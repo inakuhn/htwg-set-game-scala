@@ -1,4 +1,4 @@
-name          := "htwg-scala-seed"
+name          := "htwg-set-game-scala"
 organization  := "de.htwg.se"
 version       := "0.0.1"
 scalaVersion  := "2.11.8"
@@ -7,10 +7,10 @@ scalacOptions := Seq("-unchecked", "-feature", "-deprecation", "-encoding", "utf
 resolvers += Resolver.jcenterRepo
 
 libraryDependencies ++= {
-  val scalaTestV       = "3.0.0-M15"
-  val scalaMockV       = "3.2.2"
   Seq(
-    "org.scalatest" %% "scalatest"                   % scalaTestV       % "test",
-    "org.scalamock" %% "scalamock-scalatest-support" % scalaMockV       % "test"
+    "org.scalatest" %% "scalatest"                   % "3.0.0"                % "test",
+    "org.scalamock" %% "scalamock-scalatest-support" % "latest.release"       % "test",
+    "org.specs2"    %% "specs2"                      % "latest.release"       % "test"
+
   )
 }
