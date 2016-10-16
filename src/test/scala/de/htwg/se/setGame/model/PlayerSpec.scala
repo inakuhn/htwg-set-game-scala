@@ -1,16 +1,20 @@
 package de.htwg.se.setGame.model
 
+import org.specs2.mutable._
 
-import org.scalatest._
+class PlayerSpec extends Specification {
 
-class PlayerSpec extends FlatSpec with Matchers {
-  "A Player" should "have a name " in {
-    Player(0,0,"Joe").name should be("Joe")
-  }
-  "A Player" should "have a identity" in {
-    Player(0,0,"Joe").identify should be(0)
-  }
-  "A Player" should "have a score" in {
-    Player(0,0,"Joe") should be(0)
+  "Player" should {
+    val target = Player(42, 1337, "Joe")
+
+    "have identity" in {
+      target.identify mustEqual 42
+    }
+    "have points" in {
+      target.points mustEqual 1337
+    }
+    "have name" in {
+      target.name mustEqual "Joe"
+    }
   }
 }
