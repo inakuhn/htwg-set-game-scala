@@ -1,5 +1,6 @@
 package de.htwg.se.setGame.model
-
+import de.htwg.se.setGame.model.imp.CardAttribute._
+import de.htwg.se.setGame.model.imp.Player
 import org.specs2.mutable._
 
 class PlayerSpec extends Specification {

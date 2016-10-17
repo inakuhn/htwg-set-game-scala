@@ -1,4 +1,4 @@
-package de.htwg.se.setGame.model
+package de.htwg.se.setGame.model.imp
 
 /**
   * Created by raina on 15.10.2016.
