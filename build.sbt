@@ -10,7 +10,7 @@ libraryDependencies ++= {
   Seq(
     "org.scalatest" %% "scalatest"                   % "3.0.0"                % "test",
     "org.scalamock" %% "scalamock-scalatest-support" % "latest.release"       % "test",
-    "org.specs2"    %% "specs2"                      % "latest.release"       % "test"
-
+    "com.typesafe.scala-logging" %% "scala-logging" % "3.5.0",
+    "org.slf4j" % "slf4j-log4j12" % "latest.release"
   )
 }
