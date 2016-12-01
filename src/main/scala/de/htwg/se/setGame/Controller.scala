@@ -1,9 +1,11 @@
 package de.htwg.se.setGame
 
+import scala.swing.Publisher
+
 /**
   * @author Philipp Daniels
   */
-protected class Controller {
+protected class Controller extends Publisher {
 
 }
 
