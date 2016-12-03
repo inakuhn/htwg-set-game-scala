@@ -21,7 +21,9 @@ class TuiSpec extends WordSpec {
       class ControllerSpy extends Controller {
         override def subscribe(listener: Reaction): Unit = {
           listenerList += listener
+          listeners += listener
         }
+
       }
 
       val testAppender = new TestAppender
