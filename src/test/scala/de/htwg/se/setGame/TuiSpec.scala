@@ -15,7 +15,7 @@ import scala.swing.Reactions.Reaction
 class TuiSpec extends WordSpec {
   val in = new ByteArrayInputStream("x".getBytes)
   "Tui" should {
-    scala.Console.withIn(in) {
+    Console.withIn(in) {
       val listenerList = new ListBuffer[Reaction]()
 
       class ControllerSpy extends Controller {
