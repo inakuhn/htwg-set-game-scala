@@ -36,7 +36,7 @@ class Tui(private val controller: Controller) extends Reactor {
     val input = StdIn.readChar()
     logger.info(Tui.ReadInput.format(input))
     input match {
-      case 'x' => controller.exitApplikation()
+      case Tui.CommandExit => controller.exitApplikation()
       case _ =>
         logger.info(Tui.UnknownMenuEntry.format(input))
         printMenu()
@@ -63,5 +63,6 @@ object Tui {
   val UnknownMenuEntry = "Unkown input entry: %s"
   val ReadInput = "Read input: %s"
   val Shutdown = "Shutdown UI"
+  val CommandExit = 'x'
   def apply(controller: Controller): Tui = new Tui(controller)
 }

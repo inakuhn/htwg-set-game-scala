@@ -13,7 +13,8 @@ import scala.swing.Reactions.Reaction
   * @author Philipp Daniels
   */
 class TuiSpec extends WordSpec {
-  val in = new ByteArrayInputStream("x".getBytes)
+  val in = new ByteArrayInputStream(Tui.CommandExit.toString.getBytes)
+
   "Tui" should {
     Console.withIn(in) {
       val listenerList = new ListBuffer[Reaction]()
