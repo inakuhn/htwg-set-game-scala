@@ -1,6 +1,7 @@
 package de.htwg.se.setGame.model.imp
 
 import de.htwg.se.setGame.model.imp.CardAttribute.{Color, Count, Fill, Form}
+import org.scalatest.Matchers._
 import org.scalatest.WordSpec
 
 class CardSpec extends WordSpec {
@@ -19,6 +20,11 @@ class CardSpec extends WordSpec {
     }
     "have a number of components" in {
       target.count equals Count.one
+    }
+    "be equal" in {
+      val example = Card(Form.wave, Color.green, Fill.halfFilled, Count.one)
+      target.equals(example) should be (true)
+      Card.unapply(example)
     }
   }
 }
