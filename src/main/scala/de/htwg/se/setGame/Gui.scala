@@ -17,7 +17,7 @@ class Gui(private val controller: Controller) extends Frame {
   }
 
   override def closeOperation(): Unit = {
-    controller.exitApplikation()
+    controller.exitApplication()
   }
 
   reactions += {

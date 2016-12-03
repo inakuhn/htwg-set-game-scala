@@ -36,7 +36,7 @@ class Tui(private val controller: Controller) extends Reactor {
     val input = StdIn.readChar()
     logger.info(Tui.ReadInput.format(input))
     input match {
-      case Tui.CommandExit => controller.exitApplikation()
+      case Tui.CommandExit => controller.exitApplication()
       case _ =>
         logger.info(Tui.UnknownMenuEntry.format(input))
         printMenu()

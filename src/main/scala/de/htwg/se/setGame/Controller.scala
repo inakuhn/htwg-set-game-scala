@@ -1,5 +1,6 @@
 package de.htwg.se.setGame
 
+import akka.actor.ActorSystem
 import com.typesafe.scalalogging.Logger
 
 import scala.swing.Publisher
@@ -11,7 +12,7 @@ import scala.swing.event.Event
 protected class Controller extends Publisher {
   private val logger = Logger(getClass)
 
-  def exitApplikation(): Unit = {
+  def exitApplication(): Unit = {
     logger.info(Controller.EventExitApp)
     publish(new ExitApplication)
   }
