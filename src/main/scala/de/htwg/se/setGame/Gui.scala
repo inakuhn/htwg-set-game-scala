@@ -5,7 +5,7 @@ import scala.swing._
 /**
   * @author Philipp Daniels
   */
-class Gui(private val controller: Controller) extends MainFrame {
+class Gui(private val controller: Controller) extends Frame {
   listenTo(controller)
   title = Gui.Title
   visible = true
@@ -14,6 +14,16 @@ class Gui(private val controller: Controller) extends MainFrame {
     contents += new Label {
       text = "Hello World"
     }
+  }
+
+  override def closeOperation(): Unit = {
+    controller.exitApplikation()
+  }
+
+  reactions += {
+    case e: ExitApplication =>
+      close()
+      dispose()
   }
 }
 
