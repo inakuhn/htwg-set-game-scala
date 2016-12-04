@@ -9,7 +9,7 @@ import scala.swing.event.Event
 /**
   * @author Philipp Daniels
   */
-protected class Controller extends Publisher {
+protected class Controller(private val system: ActorSystem) extends Publisher {
   private val logger = Logger(getClass)
 
   def exitApplication(): Unit = {
@@ -23,7 +23,7 @@ protected class Controller extends Publisher {
   */
 object Controller {
   val EventExitApp = "Send `ExitApplication` event"
-  def apply(): Controller = new Controller()
+  def apply(system: ActorSystem): Controller = new Controller(system)
 }
 
-case class ExitApplication() extends Event {}
+case class ExitApplication() extends Event

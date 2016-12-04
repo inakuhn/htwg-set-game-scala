@@ -1,5 +1,6 @@
 package de.htwg.se.setGame
 
+import akka.actor.ActorSystem
 import org.scalatest.Matchers._
 import org.scalatest.WordSpec
 
@@ -13,7 +14,11 @@ class GuiSpec extends WordSpec {
   "Gui" should {
     val listenerList = new ListBuffer[Reaction]()
 
-    class ControllerSpy extends Controller {
+    class ControllerSpy(system: ActorSystem) extends Controller(system) {
+      def this() {
+        this(null)
+      }
+
       override def subscribe(listener: Reaction): Unit = {
         listenerList += listener
       }

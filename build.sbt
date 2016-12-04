@@ -12,6 +12,8 @@ libraryDependencies ++= {
     "org.scalamock" %% "scalamock-scalatest-support" % "3.3.0"       % "test",
     "com.typesafe.scala-logging" %% "scala-logging" % "3.5.0",
     "org.slf4j" % "slf4j-log4j12" % "1.7.21",
-    "org.scala-lang" % "scala-swing" % "2.11.0-M7"
+    "org.scala-lang" % "scala-swing" % "2.11.0-M7",
+    "com.typesafe.akka" % "akka-remote_2.11" % "2.4.14",
+    "com.typesafe.akka" % "akka-slf4j_2.11" % "2.4.14"
   )
 }

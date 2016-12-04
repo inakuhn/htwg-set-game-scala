@@ -10,7 +10,7 @@ class ControllerSpec extends WordSpec {
 
   "Controller" should {
     "have instance" in {
-      Controller() shouldBe a [Controller]
+      Controller(null) shouldBe a [Controller]
     }
   }
 }

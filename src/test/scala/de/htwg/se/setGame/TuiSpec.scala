@@ -2,6 +2,7 @@ package de.htwg.se.setGame
 
 import java.io.ByteArrayInputStream
 
+import akka.actor.ActorSystem
 import org.apache.log4j.Logger
 import org.scalatest.Matchers._
 import org.scalatest.WordSpec
@@ -19,7 +20,11 @@ class TuiSpec extends WordSpec {
     Console.withIn(in) {
       val listenerList = new ListBuffer[Reaction]()
 
-      class ControllerSpy extends Controller {
+      class ControllerSpy(system: ActorSystem) extends Controller(system) {
+        def this() {
+          this(null)
+        }
+
         override def subscribe(listener: Reaction): Unit = {
           listenerList += listener
           listeners += listener
