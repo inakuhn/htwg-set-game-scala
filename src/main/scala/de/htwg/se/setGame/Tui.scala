@@ -2,7 +2,6 @@ package de.htwg.se.setGame
 
 import com.typesafe.scalalogging.Logger
 
-import scala.io.StdIn
 import scala.swing.Reactor
 
 /**
@@ -25,15 +24,16 @@ class Tui(private val controller: Controller) extends Reactor {
   private def readInput(): Unit = {
     while(continue) {
       try {
-        processInput()
+        if (Console.in.ready()) {
+          processInput(Console.in.readLine())
+        }
       } catch {
         case e: StringIndexOutOfBoundsException => logger.error(Tui.ErrorReadingInput, e)
       }
     }
   }
 
-  private def processInput(): Unit = {
-    val input = StdIn.readChar()
+  private def processInput(input: String): Unit = {
     logger.info(Tui.ReadInput.format(input))
     input match {
       case Tui.CommandExit => controller.exitApplication()
@@ -64,6 +64,6 @@ object Tui {
   val UnknownMenuEntry = "Unkown input entry: %s"
   val ReadInput = "Read input: %s"
   val Shutdown = "Shutdown UI"
-  val CommandExit = 'x'
+  val CommandExit = "x"
   def apply(controller: Controller): Tui = new Tui(controller)
 }
