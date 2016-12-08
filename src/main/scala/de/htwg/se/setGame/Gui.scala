@@ -1,19 +1,23 @@
 package de.htwg.se.setGame
 
+import java.awt.Toolkit
+
 import scala.swing._
 
 /**
   * @author Philipp Daniels
   */
-class Gui(private val controller: Controller) extends Frame {
+class Gui(private val controller: Controller) extends MainFrame {
   listenTo(controller)
   title = Gui.Title
   visible = true
 
+  preferredSize = Toolkit.getDefaultToolkit.getScreenSize
+
+  private val label = new Label {text = "Hello World"}
+
   contents = new FlowPanel {
-    contents += new Label {
-      text = "Hello World"
-    }
+    contents += label
   }
 
   override def closeOperation(): Unit = {
@@ -21,9 +25,12 @@ class Gui(private val controller: Controller) extends Frame {
   }
 
   reactions += {
-    case e: ExitApplication =>
-      close()
-      dispose()
+    case e: ExitApplication => exit()
+  }
+
+  private def exit(): Unit = {
+    close()
+    dispose()
   }
 }
 
