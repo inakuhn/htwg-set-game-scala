@@ -13,14 +13,14 @@ class SetGameApplicationSpec extends WordSpec {
   val input = new ByteArrayInputStream(Tui.CommandExit.toString.getBytes)
 
   "SetGameApplication" should {
-    val target = SetGameApplication
-
-    val testAppender = new TestAppender
-    Logger.getRootLogger.removeAllAppenders()
-    Logger.getRootLogger.addAppender(testAppender)
 
     "have output" in {
       Console.withIn(input) {
+        val target = SetGameApplication
+
+        val testAppender = new TestAppender
+        Logger.getRootLogger.removeAllAppenders()
+        Logger.getRootLogger.addAppender(testAppender)
         target.main(new Array[String](0))
         testAppender.getLog().length should be > 0
       }

@@ -19,15 +19,20 @@ protected class Controller(private val system: ActorSystem) extends Publisher {
   private val logger = Logger(getClass)
 
   def exitApplication(): Unit = {
-    logger.info(Controller.EventExitApp)
+    logger.info(Controller.LogTriggerExitApp)
     publish(new ExitApplication)
   }
 
-  def create(): Unit =  {
+  def createCards(): Unit =  {
     val myActor = system.actorOf(Props[CardActor])
     val future = myActor ? CreateMessage
     val result = Await.result(future, timeout.duration).asInstanceOf[String]
     logger.info("Actor result: " + result)
+  }
+
+  def createNewGame(): Unit = {
+    logger.info(Controller.LogTriggerAddPlayer)
+    publish(new AddPlayer)
   }
 }
 
@@ -35,8 +40,10 @@ protected class Controller(private val system: ActorSystem) extends Publisher {
   * @author Philipp Daniels
   */
 object Controller {
-  val EventExitApp = "Send `ExitApplication` event"
+  final val LogTriggerExitApp = "Send `ExitApplication` event"
+  final val LogTriggerAddPlayer = "Send `AddPlayer` event"
   def apply(system: ActorSystem): Controller = new Controller(system)
 }
 
 case class ExitApplication() extends Event
+case class AddPlayer() extends Event
