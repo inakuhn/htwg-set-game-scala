@@ -10,6 +10,7 @@ import scala.collection.mutable.ListBuffer
   */
 class TestAppender extends AppenderSkeleton{
   private val log = new ListBuffer[LoggingEvent]()
+  private val lineBreak = sys.props("line.separator")
 
   override def append(event: LoggingEvent): Unit = {
     log += event
@@ -19,9 +20,9 @@ class TestAppender extends AppenderSkeleton{
 
   override def close(): Unit = {}
 
-  def getLog(): String = {
+  def logAsString(): String = {
     val sb = new StringBuilder
-    for (entry <- log.toList) sb.append(entry.getMessage)
+    for (entry <- log.toList) sb.append(entry.getMessage + lineBreak)
     sb.toString()
   }
 }

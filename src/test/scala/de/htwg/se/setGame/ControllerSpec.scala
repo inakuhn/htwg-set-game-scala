@@ -40,7 +40,7 @@ class ControllerSpec extends WordSpec {
 
       target.exitApplication()
       called should be (true)
-      logger.getLog should include(Controller.LogTriggerExitApp)
+      logger.logAsString should include(Controller.LogTriggerExitApp)
     }
 
 
@@ -52,7 +52,7 @@ class ControllerSpec extends WordSpec {
 
       target.createNewGame()
       called should be (true)
-      logger.getLog should include(Controller.LogTriggerAddPlayer)
+      logger.logAsString should include(Controller.LogTriggerAddPlayer)
     }
   }
 

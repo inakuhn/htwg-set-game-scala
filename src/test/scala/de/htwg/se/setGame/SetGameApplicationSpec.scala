@@ -22,7 +22,7 @@ class SetGameApplicationSpec extends WordSpec {
         Logger.getRootLogger.removeAllAppenders()
         Logger.getRootLogger.addAppender(testAppender)
         target.main(new Array[String](0))
-        testAppender.getLog().length should be > 0
+        testAppender.logAsString().length should be > 0
       }
     }
   }

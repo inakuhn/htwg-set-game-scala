@@ -14,41 +14,70 @@ import scala.swing.Reactions.Reaction
   * @author Philipp Daniels
   */
 class TuiSpec extends WordSpec {
-  val in = new ByteArrayInputStream(Tui.CommandExit.toString.getBytes)
+  private val lineBreak = sys.props("line.separator")
+  val listenerList = new ListBuffer[Reaction]()
+
+  class ControllerSpy(system: ActorSystem) extends Controller(system) {
+    var exitAppCalled = false
+
+    def this() {
+      this(null)
+      listenerList.clear()
+    }
+
+    override def subscribe(listener: Reaction): Unit = {
+      listenerList += listener
+      listeners += listener
+    }
+
+    override def exitApplication(): Unit = {
+      super.exitApplication()
+      exitAppCalled = true
+    }
+  }
+
+  private def withController(test: (TestAppender, ControllerSpy) => Any) = {
+    val testAppender = new TestAppender
+    Logger.getRootLogger.removeAllAppenders()
+    Logger.getRootLogger.addAppender(testAppender)
+
+    val controller = new ControllerSpy
+    try test(testAppender, controller)
+    finally {}
+  }
 
   "Tui" should {
-    Console.withIn(in) {
-      val listenerList = new ListBuffer[Reaction]()
 
-      class ControllerSpy(system: ActorSystem) extends Controller(system) {
-        def this() {
-          this(null)
-        }
+    "initiate and exit gracefully" in withController { (testAppender, controller) =>
+      val stream = new ByteArrayInputStream(Tui.CommandExit.getBytes)
+      Console.withIn(stream) {
+        val target = Tui(controller)
 
-        override def subscribe(listener: Reaction): Unit = {
-          listenerList += listener
-          listeners += listener
-        }
-
-      }
-
-      val testAppender = new TestAppender
-      Logger.getRootLogger.removeAllAppenders()
-      Logger.getRootLogger.addAppender(testAppender)
-
-      val controller = new ControllerSpy
-      val target = Tui(controller)
-
-      "called listenTo" in {
-        listenerList should have length 2
+        listenerList should have length 1
         listenerList contains target
-        listenerList contains controller
-      }
 
-      "has initiate message" in {
-        testAppender.getLog().length should be > 0
-        testAppender.getLog should include(Tui.InitiateMessage)
+        val logs = testAppender.logAsString()
+        logs.length should be > 0
+        logs should include(Tui.InitiateMessage)
+        logs should include(Tui.Shutdown)
+
+        controller.exitAppCalled should be(true)
       }
     }
+
+    "detect unknown meny entry" in withController { (testAppender, controller) =>
+      val input = "unknown" + lineBreak + Tui.CommandExit
+      val stream = new ByteArrayInputStream(input.getBytes)
+      Console.withIn(stream) {
+        val target = Tui(controller)
+
+        val logs = testAppender.logAsString()
+        logs.length should be > 0
+        logs should include(Tui.UnknownMenuEntry.format("unknown"))
+
+        controller.exitAppCalled should be(true)
+      }
+    }
+
   }
 }
