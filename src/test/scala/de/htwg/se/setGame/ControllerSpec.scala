@@ -40,11 +40,11 @@ class ControllerSpec extends WordSpec {
 
       target.exitApplication()
       called should be (true)
-      logger.logAsString should include(Controller.LogTriggerExitApp)
+      logger.logAsString should include(Controller.TriggerExitApp)
     }
 
 
-    "have createNewGame" in withController { (target, logger) =>
+    "have send AddPlayer event on createNewGame" in withController { (target, logger) =>
       var called = false
       new ReactorSpy(target) {
         reactions += {case e: AddPlayer => called = true}
@@ -52,7 +52,30 @@ class ControllerSpec extends WordSpec {
 
       target.createNewGame()
       called should be (true)
-      logger.logAsString should include(Controller.LogTriggerAddPlayer)
+      logger.logAsString should include(Controller.TriggerAddPlayer)
+    }
+
+    "have send PlayerAdded event on addPlayer" in withController { (target, logger) =>
+      var called = false
+      new ReactorSpy(target) {
+        reactions += {case e: PlayerAdded => called = true}
+      }
+
+      val name = "player"
+      target.addPlayer(name)
+      called should be (true)
+      logger.logAsString should include(Controller.PlayerAdded.format(name))
+    }
+
+    "have send CancelAddPlayer event on cancelAddPlayer" in withController { (target, logger) =>
+      var called = false
+      new ReactorSpy(target) {
+        reactions += {case e: CancelAddPlayer => called = true}
+      }
+
+      target.cancelAddPlayer()
+      called should be (true)
+      logger.logAsString should include(Controller.TriggerCancelPlayer)
     }
   }
 
@@ -66,6 +89,16 @@ class ControllerSpec extends WordSpec {
       val event = new AddPlayer
       event shouldBe a [Event]
       AddPlayer.unapply(event)
+    }
+    "have CancelAddPlayer" in {
+      val event = new CancelAddPlayer
+      event shouldBe a [Event]
+      CancelAddPlayer.unapply(event)
+    }
+    "have PlayerAdded" in {
+      val event = new PlayerAdded
+      event shouldBe a [Event]
+      PlayerAdded.unapply(event)
     }
   }
 }

@@ -19,7 +19,7 @@ protected class Controller(private val system: ActorSystem) extends Publisher {
   private val logger = Logger(getClass)
 
   def exitApplication(): Unit = {
-    logger.info(Controller.LogTriggerExitApp)
+    logger.info(Controller.TriggerExitApp)
     publish(new ExitApplication)
   }
 
@@ -31,8 +31,18 @@ protected class Controller(private val system: ActorSystem) extends Publisher {
   }
 
   def createNewGame(): Unit = {
-    logger.info(Controller.LogTriggerAddPlayer)
+    logger.info(Controller.TriggerAddPlayer)
     publish(new AddPlayer)
+  }
+
+  def addPlayer(name: String): Unit = {
+    logger.info(Controller.PlayerAdded.format(name))
+    publish(new PlayerAdded)
+  }
+
+  def cancelAddPlayer(): Unit = {
+    logger.info(Controller.TriggerCancelPlayer)
+    publish(new CancelAddPlayer)
   }
 }
 
@@ -40,10 +50,14 @@ protected class Controller(private val system: ActorSystem) extends Publisher {
   * @author Philipp Daniels
   */
 object Controller {
-  final val LogTriggerExitApp = "Send `ExitApplication` event"
-  final val LogTriggerAddPlayer = "Send `AddPlayer` event"
+  val TriggerExitApp = "Send `ExitApplication` event"
+  val TriggerAddPlayer = "Send `AddPlayer` event"
+  val TriggerCancelPlayer = "Send `CancelAddPlayer` event"
+  val PlayerAdded = "Player added: %s"
   def apply(system: ActorSystem): Controller = new Controller(system)
 }
 
 case class ExitApplication() extends Event
 case class AddPlayer() extends Event
+case class CancelAddPlayer() extends Event
+case class PlayerAdded() extends Event

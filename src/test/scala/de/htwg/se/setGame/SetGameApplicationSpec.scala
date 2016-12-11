@@ -10,7 +10,7 @@ import org.scalatest.WordSpec
   * @author Philipp Daniels
   */
 class SetGameApplicationSpec extends WordSpec {
-  val input = new ByteArrayInputStream(Tui.CommandExit.toString.getBytes)
+  val input = new ByteArrayInputStream(Tui.MainCommandExit.toString.getBytes)
 
   "SetGameApplication" should {
 

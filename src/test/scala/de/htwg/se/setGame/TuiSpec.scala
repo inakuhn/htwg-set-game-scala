@@ -19,6 +19,9 @@ class TuiSpec extends WordSpec {
 
   class ControllerSpy(system: ActorSystem) extends Controller(system) {
     var exitAppCalled = false
+    var createNewGameCalled = false
+    var addPlayerCalled = false
+    var cancelPlayerCalled = false
 
     def this() {
       this(null)
@@ -33,6 +36,21 @@ class TuiSpec extends WordSpec {
     override def exitApplication(): Unit = {
       super.exitApplication()
       exitAppCalled = true
+    }
+
+    override def createNewGame(): Unit = {
+      super.createNewGame()
+      createNewGameCalled = true
+    }
+
+    override def addPlayer(name: String): Unit = {
+      super.addPlayer(name)
+      addPlayerCalled = true
+    }
+
+    override def cancelAddPlayer(): Unit = {
+      super.cancelAddPlayer()
+      cancelPlayerCalled = true
     }
   }
 
@@ -49,7 +67,7 @@ class TuiSpec extends WordSpec {
   "Tui" should {
 
     "initiate and exit gracefully" in withController { (testAppender, controller) =>
-      val stream = new ByteArrayInputStream(Tui.CommandExit.getBytes)
+      val stream = new ByteArrayInputStream(Tui.MainCommandExit.getBytes)
       Console.withIn(stream) {
         val target = Tui(controller)
 
@@ -59,14 +77,16 @@ class TuiSpec extends WordSpec {
         val logs = testAppender.logAsString()
         logs.length should be > 0
         logs should include(Tui.InitiateMessage)
+        logs should include(Tui.MainMenuHeading)
         logs should include(Tui.Shutdown)
 
         controller.exitAppCalled should be(true)
+        controller.createNewGameCalled should be(false)
       }
     }
 
     "detect unknown meny entry" in withController { (testAppender, controller) =>
-      val input = "unknown" + lineBreak + Tui.CommandExit
+      val input = "unknown" + lineBreak + Tui.MainCommandExit
       val stream = new ByteArrayInputStream(input.getBytes)
       Console.withIn(stream) {
         val target = Tui(controller)
@@ -76,6 +96,51 @@ class TuiSpec extends WordSpec {
         logs should include(Tui.UnknownMenuEntry.format("unknown"))
 
         controller.exitAppCalled should be(true)
+        controller.createNewGameCalled should be(false)
+      }
+    }
+
+    "have cancel addPlayer" in withController { (testAppender, controller) =>
+      val input = Tui.MainCommandCreate + lineBreak +
+        Tui.PlayerCommandCancel + lineBreak +
+        Tui.MainCommandExit + lineBreak
+      val stream = new ByteArrayInputStream(input.getBytes)
+      Console.withIn(stream) {
+        val target = Tui(controller)
+
+        val logs = testAppender.logAsString()
+        logs.length should be > 0
+        logs should include(Tui.PlayerMenuHeading)
+        logs should not.include(Tui.RequestPlayerName)
+        logs should include(Tui.Shutdown)
+
+        controller.exitAppCalled should be(true)
+        controller.createNewGameCalled should be(true)
+        controller.addPlayerCalled should be(false)
+        controller.cancelPlayerCalled should be(true)
+      }
+    }
+
+    "have addPlayer with name" in withController { (testAppender, controller) =>
+      val input = Tui.MainCommandCreate + lineBreak +
+        Tui.PlayerCommandPlayer + lineBreak +
+        "player" + lineBreak +
+        Tui.PlayerCommandCancel + lineBreak +
+        Tui.MainCommandExit + lineBreak
+      val stream = new ByteArrayInputStream(input.getBytes)
+      Console.withIn(stream) {
+        val target = Tui(controller)
+
+        val logs = testAppender.logAsString()
+        logs.length should be > 0
+        logs should include(Tui.PlayerMenuHeading)
+        logs should include(Tui.RequestPlayerName)
+        logs should include(Tui.Shutdown)
+
+        controller.exitAppCalled should be(true)
+        controller.createNewGameCalled should be(true)
+        controller.addPlayerCalled should be(true)
+        controller.cancelPlayerCalled should be(true)
       }
     }
 
