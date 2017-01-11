@@ -1,4 +1,4 @@
-package de.htwg.se.setGame.model.imp
+package de.htwg.se.setGame.model
 
 import org.scalatest.Matchers._
 import org.scalatest.WordSpec

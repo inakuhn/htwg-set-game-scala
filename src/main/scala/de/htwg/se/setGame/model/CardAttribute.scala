@@ -1,4 +1,4 @@
-package de.htwg.se.setGame.model.imp
+package de.htwg.se.setGame.model
 
 /**
  * Card attribute contains the information for cards.
@@ -33,7 +33,4 @@ object CardAttribute {
   object Count extends Enumeration {
     val one, two, tree = Value
   }
-
 }
-
-
