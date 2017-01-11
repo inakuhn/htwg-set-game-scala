@@ -118,6 +118,7 @@ class TuiSpec extends WordSpec {
         controller.createNewGameCalled should be(true)
         controller.addPlayerCalled should be(false)
         controller.cancelPlayerCalled should be(true)
+        controller.exitAppCalled should be(true)
       }
     }
 
@@ -141,8 +142,30 @@ class TuiSpec extends WordSpec {
         controller.createNewGameCalled should be(true)
         controller.addPlayerCalled should be(true)
         controller.cancelPlayerCalled should be(true)
+        controller.exitAppCalled should be(true)
       }
     }
 
+
+    "have exit addPlayer" in withController { (testAppender, controller) =>
+      val input = Tui.MainCommandCreate + lineBreak +
+        Tui.MainCommandExit + lineBreak
+      val stream = new ByteArrayInputStream(input.getBytes)
+      Console.withIn(stream) {
+        val target = Tui(controller)
+
+        val logs = testAppender.logAsString()
+        logs.length should be > 0
+        logs should include(Tui.PlayerMenuHeading)
+        logs should not.include(Tui.RequestPlayerName)
+        logs should include(Tui.Shutdown)
+
+        controller.exitAppCalled should be(true)
+        controller.createNewGameCalled should be(true)
+        controller.addPlayerCalled should be(false)
+        controller.cancelPlayerCalled should be(false)
+        controller.exitAppCalled should be(true)
+      }
+    }
   }
 }

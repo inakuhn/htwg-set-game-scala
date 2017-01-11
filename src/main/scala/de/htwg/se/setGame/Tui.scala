@@ -62,6 +62,7 @@ class Tui(private val controller: Controller) extends Reactor {
     logger.info(Tui.PlayerMenuHeading)
     logger.info(Tui.PlayerMenuEntryPlayer.format(Tui.PlayerCommandPlayer))
     logger.info(Tui.PlayerMenuEntryCancel.format(Tui.PlayerCommandCancel))
+    logger.info(Tui.MainMenuEntryExit.format(Tui.MainCommandExit))
     logger.info(Tui.RequestMenuInput)
   }
   private def readPlayerMenuInput(): Unit = {
@@ -71,13 +72,14 @@ class Tui(private val controller: Controller) extends Reactor {
         processPlayerMenuInput(Console.in.readLine())
       }
       Thread.sleep(100)
-    } while(continuePlayer)
+    } while(continuePlayer && continueMain)
   }
   private def processPlayerMenuInput(input: String): Unit = {
     logger.info(Tui.ReadInput.format(input))
     input match {
       case Tui.PlayerCommandPlayer => requestPlayerName()
       case Tui.PlayerCommandCancel => controller.cancelAddPlayer()
+      case Tui.MainCommandExit => controller.exitApplication()
       case _ =>
         logger.info(Tui.UnknownMenuEntry.format(input))
         printPlayerMenu()
@@ -93,7 +95,7 @@ class Tui(private val controller: Controller) extends Reactor {
         controller.addPlayer(input)
       }
       Thread.sleep(100)
-    } while(continuePlayerName)
+    } while(continuePlayerName && continuePlayer && continueMain)
   }
 }
 
