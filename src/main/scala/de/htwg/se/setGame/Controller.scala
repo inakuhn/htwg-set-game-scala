@@ -4,7 +4,7 @@ import akka.actor.{ActorSystem, Props}
 import akka.pattern.ask
 import akka.util.Timeout
 import com.typesafe.scalalogging.Logger
-import de.htwg.se.setGame.model.Card
+import de.htwg.se.setGame.model.{Card, Player}
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -30,6 +30,25 @@ protected class Controller(private val system: ActorSystem) extends Publisher {
     val result = Await.result(future, timeout.duration).asInstanceOf[List[Card]]
     logger.info("Actor result: " + result)
   }
+
+  /**
+    * Dummys
+    */
+  /**
+    *
+    * @return
+    */
+  def getCardsInField() : List[Card] = {
+    return  List[Card]();
+  }
+  def isASet(card: Card, player : Player) : Boolean = {
+
+    return true;
+
+  }
+
+
+
 
   def createNewGame(): Unit = {
     logger.info(Controller.TriggerAddPlayer)
