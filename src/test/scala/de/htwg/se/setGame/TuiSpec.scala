@@ -17,7 +17,7 @@ class TuiSpec extends WordSpec {
   private val lineBreak = sys.props("line.separator")
   val listenerList = new ListBuffer[Reaction]()
 
-  class ControllerSpy(system: ActorSystem) extends Controller(system) {
+  class ControllerSpy(system: ActorSystem) extends ControllerActorSystem(system) {
     var exitAppCalled = false
     var createNewGameCalled = false
     var addPlayerCalled = false

@@ -20,7 +20,7 @@ class ControllerSpec extends WordSpec {
     Logger.getRootLogger.removeAllAppenders()
     Logger.getRootLogger.addAppender(testAppender)
 
-    val target = new Controller(null)
+    val target = new ControllerActorSystem(null)
     try test(target, testAppender)
     finally {
 
