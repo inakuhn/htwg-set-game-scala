@@ -6,6 +6,7 @@ import akka.util.Timeout
 import com.typesafe.scalalogging.Logger
 import de.htwg.se.setGame.model.{Card, Player}
 
+import scala.collection.mutable
 import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.language.postfixOps
@@ -18,7 +19,7 @@ import scala.swing.event.Event
 protected class Controller(private val system: ActorSystem) extends Publisher {
   private implicit val timeout = Timeout(5 seconds)
   private val logger = Logger(getClass)
-
+  private var pack = mutable.MutableList[Card]();
   def exitApplication(): Unit = {
     logger.info(Controller.TriggerExitApp)
     publish(new ExitApplication)
@@ -27,7 +28,8 @@ protected class Controller(private val system: ActorSystem) extends Publisher {
   def createCards(): Unit =  {
     val myActor = system.actorOf(Props[CardActor])
     val future = myActor ? CreateMessage
-    val result = Await.result(future, timeout.duration).asInstanceOf[List[Card]]
+    val result = Await.result(future, timeout.duration).asInstanceOf[mutable.MutableList[Card]]
+    pack = result
     logger.info("Actor result: " + result)
   }
 
@@ -52,6 +54,7 @@ protected class Controller(private val system: ActorSystem) extends Publisher {
 
   def createNewGame(): Unit = {
     logger.info(Controller.TriggerAddPlayer)
+    createCards()
     publish(new AddPlayer)
   }
 
@@ -81,3 +84,4 @@ case class ExitApplication() extends Event
 case class AddPlayer() extends Event
 case class CancelAddPlayer() extends Event
 case class PlayerAdded() extends Event
+case class NewGame() extends Event

@@ -4,7 +4,7 @@ import java.awt.Toolkit
 import javafx.scene.paint.Color
 import javax.swing.ImageIcon
 
-import de.htwg.se.setGame.aview.gui.Field
+import de.htwg.se.setGame.aview.gui.{Field, GamePanel}
 import de.htwg.se.setGame.model.{Card, CardAttribute}
 
 import scala.swing._
@@ -25,16 +25,8 @@ class Gui(private val controller: Controller) extends MainFrame {
   }
 
 
-  contents = new FlowPanel {
-    contents += label
-    val button = Field(false, new Card(CardAttribute.Form.balk, CardAttribute.Color.green, CardAttribute.Fill.halfFilled, CardAttribute.Count.one))
-
-    val source = ClassLoader.getSystemResource("pack/" + button.card.name + ".gif")
-    button.icon = new ImageIcon(source.getFile)
-    listenTo(button)
-    contents += button
-
-  }
+  val frame  = new GamePanel(controller)
+  contents = frame
 
   override def closeOperation(): Unit = {
     controller.exitApplication()
@@ -42,6 +34,7 @@ class Gui(private val controller: Controller) extends MainFrame {
 
   reactions += {
     case e: ExitApplication => exit()
+    case e: AddPlayer => frame.setCardsInField()
   }
 
   private def exit(): Unit = {
@@ -52,6 +45,5 @@ class Gui(private val controller: Controller) extends MainFrame {
 
 object Gui {
   val Title = "SetGame"
-
   def apply(controller: Controller): Gui = new Gui(controller)
 }
