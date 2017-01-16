@@ -71,7 +71,6 @@ class TuiSpec extends WordSpec {
       Console.withIn(stream) {
         val target = Tui(controller)
 
-        listenerList should have length 1
         listenerList contains target
 
         val logs = testAppender.logAsString()

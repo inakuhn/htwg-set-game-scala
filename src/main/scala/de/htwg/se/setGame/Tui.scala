@@ -1,6 +1,7 @@
 package de.htwg.se.setGame
 
 import com.typesafe.scalalogging.Logger
+import de.htwg.se.setGame.tui.MenuPlayerName
 
 import scala.swing.Reactor
 
@@ -11,7 +12,7 @@ class Tui(private val controller: Controller) extends Reactor {
   private val logger = Logger(getClass)
   private var continueMain = true
   private var continuePlayer = true
-  private var continuePlayerName = true
+  private var menuPlayerName = new MenuPlayerName(controller)
 
   logger.info(Tui.InitiateMessage)
   listenTo(controller)
@@ -20,7 +21,7 @@ class Tui(private val controller: Controller) extends Reactor {
     case e: ExitApplication => shutdown()
     case e: AddPlayer => printPlayerMenu(); readPlayerMenuInput()
     case e: CancelAddPlayer => continuePlayer = false; printMainMenu()
-    case e: PlayerAdded => continuePlayerName = false; printPlayerMenu()
+    case e: PlayerAdded => printPlayerMenu()
   }
 
   printMainMenu()
@@ -55,7 +56,6 @@ class Tui(private val controller: Controller) extends Reactor {
     logger.info(Tui.Shutdown)
     continueMain = false
     continuePlayer = false
-    continuePlayerName = false
   }
 
   private def printPlayerMenu(): Unit = {
@@ -77,25 +77,13 @@ class Tui(private val controller: Controller) extends Reactor {
   private def processPlayerMenuInput(input: String): Unit = {
     logger.info(Tui.ReadInput.format(input))
     input match {
-      case Tui.PlayerCommandPlayer => requestPlayerName()
+      case Tui.PlayerCommandPlayer => menuPlayerName.process()
       case Tui.PlayerCommandCancel => controller.cancelAddPlayer()
       case Tui.MainCommandExit => controller.exitApplication()
       case _ =>
         logger.info(Tui.UnknownMenuEntry.format(input))
         printPlayerMenu()
     }
-  }
-  private def requestPlayerName(): Unit = {
-    logger.info(Tui.RequestPlayerName)
-    continuePlayerName = true
-    do {
-      if (Console.in.ready()) {
-        val input = Console.in.readLine()
-        logger.info(Tui.ReadInput.format(input))
-        controller.addPlayer(input)
-      }
-      Thread.sleep(100)
-    } while(continuePlayerName && continuePlayer && continueMain)
   }
 }
 
