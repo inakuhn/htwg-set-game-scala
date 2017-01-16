@@ -4,6 +4,7 @@ import akka.actor.{ActorSystem, Props}
 import akka.pattern.ask
 import akka.util.Timeout
 import com.typesafe.scalalogging.Logger
+import de.htwg.se.setGame.model.Card
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -26,7 +27,7 @@ protected class Controller(private val system: ActorSystem) extends Publisher {
   def createCards(): Unit =  {
     val myActor = system.actorOf(Props[CardActor])
     val future = myActor ? CreateMessage
-    val result = Await.result(future, timeout.duration).asInstanceOf[String]
+    val result = Await.result(future, timeout.duration).asInstanceOf[List[Card]]
     logger.info("Actor result: " + result)
   }
 

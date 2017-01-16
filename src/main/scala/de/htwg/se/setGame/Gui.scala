@@ -13,11 +13,13 @@ class Gui(private val controller: Controller) extends MainFrame {
   visible = true
 
   preferredSize = Toolkit.getDefaultToolkit.getScreenSize
+  private val label = new Label {text = "Hello World"
 
-  private val label = new Label {text = "Hello World"}
+  }
 
   contents = new FlowPanel {
     contents += label
+   // contents += Button("Press me, please") { println("Thank you") }
   }
 
   override def closeOperation(): Unit = {
