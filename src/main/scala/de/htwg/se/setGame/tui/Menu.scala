@@ -37,7 +37,7 @@ trait Menu extends NonBlockingInputReader with Reactor {
     logger.info(Menu.RequestMenuInput)
   }
 
-  private def outputMenuList() = {
+  protected final def outputMenuList(): Unit = {
     preMenuList()
     for ((key, (_, message)) <- actions.iterator) {
       logger.info(Menu.MenuEntryFormat.format(key, message))

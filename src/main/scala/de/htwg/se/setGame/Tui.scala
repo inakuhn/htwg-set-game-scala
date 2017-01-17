@@ -1,7 +1,7 @@
 package de.htwg.se.setGame
 
 import com.typesafe.scalalogging.Logger
-import de.htwg.se.setGame.tui.MenuPlayerName
+import de.htwg.se.setGame.tui.MenuPlayer
 
 import scala.swing.Reactor
 
@@ -11,17 +11,15 @@ import scala.swing.Reactor
 class Tui(private val controller: Controller) extends Reactor {
   private val logger = Logger(getClass)
   private var continueMain = true
-  private var continuePlayer = true
-  private var menuPlayerName = new MenuPlayerName(controller)
+  private val menuPlayer = MenuPlayer(controller)
 
   logger.info(Tui.InitiateMessage)
   listenTo(controller)
 
   reactions += {
     case e: ExitApplication => shutdown()
-    case e: AddPlayer => printPlayerMenu(); readPlayerMenuInput()
-    case e: CancelAddPlayer => continuePlayer = false; printMainMenu()
-    case e: PlayerAdded => printPlayerMenu()
+    case e: AddPlayer => menuPlayer.process()
+    case e: CancelAddPlayer => printMainMenu()
   }
 
   printMainMenu()
@@ -55,35 +53,6 @@ class Tui(private val controller: Controller) extends Reactor {
   private def shutdown(): Unit = {
     logger.info(Tui.Shutdown)
     continueMain = false
-    continuePlayer = false
-  }
-
-  private def printPlayerMenu(): Unit = {
-    logger.info(Tui.PlayerMenuHeading)
-    logger.info(Tui.PlayerMenuEntryPlayer.format(Tui.PlayerCommandPlayer))
-    logger.info(Tui.PlayerMenuEntryCancel.format(Tui.PlayerCommandCancel))
-    logger.info(Tui.MainMenuEntryExit.format(Tui.MainCommandExit))
-    logger.info(Tui.RequestMenuInput)
-  }
-  private def readPlayerMenuInput(): Unit = {
-    continuePlayer = true
-    do {
-      if (Console.in.ready()) {
-        processPlayerMenuInput(Console.in.readLine())
-      }
-      Thread.sleep(100)
-    } while(continuePlayer && continueMain)
-  }
-  private def processPlayerMenuInput(input: String): Unit = {
-    logger.info(Tui.ReadInput.format(input))
-    input match {
-      case Tui.PlayerCommandPlayer => menuPlayerName.process()
-      case Tui.PlayerCommandCancel => controller.cancelAddPlayer()
-      case Tui.MainCommandExit => controller.exitApplication()
-      case _ =>
-        logger.info(Tui.UnknownMenuEntry.format(input))
-        printPlayerMenu()
-    }
   }
 }
 

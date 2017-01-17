@@ -28,7 +28,7 @@ class MenuPlayer(private val controller: Controller, private val playerName: Men
   }
 
   private class Add extends Action {
-    override def execute(): Unit = playerName.process()
+    override def execute(): Unit = playerName.process(); outputMenuList()
   }
 
   private class Cancel extends Action {
