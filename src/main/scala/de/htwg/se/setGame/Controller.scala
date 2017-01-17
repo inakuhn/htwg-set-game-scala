@@ -19,7 +19,7 @@ import scala.swing.event.Event
 protected class Controller(private val system: ActorSystem) extends Publisher {
   private implicit val timeout = Timeout(5 seconds)
   private val logger = Logger(getClass)
-  private var pack = mutable.MutableList[Card]();
+  var pack = List[Card]() ;
   def exitApplication(): Unit = {
     logger.info(Controller.TriggerExitApp)
     publish(new ExitApplication)
@@ -28,7 +28,7 @@ protected class Controller(private val system: ActorSystem) extends Publisher {
   def createCards(): Unit =  {
     val myActor = system.actorOf(Props[CardActor])
     val future = myActor ? CreateMessage
-    val result = Await.result(future, timeout.duration).asInstanceOf[mutable.MutableList[Card]]
+    val result = Await.result(future, timeout.duration).asInstanceOf[List[Card]]
     pack = result
     logger.info("Actor result: " + result)
   }
@@ -41,7 +41,7 @@ protected class Controller(private val system: ActorSystem) extends Publisher {
     * @return
     */
   def getCardsInField() : List[Card] = {
-    return  List[Card]();
+    return pack;
   }
   def isASet(card: Card, player : Player) : Boolean = {
 

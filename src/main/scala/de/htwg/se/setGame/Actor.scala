@@ -15,7 +15,8 @@ class CardActor extends Actor with ActorLogging {
       var cards = mutable.MutableList[Card]()
       for (form <- CardAttribute.Form.values; color <- CardAttribute.Color.values; fill <- CardAttribute.Fill.values; count <- CardAttribute.Count.values)
         cards += Card(form, color, fill, count)
-      sender ! cards
+      val cardsFinal = List[Card](cards:_*)
+      sender ! cardsFinal
       context.stop(self)
     case default@_ =>
       log.warning("that was unexpected: " + default.toString)
