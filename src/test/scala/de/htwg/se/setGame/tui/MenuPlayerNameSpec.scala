@@ -3,24 +3,15 @@ package de.htwg.se.setGame.tui
 import java.io.ByteArrayInputStream
 
 import de.htwg.se.setGame._
-import org.apache.log4j.Logger
-import org.scalatest.WordSpec
 import org.scalatest.Matchers._
+import org.scalatest.WordSpec
 
 import scala.swing.event.Event
 
 /**
   * @author Philipp Daniels
   */
-class MenuPlayerNameSpec extends WordSpec {
-  private def withLogger(test: (TestAppender) => Any) = {
-    val testAppender = new TestAppender
-    Logger.getRootLogger.removeAllAppenders()
-    Logger.getRootLogger.addAppender(testAppender)
-
-    try test(testAppender)
-    finally {}
-  }
+class MenuPlayerNameSpec extends WordSpec with TuiSpecExtension {
 
   "MenuPlayerName" should {
     val assertEvent = (event: Event, logger: TestAppender) => {
@@ -29,26 +20,24 @@ class MenuPlayerNameSpec extends WordSpec {
           publish(event)
         }
       })
-      val stream = new ByteArrayInputStream("Playername".getBytes)
-      Console.withIn(stream) {
+      overrideConsoleIn("Playername") {
         target.process()
         logger.logAsString() should include (Menu.ReadInput.format("Playername"))
       }
     }
 
     "have called controler with Input" in withLogger { (logger) =>
-      var playername = ""
+      var playerName = ""
       val target = MenuPlayerName(new ControllerDummy {
         override def addPlayer(name: String): Unit = {
-          playername = name
+          playerName = name
           publish(PlayerAdded())
         }
       })
-      val stream = new ByteArrayInputStream("Playername".getBytes)
-      Console.withIn(stream) {
+      overrideConsoleIn("Playername") {
         target.process()
       }
-      playername should equal("Playername")
+      playerName should equal("Playername")
       logger.logAsString() should include (MenuPlayerName.RequestPlayerName)
     }
 

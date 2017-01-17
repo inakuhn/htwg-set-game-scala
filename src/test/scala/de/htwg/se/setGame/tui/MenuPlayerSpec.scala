@@ -1,34 +1,15 @@
 package de.htwg.se.setGame.tui
 
-import java.io.ByteArrayInputStream
-
 import de.htwg.se.setGame._
-import org.apache.log4j.Logger
 import org.scalatest.Matchers._
 import org.scalatest.WordSpec
-
-import scala.swing.event.Event
 
 /**
   * @author Philipp Daniels
   */
-class MenuPlayerSpec extends WordSpec {
+class MenuPlayerSpec extends WordSpec with TuiSpecExtension {
 
   private val lineBreak = sys.props("line.separator")
-
-  private def withLogger(test: (TestAppender) => Any) = {
-    val testAppender = new TestAppender
-    Logger.getRootLogger.removeAllAppenders()
-    Logger.getRootLogger.addAppender(testAppender)
-
-    try test(testAppender)
-    finally {}
-  }
-
-  private def overrideConsoleIn[T](input: String)(thunk: => T): T = {
-    val stream = new ByteArrayInputStream(input.getBytes)
-    Console.withIn(stream)(thunk)
-  }
 
   "MenuPlayer" should {
     val assertEvent = (logger: TestAppender, command: String, c: Controller) => {
