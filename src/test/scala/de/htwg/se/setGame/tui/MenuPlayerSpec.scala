@@ -33,7 +33,6 @@ class MenuPlayerSpec extends WordSpec with TuiSpecExtension {
     }
 
     "have called MenuPlayerName" in withLogger { (logger) =>
-      var called = false
       val controller = new ControllerDummy {
         override def addPlayer(name: String): Unit = publish(new PlayerAdded)
         override def exitApplication(): Unit = publish(new ExitApplication)

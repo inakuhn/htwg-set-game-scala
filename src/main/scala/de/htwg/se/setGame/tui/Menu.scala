@@ -64,6 +64,8 @@ trait NonBlockingInputReader {
 
   def exit(): Unit = continue = false
 
+  def isContinue: Boolean = continue
+
   protected def readInput(): Unit = {
     continue = true
     do {
