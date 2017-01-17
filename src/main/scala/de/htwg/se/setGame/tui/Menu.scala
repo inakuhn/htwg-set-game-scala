@@ -11,7 +11,9 @@ import scala.swing.Reactor
 trait Menu extends NonBlockingInputReader with Reactor {
 
   private val logger = Logger(getClass)
-  protected val actions = new mutable.HashMap[String, (Action, String)]()
+  private val actions = mutable.HashMap[String, (Action, String)]()
+
+  protected def getActions: mutable.HashMap[String, (Action, String)] = actions
 
   def process(): Unit = {
     outputMenuList()
@@ -28,10 +30,10 @@ trait Menu extends NonBlockingInputReader with Reactor {
     }
   }
 
-  def preMenuList(): Unit = {
+  protected def preMenuList(): Unit = {
   }
 
-  def postMenuList(): Unit = {
+  protected def postMenuList(): Unit = {
     logger.info(Menu.RequestMenuInput)
   }
 
