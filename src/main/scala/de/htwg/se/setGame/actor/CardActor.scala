@@ -1,12 +1,13 @@
-package de.htwg.se.setGame
+package de.htwg.se.setGame.actor
 
 import akka.actor.{Actor, ActorLogging}
 import de.htwg.se.setGame.model.{Card, CardAttribute}
 
 import scala.collection.mutable
-
 case object CreateMessage
-
+/**
+  * Created by Ina Kuhn on 17.01.2017.
+  */
 class CardActor extends Actor with ActorLogging {
   def receive: Actor.Receive = {
     case CreateMessage =>

@@ -4,6 +4,7 @@ import akka.actor.{ActorSystem, Props}
 import akka.pattern.ask
 import akka.util.Timeout
 import com.typesafe.scalalogging.Logger
+import de.htwg.se.setGame.actor.{CardActor, CreateMessage}
 import de.htwg.se.setGame.model.{Card, Player}
 
 import scala.concurrent.Await
