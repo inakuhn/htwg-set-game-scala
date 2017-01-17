@@ -55,6 +55,7 @@ protected class Controller(private val system: ActorSystem) extends Publisher {
   def createNewGame(): Unit = {
     logger.info(Controller.TriggerAddPlayer)
     createCards()
+
     publish(new AddPlayer)
   }
 

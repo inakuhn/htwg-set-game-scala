@@ -31,6 +31,6 @@ object CardAttribute {
    * Count Enumeration
    */
   object Count extends Enumeration {
-    val one, two, tree = Value
+    val one, two, three = Value
   }
 }
