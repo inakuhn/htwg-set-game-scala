@@ -1,15 +1,12 @@
 package de.htwg.se.setGame
 
 import java.awt.Toolkit
-import javafx.scene.paint.Color
-import javax.swing.ImageIcon
 
 import de.htwg.se.setGame.aview.gui.ImageIconGenerator
-import de.htwg.se.setGame.model.{Card, CardAttribute}
+import de.htwg.se.setGame.model.Card
 
-import scala.io.Source
 import scala.swing._
-import scala.swing.event.{ButtonClicked, MouseClicked}
+import scala.swing.event.ButtonClicked
 
 /**
   * @author Philipp Daniels

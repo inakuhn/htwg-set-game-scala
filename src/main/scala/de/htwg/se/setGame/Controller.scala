@@ -6,7 +6,6 @@ import akka.util.Timeout
 import com.typesafe.scalalogging.Logger
 import de.htwg.se.setGame.model.{Card, Player}
 
-import scala.collection.mutable
 import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.language.postfixOps

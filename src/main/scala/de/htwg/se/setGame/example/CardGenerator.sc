@@ -1,5 +1,4 @@
 import de.htwg.se.setGame.model.{Card, CardAttribute}
-import de.htwg.se.setGame.model.CardAttribute.Color._
 
 import scala.collection.mutable
 
