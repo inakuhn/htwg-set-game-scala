@@ -6,3 +6,4 @@ package de.htwg.se.setGame.model
 case class Game(cardsInField : List[Card], pack: List[Card], playerOne: Player, playerTwo: Player) {
 
 }
+
