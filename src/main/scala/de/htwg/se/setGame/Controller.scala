@@ -33,29 +33,11 @@ protected class Controller(private val system: ActorSystem) extends Publisher {
     logger.info("Actor result: " + result)
   }
 
-  /**
-    * Dummys
-    */
-  /**
-    *
-    * @return
-    */
-  def getCardsInField() : List[Card] = {
-    return pack;
-  }
-  def isASet(card: Card, player : Player) : Boolean = {
-
-    return true;
-
-  }
-
 
 
 
   def createNewGame(): Unit = {
     logger.info(Controller.TriggerAddPlayer)
-    createCards()
-
     publish(new AddPlayer)
   }
 
