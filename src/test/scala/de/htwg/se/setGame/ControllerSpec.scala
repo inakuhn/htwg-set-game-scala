@@ -65,7 +65,7 @@ class ControllerSpec extends WordSpec {
       var isSetAns = false
       val cardOne = Card(CardAttribute.Form.balk, CardAttribute.Color.red, CardAttribute.Fill.halfFilled, CardAttribute.Count.one)
       val cards = List[Card](cardOne,cardOne,cardOne)
-      target.isASet(cards)
+      target.checkSet(cards, Player(0,0, "ina"))
       new ReactorSpy(target) {
         reactions += {
           case IsSet(istSet) =>
@@ -104,6 +104,19 @@ class ControllerSpec extends WordSpec {
       target.cancelAddPlayer()
       called should be (true)
       logger.logAsString should include(Controller.TriggerCancelPlayer)
+    }
+
+    "have send StartGame event on startGame call" in withController { (target, logger) =>
+      var called = false
+      new ReactorSpy(target) {
+        reactions += {
+          case _: StartGame => called = true
+        }
+      }
+
+      target.startGame()
+      called should be (true)
+      logger.logAsString should be ("")
     }
   }
 
