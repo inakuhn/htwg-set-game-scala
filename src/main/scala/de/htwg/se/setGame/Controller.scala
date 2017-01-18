@@ -20,6 +20,7 @@ trait Controller extends Publisher {
   def createNewGame()
   def addPlayer(name: String)
   def cancelAddPlayer()
+  def isASet(cards : List[Card])
 }
 
 /**
