@@ -4,7 +4,7 @@ import akka.actor.{ActorSystem, Props}
 import akka.pattern.ask
 import akka.util.Timeout
 import com.typesafe.scalalogging.Logger
-import de.htwg.se.setGame.actor.{CardActor, CreatePack, RemoveCardsFromField, Set}
+import de.htwg.se.setGame.actor.{CardActor, CreatePack, GeneratingNewGame, Set}
 import de.htwg.se.setGame.model.{Card, Game, Player}
 
 import scala.concurrent.Await
@@ -16,15 +16,20 @@ import scala.swing.event.Event
 trait Controller extends Publisher {
 
   def exitApplication()
+
   def createCards()
+
   def createNewGame()
 
   /** Add new player to game session and set name of player
+    *
     * @param name Name of new added player
     */
   def addPlayer(name: String)
+
   def cancelAddPlayer()
-  def checkSet(cards : List[Card], player : Player)
+
+  def checkSet(cards: List[Card], player: Player)
 
 
   /**
@@ -47,7 +52,7 @@ protected class ControllerActorSystem(private val system: ActorSystem) extends C
     publish(new ExitApplication)
   }
 
-  override def createCards(): Unit =  {
+  override def createCards(): Unit = {
     val myActor = system.actorOf(Props[CardActor])
     val future = myActor ? CreatePack
     val result = Await.result(future, timeout.duration).asInstanceOf[List[Card]]
@@ -55,18 +60,21 @@ protected class ControllerActorSystem(private val system: ActorSystem) extends C
   }
 
 
+  def generateNewGame(player: Player, set: List[Card]): Unit = {
+    val myActor = system.actorOf(Props[CardActor])
+    val future = myActor ? GeneratingNewGame(set,player,game)
+    game = Await.result(future, timeout.duration).asInstanceOf[Game]
+    logger.info("Actor result: " + game)
+  }
 
-  def checkSet(cards : List[Card], player: Player) : Unit = {
-
+  def checkSet(set: List[Card], player: Player): Unit = {
     logger.info(Controller.TriggerIsSet)
     val myActor = system.actorOf(Props[CardActor])
-    var future = myActor ? Set(cards)
+    val future = myActor ? Set(set)
     val result = Await.result(future, timeout.duration).asInstanceOf[Boolean]
     logger.info("Actor result: " + result)
-    if(result){
-      val cardsInField = game.cardsInField diff cards
+    if (result && game.pack.size >= Controller.sizeOfSet) generateNewGame(player, set)
 
-    }
     publish(IsSet(result))
   }
 
@@ -102,14 +110,22 @@ object Controller {
   val TriggerCancelPlayer = "Send `CancelAddPlayer` event"
   val PlayerAdded = "Player added: %s"
   val TriggerIsSet = "Called is a SET"
+  val sizeOfSet = 3
+
   def apply(system: ActorSystem): Controller = new ControllerActorSystem(system)
 
 }
 
 case class ExitApplication() extends Event
+
 case class AddPlayer() extends Event
+
 case class CancelAddPlayer() extends Event
+
 case class PlayerAdded(game: Game) extends Event
+
 case class NewGame() extends Event
+
 case class StartGame(game: Game) extends Event
+
 case class IsSet(boolean: Boolean) extends Event
