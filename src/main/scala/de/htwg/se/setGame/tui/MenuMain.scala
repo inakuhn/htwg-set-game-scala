@@ -39,6 +39,6 @@ object MenuMain {
   val ExitDescription = "Exit application"
   val CreateCommand = "c"
   val CreateDescription = "Create new game"
-  val MenuHeading = "# PLAYER-MENU #"
+  val MenuHeading = "# MAIN-MENU #"
   def apply(controller: Controller): MenuMain = new MenuMain(controller, MenuPlayer(controller))
 }

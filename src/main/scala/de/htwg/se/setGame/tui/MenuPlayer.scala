@@ -11,7 +11,7 @@ class MenuPlayer(private val controller: Controller, private val playerName: Men
   private val logger = Logger(getClass)
   listenTo(controller)
 
-  getActions(MenuPlayer.PlayerCommand) = (new Add, MenuPlayer.PlayerDescription)
+  getActions(MenuPlayer.PlayerCommand) = (new Player, MenuPlayer.PlayerDescription)
   getActions(MenuPlayer.CancelCommand) = (new Cancel, MenuPlayer.CancelDescription)
   getActions(MenuPlayer.ExitCommand) = (new Exit, MenuPlayer.ExitDescription)
 
@@ -26,8 +26,11 @@ class MenuPlayer(private val controller: Controller, private val playerName: Men
     logger.info(MenuPlayer.MenuHeading)
   }
 
-  private class Add extends Action {
-    override def execute(): Unit = playerName.process(); outputMenuList()
+  private class Player extends Action {
+    override def execute(): Unit = {
+      playerName.process()
+      outputMenuList()
+    }
   }
 
   private class Cancel extends Action {

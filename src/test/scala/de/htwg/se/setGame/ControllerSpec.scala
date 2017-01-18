@@ -29,13 +29,15 @@ class ControllerSpec extends WordSpec {
 
   "Controller" should {
     "have instance" in {
-      Controller(null) shouldBe a [Controller]
+      Controller(null) shouldBe a[Controller]
     }
 
     "have exitApplication" in withController { (target, logger) =>
       var called = false
       new ReactorSpy(target) {
-        reactions += {case e: ExitApplication => called = true}
+        reactions += {
+          case _: ExitApplication => called = true
+        }
       }
 
       target.exitApplication()
@@ -47,7 +49,9 @@ class ControllerSpec extends WordSpec {
     "have send AddPlayer event on createNewGame" in withController { (target, logger) =>
       var called = false
       new ReactorSpy(target) {
-        reactions += {case e: AddPlayer => called = true}
+        reactions += {
+          case _: AddPlayer => called = true
+        }
       }
 
       target.createNewGame()
@@ -58,7 +62,9 @@ class ControllerSpec extends WordSpec {
     "have send PlayerAdded event on addPlayer" in withController { (target, logger) =>
       var called = false
       new ReactorSpy(target) {
-        reactions += {case e: PlayerAdded => called = true}
+        reactions += {
+          case _: PlayerAdded => called = true
+        }
       }
 
       val name = "player"
@@ -70,7 +76,9 @@ class ControllerSpec extends WordSpec {
     "have send CancelAddPlayer event on cancelAddPlayer" in withController { (target, logger) =>
       var called = false
       new ReactorSpy(target) {
-        reactions += {case e: CancelAddPlayer => called = true}
+        reactions += {
+          case _: CancelAddPlayer => called = true
+        }
       }
 
       target.cancelAddPlayer()
@@ -82,22 +90,22 @@ class ControllerSpec extends WordSpec {
   "Events" should {
     "have ExitApplication" in {
       val event = new ExitApplication
-      event shouldBe a [Event]
+      event shouldBe a[Event]
       ExitApplication.unapply(event)
     }
     "have AddPlayer" in {
       val event = new AddPlayer
-      event shouldBe a [Event]
+      event shouldBe a[Event]
       AddPlayer.unapply(event)
     }
     "have CancelAddPlayer" in {
       val event = new CancelAddPlayer
-      event shouldBe a [Event]
+      event shouldBe a[Event]
       CancelAddPlayer.unapply(event)
     }
     "have PlayerAdded" in {
       val event = new PlayerAdded
-      event shouldBe a [Event]
+      event shouldBe a[Event]
       PlayerAdded.unapply(event)
     }
   }
