@@ -11,8 +11,8 @@ class MenuMain(private val controller: Controller, private val player: Menu) ext
   private val logger = Logger(getClass)
   listenTo(controller)
 
-  getActions(MenuMain.ExitCommand) = (new Exit, MenuMain.ExitDescription)
   getActions(MenuMain.CreateCommand) = (new Create, MenuMain.CreateDescription)
+  getActions(MenuMain.ExitCommand) = (new Exit, MenuMain.ExitDescription)
 
   reactions += {
     case _: ExitApplication => exit()
