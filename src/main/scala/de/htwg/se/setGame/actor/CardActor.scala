@@ -10,7 +10,9 @@ case class Set(cards : List[Card])
 /**
   * Created by Ina Kuhn on 17.01.2017.
   */
+
 class CardActor extends Actor with ActorLogging {
+
   def receive: Actor.Receive = {
     case CreatePack =>
       log.info("Create cards for Game")
