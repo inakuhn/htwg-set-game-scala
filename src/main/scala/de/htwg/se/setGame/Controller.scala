@@ -19,6 +19,7 @@ trait Controller extends Publisher {
   def createNewGame()
   def addPlayer(name: String)
   def cancelAddPlayer()
+  def getCardsInField(): List[Card]
 }
 
 /**
@@ -51,6 +52,7 @@ protected class ControllerActorSystem(private val system: ActorSystem) extends C
   def getCardsInField() : List[Card] = {
     return pack;
   }
+
   def isASet(card: Card, player : Player) : Boolean = {
 
     return true;
