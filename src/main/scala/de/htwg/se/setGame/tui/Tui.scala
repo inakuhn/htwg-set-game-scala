@@ -1,7 +1,7 @@
-package de.htwg.se.setGame
+package de.htwg.se.setGame.tui
 
 import com.typesafe.scalalogging.Logger
-import de.htwg.se.setGame.tui.{Menu, MenuMain}
+import de.htwg.se.setGame.{Controller, ExitApplication}
 
 import scala.swing.Reactor
 
