@@ -9,7 +9,6 @@ import org.scalatest.WordSpec
 class CardActorTest extends WordSpec {
 
   "CardActorTest" should {
-    val actorRef = TestActorRef[CardActor]
 
     "generateCards" in {
 
