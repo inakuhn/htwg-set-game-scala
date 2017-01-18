@@ -52,7 +52,7 @@ object MenuPlayer {
   val CancelCommand = "c"
   val CancelDescription = "Cancel"
   val MenuHeading = "# PLAYER-MENU #"
-  val PlayerCommand = "p"
+  val PlayerCommand = "a"
   val PlayerDescription = "Add player"
   val PlayerAdded = "PlayerAdded"
   val PlayerFormat = "%s (%d points)"
