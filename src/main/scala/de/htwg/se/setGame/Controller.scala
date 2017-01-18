@@ -66,7 +66,6 @@ protected class ControllerActorSystem(private val system: ActorSystem) extends C
     if(result){
       val cardsInField = game.cardsInField diff cards
 
-
     }
     publish(IsSet(result))
   }

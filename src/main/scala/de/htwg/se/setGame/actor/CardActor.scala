@@ -4,6 +4,7 @@ import akka.actor.{Actor, ActorLogging}
 import de.htwg.se.setGame.model.{Card, CardAttribute, Game}
 
 import scala.collection.mutable
+import scala.util.Random
 case object CreatePack
 case class Set(cards : List[Card])
 case class RemoveCardsFromField(cards : List[Card], game : Game)
@@ -38,6 +39,7 @@ class CardActor extends Actor with ActorLogging {
     var cards = mutable.MutableList[Card]()
     for (form <- CardAttribute.Form.values; color <- CardAttribute.Color.values; fill <- CardAttribute.Fill.values; count <- CardAttribute.Count.values)
     cards += Card(form, color, fill, count)
+    Random.shuffle(cards)
     List[Card](cards:_*)
   }
   def isSet(list: List[Card]) : Boolean = {
