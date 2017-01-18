@@ -4,7 +4,7 @@ import akka.actor.{ActorSystem, Props}
 import akka.pattern.ask
 import akka.util.Timeout
 import com.typesafe.scalalogging.Logger
-import de.htwg.se.setGame.actor.{CardActor, CreatePack, Set}
+import de.htwg.se.setGame.actor.{CardActor, CreatePack, RemoveCardsFromField, Set}
 import de.htwg.se.setGame.model.{Card, Game, Player}
 
 import scala.concurrent.Await
@@ -20,7 +20,7 @@ trait Controller extends Publisher {
   def createNewGame()
   def addPlayer(name: String)
   def cancelAddPlayer()
-  def isASet(cards : List[Card])
+  def checkSet(cards : List[Card], player : Player)
 }
 
 /**
@@ -44,12 +44,22 @@ protected class ControllerActorSystem(private val system: ActorSystem) extends C
   }
 
 
-  def isASet(cards : List[Card]) : Unit = {
+  def checkSet(cards : List[Card], player: Player) : Unit = {
     logger.info(Controller.TriggerIsSet)
     val myActor = system.actorOf(Props[CardActor])
-    val future = myActor ? Set(cards)
+    var future = myActor ? Set(cards)
     val result = Await.result(future, timeout.duration).asInstanceOf[Boolean]
     logger.info("Actor result: " + result)
+    if(result){
+     //remove card from field
+      future = myActor ? RemoveCardsFromField(cards,game)
+
+      //TODO: still sets in game
+      val cardsInField = Await.result(future, timeout.duration).asInstanceOf[List[Card]]
+
+
+
+    }
     publish(IsSet(result))
   }
 

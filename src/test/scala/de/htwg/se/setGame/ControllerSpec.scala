@@ -63,8 +63,8 @@ class ControllerSpec extends WordSpec {
     "have send isSet event on createNewGame" ignore  withController { (target, logger) =>
       var called = false
       var isSetAns = false
-      var cardOne = Card(CardAttribute.Form.balk, CardAttribute.Color.red, CardAttribute.Fill.halfFilled, CardAttribute.Count.one)
-      var cards = List[Card](cardOne,cardOne,cardOne)
+      val cardOne = Card(CardAttribute.Form.balk, CardAttribute.Color.red, CardAttribute.Fill.halfFilled, CardAttribute.Count.one)
+      val cards = List[Card](cardOne,cardOne,cardOne)
       target.isASet(cards)
       new ReactorSpy(target) {
         reactions += {

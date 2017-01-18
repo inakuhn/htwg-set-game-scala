@@ -1,11 +1,12 @@
 package de.htwg.se.setGame.actor
 
 import akka.actor.{Actor, ActorLogging}
-import de.htwg.se.setGame.model.{Card, CardAttribute}
+import de.htwg.se.setGame.model.{Card, CardAttribute, Game}
 
 import scala.collection.mutable
 case object CreatePack
 case class Set(cards : List[Card])
+case class RemoveCardsFromField(cards : List[Card], game : Game)
 
 /**
   * Created by Ina Kuhn on 17.01.2017.
@@ -20,13 +21,20 @@ class CardActor extends Actor with ActorLogging {
       sender ! generateCards()
       context.stop(self)
       log.info("Stopped")
-    case Set(cards) => cards
+    case e: Set =>
       log.info("Check is ist a Set")
-      val result = isSet(cards)
+      val result = isSet(e.cards)
       log.info("is set = " + result)
       sender ! result
       log.info("Stopped")
       context.stop(self)
+    case e : RemoveCardsFromField =>{
+      log.info("Removing cards from field")
+      val cardsInField = e.game.cardsInField diff e.cards
+      sender ! cardsInField
+      log.info("Stopped")
+      context.stop(self)
+    }
     case default@_ =>
       log.warning("that was unexpected: " + default.toString)
       sender ! None
