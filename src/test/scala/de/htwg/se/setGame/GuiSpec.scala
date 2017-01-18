@@ -16,10 +16,7 @@ class GuiSpec extends WordSpec {
   var target:Gui = _
   var exitCalled = false
 
-  class ControllerSpy(system: ActorSystem) extends Controller(system) {
-    def this() {
-      this(null)
-    }
+  class ControllerSpy extends ControllerDummy {
 
     override def subscribe(listener: Reaction): Unit = {
       listenerList += listener
