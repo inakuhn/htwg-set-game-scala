@@ -19,7 +19,7 @@ trait Controller extends Publisher {
   def createNewGame()
   def addPlayer(name: String)
   def cancelAddPlayer()
-  def getCardsInField(): List[Card]
+  def getCardsInField: List[Card]
 }
 
 /**
@@ -28,7 +28,7 @@ trait Controller extends Publisher {
 protected class ControllerActorSystem(private val system: ActorSystem) extends Controller {
   private implicit val timeout = Timeout(5 seconds)
   private val logger = Logger(getClass)
-  var pack = List[Card]() ;
+  private var pack = List[Card]() ;
   def exitApplication(): Unit = {
     logger.info(Controller.TriggerExitApp)
     publish(new ExitApplication)
@@ -49,18 +49,13 @@ protected class ControllerActorSystem(private val system: ActorSystem) extends C
     *
     * @return
     */
-  def getCardsInField() : List[Card] = {
-    return pack;
+  def getCardsInField: List[Card] = {
+    pack
   }
 
   def isASet(card: Card, player : Player) : Boolean = {
-
-    return true;
-
+    true
   }
-
-
-
 
   def createNewGame(): Unit = {
     logger.info(Controller.TriggerAddPlayer)

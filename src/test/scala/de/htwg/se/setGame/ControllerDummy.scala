@@ -12,5 +12,5 @@ class ControllerDummy extends Controller {
   override def createNewGame(): Unit = {}
   override def addPlayer(name: String): Unit = {}
   override def cancelAddPlayer(): Unit = {}
-  override def getCardsInField(): List[Card] = {List[Card]()}
+  override def getCardsInField: List[Card] = {List[Card]()}
 }
