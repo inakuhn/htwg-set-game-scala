@@ -105,6 +105,19 @@ class ControllerSpec extends WordSpec {
       called should be (true)
       logger.logAsString should include(Controller.TriggerCancelPlayer)
     }
+
+    "have send StartGame event on startGame call" in withController { (target, logger) =>
+      var called = false
+      new ReactorSpy(target) {
+        reactions += {
+          case _: StartGame => called = true
+        }
+      }
+
+      target.startGame()
+      called should be (true)
+      logger.logAsString should be ("")
+    }
   }
 
   "Events" should {

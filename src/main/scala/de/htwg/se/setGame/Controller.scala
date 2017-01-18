@@ -18,9 +18,18 @@ trait Controller extends Publisher {
   def exitApplication()
   def createCards()
   def createNewGame()
+
+  /** Add new player to game session and set name of player
+    * @param name Name of new added player
+    */
   def addPlayer(name: String)
   def cancelAddPlayer()
   def isASet(cards : List[Card])
+
+  /**
+    * Trigger game start for all UIs
+    */
+  def startGame()
 }
 
 /**
@@ -31,20 +40,19 @@ protected class ControllerActorSystem(private val system: ActorSystem) extends C
   private val logger = Logger(getClass)
   private var game: Game = Game(List[Card](), List[Card](), List[Player]())
 
-  def exitApplication(): Unit = {
+  override def exitApplication(): Unit = {
     logger.info(Controller.TriggerExitApp)
     publish(new ExitApplication)
   }
 
-  def createCards(): Unit =  {
+  override def createCards(): Unit =  {
     val myActor = system.actorOf(Props[CardActor])
     val future = myActor ? CreatePack
     val result = Await.result(future, timeout.duration).asInstanceOf[List[Card]]
     logger.info("Actor result: " + result)
   }
 
-
-  def isASet(cards : List[Card]) : Unit = {
+  override def isASet(cards : List[Card]) : Unit = {
     logger.info(Controller.TriggerIsSet)
     val myActor = system.actorOf(Props[CardActor])
     val future = myActor ? Set(cards)
@@ -53,24 +61,25 @@ protected class ControllerActorSystem(private val system: ActorSystem) extends C
     publish(IsSet(result))
   }
 
-  def createNewGame(): Unit = {
+  override def createNewGame(): Unit = {
     logger.info(Controller.CreateNewGame)
     publish(new AddPlayer)
     publish(new NewGame)
   }
 
-  /** Add new player to game session and set name of player
-    * @param name Name of new added player
-    */
-  def addPlayer(name: String): Unit = {
+  override def addPlayer(name: String): Unit = {
     logger.info(Controller.PlayerAdded.format(name))
     game = Game(game.cardsInField, game.pack, game.player :+ Player(0, 0, name))
     publish(PlayerAdded(game))
   }
 
-  def cancelAddPlayer(): Unit = {
+  override def cancelAddPlayer(): Unit = {
     logger.info(Controller.TriggerCancelPlayer)
     publish(new CancelAddPlayer)
+  }
+
+  override def startGame(): Unit = {
+    publish(StartGame(game))
   }
 }
 
@@ -93,4 +102,5 @@ case class AddPlayer() extends Event
 case class CancelAddPlayer() extends Event
 case class PlayerAdded(game: Game) extends Event
 case class NewGame() extends Event
+case class StartGame(game: Game) extends Event
 case class IsSet(boolean: Boolean) extends Event
