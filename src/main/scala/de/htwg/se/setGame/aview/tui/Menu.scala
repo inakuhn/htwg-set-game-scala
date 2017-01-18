@@ -1,4 +1,4 @@
-package de.htwg.se.setGame.tui
+package de.htwg.se.setGame.aview.tui
 
 import com.typesafe.scalalogging.Logger
 

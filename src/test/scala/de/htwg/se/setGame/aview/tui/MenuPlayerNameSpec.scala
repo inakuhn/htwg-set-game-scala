@@ -1,4 +1,4 @@
-package de.htwg.se.setGame.tui
+package de.htwg.se.setGame.aview.tui
 
 import java.io.ByteArrayInputStream
 

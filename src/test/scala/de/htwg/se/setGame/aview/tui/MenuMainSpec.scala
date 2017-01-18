@@ -1,4 +1,4 @@
-package de.htwg.se.setGame.tui
+package de.htwg.se.setGame.aview.tui
 
 import de.htwg.se.setGame.{AddPlayer, CancelAddPlayer, ControllerDummy, ExitApplication}
 import org.scalatest.Matchers._

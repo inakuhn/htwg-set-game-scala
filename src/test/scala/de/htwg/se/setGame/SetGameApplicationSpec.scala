@@ -2,7 +2,7 @@ package de.htwg.se.setGame
 
 import java.io.ByteArrayInputStream
 
-import de.htwg.se.setGame.tui.MenuMain
+import de.htwg.se.setGame.aview.tui.MenuMain
 import org.apache.log4j.Logger
 import org.scalatest.Matchers._
 import org.scalatest.WordSpec
