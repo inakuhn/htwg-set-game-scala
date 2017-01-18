@@ -55,6 +55,23 @@ class ControllerSpec extends WordSpec {
       called should be (true)
       logger.logAsString should include(Controller.CreateNewGame)
     }
+    "have send isSet event on createNewGame" ignore  withController { (target, logger) =>
+      var called = false
+      var isSetAns = false
+      var cardOne = Card(CardAttribute.Form.balk, CardAttribute.Color.red, CardAttribute.Fill.halfFilled, CardAttribute.Count.one)
+      var cards = List[Card](cardOne,cardOne,cardOne)
+      target.isASet(cards)
+      new ReactorSpy(target) {
+        reactions += {case IsSet(istSet) => {
+          called = true
+          isSetAns = istSet
+        }}
+      }
+
+      called should be (true)
+      isSetAns should be (true)
+      logger.logAsString should include(Controller.TriggerIsSet)
+    }
 
     "have send PlayerAdded event on addPlayer" in withController { (target, logger) =>
       var called = false
