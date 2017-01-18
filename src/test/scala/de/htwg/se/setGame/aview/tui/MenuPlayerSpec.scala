@@ -1,6 +1,7 @@
 package de.htwg.se.setGame.aview.tui
 
 import de.htwg.se.setGame._
+import de.htwg.se.setGame.model.{Card, Game, Player}
 import org.scalatest.Matchers._
 import org.scalatest.WordSpec
 
@@ -34,7 +35,7 @@ class MenuPlayerSpec extends WordSpec with TuiSpecExtension {
 
     "have called MenuPlayerName" in withLogger { (logger) =>
       val controller = new ControllerDummy {
-        override def addPlayer(name: String): Unit = publish(new PlayerAdded)
+        override def addPlayer(name: String): Unit = publish(PlayerAdded(Game(List[Card](), List[Card](), List[Player]())))
         override def exitApplication(): Unit = publish(new ExitApplication)
       }
       val target = new MenuPlayer(controller, new MenuDummy {

@@ -1,6 +1,6 @@
 package de.htwg.se.setGame
 
-import de.htwg.se.setGame.model.{Card, CardAttribute}
+import de.htwg.se.setGame.model.{Card, CardAttribute, Game, Player}
 import org.apache.log4j.Logger
 import org.scalatest.Matchers._
 import org.scalatest.WordSpec
@@ -67,10 +67,11 @@ class ControllerSpec extends WordSpec {
       var cards = List[Card](cardOne,cardOne,cardOne)
       target.isASet(cards)
       new ReactorSpy(target) {
-        reactions += {case IsSet(istSet) => {
-          called = true
-          isSetAns = istSet
-        }}
+        reactions += {
+          case IsSet(istSet) =>
+            called = true
+            isSetAns = istSet
+        }
       }
 
       called should be (true)
@@ -79,17 +80,17 @@ class ControllerSpec extends WordSpec {
     }
 
     "have send PlayerAdded event on addPlayer" in withController { (target, logger) =>
-      var called = false
+      var game: Game = Game(List[Card](), List[Card](), List[Player]())
       new ReactorSpy(target) {
         reactions += {
-          case _: PlayerAdded => called = true
+          case e: PlayerAdded => game = e.game
         }
       }
 
-      val name = "player"
-      target.addPlayer(name)
-      called should be (true)
-      logger.logAsString should include(Controller.PlayerAdded.format(name))
+      target.addPlayer("player")
+      game.player.isEmpty should be (false)
+      game.player should contain (Player(0, 0, "player"))
+      logger.logAsString should include(Controller.PlayerAdded.format("player"))
     }
 
     "have send CancelAddPlayer event on cancelAddPlayer" in withController { (target, logger) =>
@@ -123,7 +124,7 @@ class ControllerSpec extends WordSpec {
       CancelAddPlayer.unapply(event)
     }
     "have PlayerAdded" in {
-      val event = new PlayerAdded
+      val event = PlayerAdded(Game(List[Card](), List[Card](), List[Player]()))
       event shouldBe a[Event]
       PlayerAdded.unapply(event)
     }

@@ -29,7 +29,7 @@ trait Controller extends Publisher {
 protected class ControllerActorSystem(private val system: ActorSystem) extends Controller {
   private implicit val timeout = Timeout(5 seconds)
   private val logger = Logger(getClass)
-  var game = Game
+  private var game: Game = Game(List[Card](), List[Card](), List[Player]())
 
   def exitApplication(): Unit = {
     logger.info(Controller.TriggerExitApp)
@@ -50,22 +50,22 @@ protected class ControllerActorSystem(private val system: ActorSystem) extends C
     val future = myActor ? Set(cards)
     val result = Await.result(future, timeout.duration).asInstanceOf[Boolean]
     logger.info("Actor result: " + result)
-    publish(new IsSet(result))
+    publish(IsSet(result))
   }
-
-
 
   def createNewGame(): Unit = {
     logger.info(Controller.CreateNewGame)
-
-
     publish(new AddPlayer)
     publish(new NewGame)
   }
 
+  /** Add new player to game session and set name of player
+    * @param name Name of new added player
+    */
   def addPlayer(name: String): Unit = {
     logger.info(Controller.PlayerAdded.format(name))
-    publish(new PlayerAdded)
+    game = Game(game.cardsInField, game.pack, game.player :+ Player(0, 0, name))
+    publish(PlayerAdded(game))
   }
 
   def cancelAddPlayer(): Unit = {
@@ -91,6 +91,6 @@ object Controller {
 case class ExitApplication() extends Event
 case class AddPlayer() extends Event
 case class CancelAddPlayer() extends Event
-case class PlayerAdded() extends Event
+case class PlayerAdded(game: Game) extends Event
 case class NewGame() extends Event
 case class IsSet(boolean: Boolean) extends Event

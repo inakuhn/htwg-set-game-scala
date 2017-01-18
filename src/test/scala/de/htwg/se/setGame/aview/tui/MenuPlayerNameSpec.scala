@@ -3,6 +3,7 @@ package de.htwg.se.setGame.aview.tui
 import java.io.ByteArrayInputStream
 
 import de.htwg.se.setGame._
+import de.htwg.se.setGame.model.{Card, Game, Player}
 import org.scalatest.Matchers._
 import org.scalatest.WordSpec
 
@@ -31,7 +32,7 @@ class MenuPlayerNameSpec extends WordSpec with TuiSpecExtension {
       val target = MenuPlayerName(new ControllerDummy {
         override def addPlayer(name: String): Unit = {
           playerName = name
-          publish(PlayerAdded())
+          publish(PlayerAdded(Game(List[Card](), List[Card](), List[Player]())))
         }
       })
       overrideConsoleIn("Playername") {
@@ -42,7 +43,7 @@ class MenuPlayerNameSpec extends WordSpec with TuiSpecExtension {
     }
 
     "has stopped on PlayerAdded event" in withLogger { (logger) =>
-      assertEvent(PlayerAdded(), logger)
+      assertEvent(PlayerAdded(Game(List[Card](), List[Card](), List[Player]())), logger)
     }
 
     "has stopped on CancelAddPlayer event" in withLogger { (logger) =>
