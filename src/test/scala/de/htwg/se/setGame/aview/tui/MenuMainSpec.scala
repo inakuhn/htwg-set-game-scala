@@ -1,5 +1,6 @@
 package de.htwg.se.setGame.aview.tui
 
+import de.htwg.se.setGame.model.{Card, Game, Player}
 import de.htwg.se.setGame.{AddPlayer, CancelAddPlayer, ControllerDummy, ExitApplication}
 import org.scalatest.Matchers._
 import org.scalatest.WordSpec
@@ -8,7 +9,7 @@ import org.scalatest.WordSpec
   * @author Philipp Daniels
   */
 class MenuMainSpec extends WordSpec with TuiSpecExtension {
-  private val lineBreak = sys.props("line.separator")
+  private def createEmptyGame: Game = Game(List[Card](), List[Card](), List[Player]())
 
   "MenuMain" should {
 
@@ -64,7 +65,7 @@ class MenuMainSpec extends WordSpec with TuiSpecExtension {
       new MenuMain(controller, new MenuDummy {
         override def process(): Unit = called = true
       })
-      controller.publish(new AddPlayer)
+      controller.publish(AddPlayer(createEmptyGame))
 
       called should be(true)
       logger.logAsString() should be ("")
