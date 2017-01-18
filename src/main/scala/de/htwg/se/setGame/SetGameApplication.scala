@@ -2,6 +2,7 @@ package de.htwg.se.setGame
 
 import akka.actor.ActorSystem
 import com.typesafe.scalalogging.Logger
+import de.htwg.se.setGame.tui.Tui
 
 object SetGameApplication {
   private val logger = Logger(getClass)

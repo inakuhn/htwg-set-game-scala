@@ -13,13 +13,23 @@ import scala.language.postfixOps
 import scala.swing.Publisher
 import scala.swing.event.Event
 
+trait Controller extends Publisher {
+
+  def exitApplication()
+  def createCards()
+  def createNewGame()
+  def addPlayer(name: String)
+  def cancelAddPlayer()
+}
+
 /**
   * @author Philipp Daniels
   */
-protected class Controller(private val system: ActorSystem) extends Publisher {
+protected class ControllerActorSystem(private val system: ActorSystem) extends Controller {
   private implicit val timeout = Timeout(5 seconds)
   private val logger = Logger(getClass)
   var game = Game
+
   def exitApplication(): Unit = {
     logger.info(Controller.TriggerExitApp)
     publish(new ExitApplication)
@@ -41,6 +51,7 @@ protected class Controller(private val system: ActorSystem) extends Publisher {
     logger.info("Actor result: " + result)
     publish(new IsSet(result))
   }
+
 
 
   def createNewGame(): Unit = {
@@ -72,7 +83,8 @@ object Controller {
   val TriggerCancelPlayer = "Send `CancelAddPlayer` event"
   val PlayerAdded = "Player added: %s"
   val TriggerIsSet = "Called is a SET"
-  def apply(system: ActorSystem): Controller = new Controller(system)
+  def apply(system: ActorSystem): Controller = new ControllerActorSystem(system)
+
 }
 
 case class ExitApplication() extends Event

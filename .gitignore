@@ -12,7 +12,6 @@ target/
 
 # Maven
 log/
-target/
 
 # Gradle
 .gradle/
@@ -21,10 +20,8 @@ pom.xml
 
 # sbt
 .cache
-.history
 .lib/
 dist/*
-target/
 lib_managed/
 src_managed/
 project/boot/
@@ -44,3 +41,4 @@ project/.sbtserver
 
 # Application
 *.log
+*.log.*
