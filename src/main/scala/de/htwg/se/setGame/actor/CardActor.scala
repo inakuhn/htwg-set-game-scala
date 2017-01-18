@@ -28,13 +28,6 @@ class CardActor extends Actor with ActorLogging {
       sender ! result
       log.info("Stopped")
       context.stop(self)
-    case e : RemoveCardsFromField =>{
-      log.info("Removing cards from field")
-      val cardsInField = e.game.cardsInField diff e.cards
-      sender ! cardsInField
-      log.info("Stopped")
-      context.stop(self)
-    }
     case default@_ =>
       log.warning("that was unexpected: " + default.toString)
       sender ! None

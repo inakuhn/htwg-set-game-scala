@@ -64,12 +64,7 @@ protected class ControllerActorSystem(private val system: ActorSystem) extends C
     val result = Await.result(future, timeout.duration).asInstanceOf[Boolean]
     logger.info("Actor result: " + result)
     if(result){
-     //remove card from field
-      future = myActor ? RemoveCardsFromField(cards,game)
-
-      //TODO: still sets in game
-      val cardsInField = Await.result(future, timeout.duration).asInstanceOf[List[Card]]
-
+      val cardsInField = game.cardsInField diff cards
 
 
     }
