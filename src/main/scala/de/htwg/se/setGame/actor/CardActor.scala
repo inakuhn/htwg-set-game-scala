@@ -18,12 +18,12 @@ case class GeneratingNewGame(set: List[Card], player: Player, game: Game)
 
 class CardActor extends Actor with ActorLogging {
 
-
   def receive: Actor.Receive = {
     case CreatePack =>
       log.info("Create cards for Game")
       //create card for game
-      sender ! generateCards()
+      val result = generateCards()
+      sender ! result
       context.stop(self)
       log.info("Stopped")
     case e: Set =>
@@ -49,6 +49,7 @@ class CardActor extends Actor with ActorLogging {
       sender ! None
       context.stop(self)
   }
+
 
   def generateCards(): List[Card] = {
     var cards = mutable.MutableList[Card]()

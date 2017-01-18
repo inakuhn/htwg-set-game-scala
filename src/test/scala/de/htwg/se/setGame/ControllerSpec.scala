@@ -28,6 +28,14 @@ class ControllerSpec extends WordSpec {
     }
   }
 
+  private def createEmptyGame: Game = Game(List[Card](), List[Card](), List[Player]())
+  private var game: Game = createEmptyGame
+  private def assertGame(cards: Boolean, pack: Boolean, player: Boolean) = {
+    game.cardsInField.isEmpty should be (cards)
+    game.pack.isEmpty should be (pack)
+    game.player.isEmpty should be (player)
+  }
+
   "Controller" should {
     "have instance" in {
       Controller(null) shouldBe a[Controller]
@@ -80,7 +88,6 @@ class ControllerSpec extends WordSpec {
     }
 
     "have send PlayerAdded event on addPlayer" in withController { (target, logger) =>
-      var game: Game = Game(List[Card](), List[Card](), List[Player]())
       new ReactorSpy(target) {
         reactions += {
           case e: PlayerAdded => game = e.game
@@ -88,7 +95,7 @@ class ControllerSpec extends WordSpec {
       }
 
       target.addPlayer("player")
-      game.player.isEmpty should be (false)
+      assertGame(cards = true, pack = true, player = false)
       game.player should contain (Player(0, 0, "player"))
       logger.logAsString should include(Controller.PlayerAdded.format("player"))
     }
@@ -118,6 +125,18 @@ class ControllerSpec extends WordSpec {
       called should be (true)
       logger.logAsString should be ("")
     }
+
+    "have reset Game on createNewGame" in withController { (target, logger) =>
+      new ReactorSpy(target) {
+        reactions += {
+          case e: StartGame => game = e.game
+        }
+      }
+
+      target.addPlayer("player")
+      target.createNewGame()
+      assertGame(cards = true, pack = true, player = false)
+    }
   }
 
   "Events" should {
@@ -127,7 +146,7 @@ class ControllerSpec extends WordSpec {
       ExitApplication.unapply(event)
     }
     "have AddPlayer" in {
-      val event = new AddPlayer
+      val event = AddPlayer(createEmptyGame)
       event shouldBe a[Event]
       AddPlayer.unapply(event)
     }
@@ -137,7 +156,7 @@ class ControllerSpec extends WordSpec {
       CancelAddPlayer.unapply(event)
     }
     "have PlayerAdded" in {
-      val event = PlayerAdded(Game(List[Card](), List[Card](), List[Player]()))
+      val event = PlayerAdded(createEmptyGame)
       event shouldBe a[Event]
       PlayerAdded.unapply(event)
     }

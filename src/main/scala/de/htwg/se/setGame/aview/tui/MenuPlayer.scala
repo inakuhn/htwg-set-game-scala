@@ -1,7 +1,7 @@
 package de.htwg.se.setGame.aview.tui
 
 import com.typesafe.scalalogging.Logger
-import de.htwg.se.setGame.{CancelAddPlayer, Controller, ExitApplication, PlayerAdded}
+import de.htwg.se.setGame.{model, _}
 
 /**
   * @author Philipp Daniels
@@ -18,7 +18,11 @@ class MenuPlayer(private val controller: Controller, private val playerName: Men
   reactions += {
     case _: ExitApplication => exit()
     case _: CancelAddPlayer => exit()
-    case _: PlayerAdded => logger.info(MenuPlayer.PlayerAdded)
+    case e: PlayerAdded =>
+      logger.info(MenuPlayer.PlayerAdded)
+      val formatter = (p: model.Player) => {MenuPlayer.PlayerFormat.format(p.name, p.points)}
+      val player = e.game.player.map(formatter)
+      logger.info(MenuPlayer.PlayerList.format(player.mkString(", ")))
   }
 
   protected override def preMenuList(): Unit = {
@@ -51,5 +55,7 @@ object MenuPlayer {
   val PlayerCommand = "p"
   val PlayerDescription = "Add player"
   val PlayerAdded = "PlayerAdded"
+  val PlayerFormat = "%s (%d points)"
+  val PlayerList = "Player: %s"
   def apply(controller: Controller): MenuPlayer = new MenuPlayer(controller, MenuPlayerName(controller))
 }

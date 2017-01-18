@@ -45,7 +45,7 @@ trait Controller extends Publisher {
 protected class ControllerActorSystem(private val system: ActorSystem) extends Controller {
   private implicit val timeout = Timeout(5 seconds)
   private val logger = Logger(getClass)
-  private var game: Game = Game(List[Card](), List[Card](), List[Player]())
+  private var game: Game = createEmptyGame
 
   override def exitApplication(): Unit = {
     logger.info(Controller.TriggerExitApp)
@@ -78,10 +78,13 @@ protected class ControllerActorSystem(private val system: ActorSystem) extends C
     publish(IsSet(result))
   }
 
+  private def createEmptyGame: Game = Game(List[Card](), List[Card](), List[Player]())
+
   override def createNewGame(): Unit = {
     logger.info(Controller.CreateNewGame)
-    publish(new AddPlayer)
-    publish(new NewGame)
+    game = createEmptyGame
+    publish(NewGame(game))
+    publish(AddPlayer(game))
   }
 
   override def addPlayer(name: String): Unit = {
@@ -118,13 +121,13 @@ object Controller {
 
 case class ExitApplication() extends Event
 
-case class AddPlayer() extends Event
+case class AddPlayer(game: Game) extends Event
 
 case class CancelAddPlayer() extends Event
 
 case class PlayerAdded(game: Game) extends Event
 
-case class NewGame() extends Event
+case class NewGame(game: Game) extends Event
 
 case class StartGame(game: Game) extends Event
 
