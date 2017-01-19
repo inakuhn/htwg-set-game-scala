@@ -17,8 +17,12 @@ class MenuPlayer(private val controller: Controller, private val playerName: Men
   getActions(MenuPlayer.ExitCommand) = (new Exit, MenuPlayer.ExitDescription)
 
   reactions += {
-    case _: ExitApplication => exit()
-    case _: CancelAddPlayer => exit()
+    case _: ExitApplication =>
+      logger.info(MenuPlayer.EventExitApplication)
+      exit()
+    case _: CancelAddPlayer =>
+      logger.info(MenuPlayer.EventCancelAddPlayer)
+      exit()
     case e: PlayerAdded =>
       logger.info(MenuPlayer.EventPlayerAdded)
       val formatter = (p: model.Player) => {MenuPlayer.PlayerFormat.format(p.name, p.points)}
@@ -57,8 +61,10 @@ class MenuPlayer(private val controller: Controller, private val playerName: Men
 object MenuPlayer {
   val CancelCommand = "c"
   val CancelDescription = "Cancel"
-  val EventStartGame = "Received StartGame event"
-  val EventPlayerAdded = "Received PlayerAdded event"
+  val EventCancelAddPlayer = "Received 'CancelAddPlayer' event"
+  val EventExitApplication = "Received 'ExitApplication' event"
+  val EventPlayerAdded = "Received 'PlayerAdded' event"
+  val EventStartGame = "Received 'StartGame' event"
   val ExitCommand = "x"
   val ExitDescription = "Exit"
   val MenuHeading = "# PLAYER-MENU #"

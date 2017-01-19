@@ -5,6 +5,8 @@ import de.htwg.se.setGame.model.{Card, Game, Player}
 import org.scalatest.Matchers._
 import org.scalatest.WordSpec
 
+import scala.swing.event.Event
+
 /**
   * @author Philipp Daniels
   */
@@ -12,6 +14,14 @@ class MenuPlayerSpec extends WordSpec with TuiSpecExtension {
 
   private val lineBreak = sys.props("line.separator")
   private def createEmptyGame: Game = Game(List[Card](), List[Card](), List[Player]())
+
+  private def assertExitByEvent(event: Event): Unit = {
+    val controller = new ControllerDummy
+    val target = new MenuPlayer(controller, new MenuDummy, new MenuDummy)
+    controller.publish(event)
+
+    target.isContinue should be (false)
+  }
 
   "MenuPlayer" should {
     val assertEvent = (logger: TestAppender, command: String, c: Controller) => {
@@ -83,6 +93,16 @@ class MenuPlayerSpec extends WordSpec with TuiSpecExtension {
 
       called should be (true)
       logger.logAsString() should include (MenuPlayer.EventStartGame)
+    }
+
+    "have listener on ExitApplication event" in withLogger { (logger) =>
+      assertExitByEvent(new ExitApplication)
+      logger.logAsString() should include (MenuPlayer.EventExitApplication)
+    }
+
+    "have listener on CancelAddPlayer event" in withLogger { (logger) =>
+      assertExitByEvent(new CancelAddPlayer)
+      logger.logAsString() should include (MenuPlayer.EventCancelAddPlayer)
     }
 
     "have unknown menu-entry fallback" in withLogger { (logger) =>
