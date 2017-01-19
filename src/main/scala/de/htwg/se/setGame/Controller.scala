@@ -88,7 +88,6 @@ protected class ControllerActorSystem(private val system: ActorSystem) extends C
     logger.info(Controller.CreateNewGame)
     game = createEmptyGame
     publish(NewGame(game))
-    publish(AddPlayer(game))
   }
 
   override def addPlayer(name: String): Unit = {

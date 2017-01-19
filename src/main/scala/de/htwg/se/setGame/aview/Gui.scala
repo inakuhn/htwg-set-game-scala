@@ -15,23 +15,16 @@ class Gui(private val controller: Controller) extends MainFrame {
   listenTo(controller)
   title = Gui.Title
   visible = true
-
-  preferredSize = Toolkit.getDefaultToolkit.getScreenSize
-  private val label = new Label {
-    text = "Hello World"
-
-  }
+  visible = true
 
   contents = new FlowPanel {
-    contents += label
-    contents += new Button("Start Game") {
-      reactions += {
-        case _: ButtonClicked => {
-          controller.createNewGame()
-        }
-      }
-
+    val button = new Button("Create Game") {
     }
+    listenTo(button)
+    reactions += {
+      case ButtonClicked(button) => startNewGame()
+    }
+    contents += button
   }
 
 
@@ -39,53 +32,69 @@ class Gui(private val controller: Controller) extends MainFrame {
     controller.addPlayer(s)
   }
 
-  def pressMe() {
-    val res = Dialog.showConfirmation(contents.head,
-      "Start new Game?",
-      optionType=Dialog.Options.YesNo,
-      title=title)
-    if (res == Dialog.Result.Ok)
-      controller.startGame()
-  }
 
   def closeMe() {
-      close()
-      dispose()
+    close()
+    dispose()
   }
 
   override def closeOperation(): Unit = {
     controller.exitApplication()
   }
 
-  def showNameDialog(): Unit = {
-    val r = Dialog.showInput(contents.head, "New label text", initial="Player name")
-    r match {
-      case Some(s) => controller.addPlayer(s)
-      case None =>
+
+  //Hier kommt er nicht rein
+  def refreshField(game: Game): Unit = {
+    nameField.text = "hallo"
+  }
+
+  val nameField = new TextField {
+    columns = 1
+  }
+
+
+  def showFormular(game: Game): Unit = {
+    contents = new BoxPanel(Orientation.Vertical) {
+      contents += new BoxPanel(Orientation.Horizontal) {
+        contents += new Label("My name")
+        contents += nameField
+      }
+      val button = new Button("Enter Player Name") {
+      }
+      listenTo(button)
+      reactions += {
+        case ButtonClicked(button) => controller.addPlayer(nameField.text)
+      }
+      contents += button
     }
   }
-//Hier kommt er nicht rein
-  def startNewGame(game: Game): Unit = {
-    contents = new GridPanel(3,4){
-      for (card <- game.cardsInField)
-        contents += new Button() {
-          val myCard = card
-          icon = new ImageIcon(ClassLoader.getSystemResource("pack/" + card.name + ".gif").getFile)
-          reactions += {
-            case _: ButtonClicked => {
 
-            }
-          }
-        }
 
+  def startGame(): Unit = {
+    contents = new BoxPanel(Orientation.Vertical) {
+      val button = new Button("Start Game") {
+      }
+      listenTo(button)
+      reactions += {
+        case ButtonClicked(button) => controller.startGame()
+      }
+      contents += button
     }
+  }
+
+  def startNewGame(): Unit = {
+    controller.createNewGame()
   }
 
   reactions += {
-    case e: NewGame => showNameDialog()
-    case e: StartGame => startNewGame(e.game)
-    case e: PlayerAdded => pressMe()
+    case e: NewGame => showFormular(e.game)
+    case e: StartGame => refreshField(e.game)
+    case e: PlayerAdded => {
+      nameField.text = e.game.player.head.name
+      startGame()
+    }
     case e: ExitApplication => closeMe()
+
   }
 
 }
