@@ -11,10 +11,11 @@ import org.scalatest.WordSpec
 class MenuPlayerSpec extends WordSpec with TuiSpecExtension {
 
   private val lineBreak = sys.props("line.separator")
+  private def createEmptyGame: Game = Game(List[Card](), List[Card](), List[Player]())
 
   "MenuPlayer" should {
     val assertEvent = (logger: TestAppender, command: String, c: Controller) => {
-      val target = new MenuPlayer(c, new MenuDummy)
+      val target = new MenuPlayer(c, new MenuDummy, new MenuDummy)
       overrideConsoleIn(command) {
         target.process()
       }
@@ -34,31 +35,60 @@ class MenuPlayerSpec extends WordSpec with TuiSpecExtension {
     }
 
     "have called MenuPlayerName" in withLogger { (logger) =>
+      var playerName = ""
       val controller = new ControllerDummy {
         override def addPlayer(name: String): Unit = {
-          val event = PlayerAdded(Game(List[Card](), List[Card](), List[Player]()))
-          publish(event)
+          playerName = name
+          publish(PlayerAdded(createEmptyGame))
+          publish(new ExitApplication)
         }
-        override def exitApplication(): Unit = publish(new ExitApplication)
       }
-      val target = new MenuPlayer(controller, new MenuDummy {
-        override def process(): Unit = controller.addPlayer("player")
-      })
+      overrideConsoleIn(MenuPlayer.PlayerCommand) {
+        new MenuPlayer(controller, new MenuDummy {
+          override def process(): Unit = controller.addPlayer("player")
+        }, new MenuDummy).process()
+      }
 
-      val input = MenuPlayer.PlayerCommand + lineBreak + MenuPlayer.ExitCommand
-      overrideConsoleIn(input) {
-        target.process()
-      }
       val logs = logger.logAsString()
       logs should include (MenuPlayer.MenuHeading)
-      logs should include (MenuPlayer.PlayerAdded)
+      logs should include (MenuPlayer.EventPlayerAdded)
       logs should include (MenuPlayer.PlayerList.format(""))
+      playerName should be ("player")
+    }
+
+    "have called controller startGame" in withLogger { (logger) =>
+      var called = false
+      overrideConsoleIn(MenuPlayer.StartCommand) {
+        new MenuPlayer(new ControllerDummy {
+          override def startGame(): Unit = {
+            called = true
+            publish(new ExitApplication)
+          }
+        }, new MenuDummy, new MenuDummy).process()
+      }
+
+      val logs = logger.logAsString()
+      logs should include (MenuPlayer.StartDescription)
+      logs should include (Menu.ReadInput.format(MenuPlayer.StartCommand))
+      called should be (true)
+    }
+
+    "have listener on StartGame event" in withLogger { (logger) =>
+      var called = false
+      val controller = new ControllerDummy
+      new MenuPlayer(controller, new MenuDummy, new MenuDummy {
+        override def process(): Unit = called = true
+      })
+      controller.publish(StartGame(createEmptyGame))
+
+      called should be (true)
+      logger.logAsString() should include (MenuPlayer.EventStartGame)
     }
 
     "have unknown menu-entry fallback" in withLogger { (logger) =>
       val target = new MenuPlayer(new ControllerDummy {
         override def exitApplication(): Unit = publish(new ExitApplication)
-      }, new MenuDummy)
+      }, new MenuDummy, new MenuDummy)
 
       val input = "test" + lineBreak + MenuPlayer.ExitCommand
       overrideConsoleIn(input) {

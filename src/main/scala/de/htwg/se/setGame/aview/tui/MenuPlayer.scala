@@ -6,12 +6,13 @@ import de.htwg.se.setGame.{model, _}
 /**
   * @author Philipp Daniels
   */
-class MenuPlayer(private val controller: Controller, private val playerName: Menu) extends Menu {
+class MenuPlayer(private val controller: Controller, private val playerName: Menu, private val game: Menu) extends Menu {
 
   private val logger = Logger(getClass)
   listenTo(controller)
 
   getActions(MenuPlayer.PlayerCommand) = (new Player, MenuPlayer.PlayerDescription)
+  getActions(MenuPlayer.StartCommand) = (new Start, MenuPlayer.StartDescription)
   getActions(MenuPlayer.CancelCommand) = (new Cancel, MenuPlayer.CancelDescription)
   getActions(MenuPlayer.ExitCommand) = (new Exit, MenuPlayer.ExitDescription)
 
@@ -19,10 +20,13 @@ class MenuPlayer(private val controller: Controller, private val playerName: Men
     case _: ExitApplication => exit()
     case _: CancelAddPlayer => exit()
     case e: PlayerAdded =>
-      logger.info(MenuPlayer.PlayerAdded)
+      logger.info(MenuPlayer.EventPlayerAdded)
       val formatter = (p: model.Player) => {MenuPlayer.PlayerFormat.format(p.name, p.points)}
       val player = e.game.player.map(formatter)
       logger.info(MenuPlayer.PlayerList.format(player.mkString(", ")))
+    case _: StartGame =>
+      logger.info(MenuPlayer.EventStartGame)
+      game.process()
   }
 
   protected override def preMenuList(): Unit = {
@@ -44,18 +48,27 @@ class MenuPlayer(private val controller: Controller, private val playerName: Men
   private class Exit extends Action {
     override def execute(): Unit = controller.exitApplication()
   }
+
+  private class Start extends Action {
+    override def execute(): Unit = controller.startGame()
+  }
 }
 
 object MenuPlayer {
-  val ExitCommand = "x"
-  val ExitDescription = "Exit"
   val CancelCommand = "c"
   val CancelDescription = "Cancel"
+  val EventStartGame = "Received StartGame event"
+  val EventPlayerAdded = "Received PlayerAdded event"
+  val ExitCommand = "x"
+  val ExitDescription = "Exit"
   val MenuHeading = "# PLAYER-MENU #"
   val PlayerCommand = "a"
   val PlayerDescription = "Add player"
-  val PlayerAdded = "PlayerAdded"
   val PlayerFormat = "%s (%d points)"
   val PlayerList = "Player: %s"
-  def apply(controller: Controller): MenuPlayer = new MenuPlayer(controller, MenuPlayerName(controller))
+  val StartCommand = "s"
+  val StartDescription = "Start game"
+  def apply(controller: Controller): MenuPlayer = {
+    new MenuPlayer(controller, MenuPlayerName(controller), MenuGame(controller))
+  }
 }
