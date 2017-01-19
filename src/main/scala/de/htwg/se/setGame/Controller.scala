@@ -4,7 +4,7 @@ import akka.actor.{ActorSystem, Props}
 import akka.pattern.ask
 import akka.util.Timeout
 import com.typesafe.scalalogging.Logger
-import de.htwg.se.setGame.actor.{CardActor, CreatePack, GeneratingNewGame, Set}
+import de.htwg.se.setGame.actor._
 import de.htwg.se.setGame.model.{Card, Game, Player}
 
 import scala.concurrent.Await
@@ -62,7 +62,7 @@ protected class ControllerActorSystem(private val system: ActorSystem) extends C
 
   def generateNewGame(player: Player, set: List[Card]): Unit = {
     val myActor = system.actorOf(Props[CardActor])
-    val future = myActor ? GeneratingNewGame(set,player,game)
+    val future = myActor ? MoveCards(set,player,game)
     game = Await.result(future, timeout.duration).asInstanceOf[Game]
     logger.info("Actor result: " + game)
   }
@@ -71,11 +71,11 @@ protected class ControllerActorSystem(private val system: ActorSystem) extends C
     logger.info(Controller.TriggerIsSet)
     val myActor = system.actorOf(Props[CardActor])
     val future = myActor ? Set(set)
-    val result = Await.result(future, timeout.duration).asInstanceOf[Boolean]
-    logger.info("Actor result: " + result)
-    if (result && game.pack.size >= Controller.sizeOfSet) generateNewGame(player, set)
+    val result = Await.result(future, timeout.duration).asInstanceOf[ResponseTyp]
+    logger.info("Actor result: " + result.boolean)
+    if (result.boolean && game.pack.size >= Controller.sizeOfSet) generateNewGame(player, set)
 
-    publish(IsSet(result))
+    publish(IsSet(result.boolean))
   }
 
   private def createEmptyGame: Game = Game(List[Card](), List[Card](), List[Player]())

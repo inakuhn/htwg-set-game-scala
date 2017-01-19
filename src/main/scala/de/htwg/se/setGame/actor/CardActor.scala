@@ -10,7 +10,8 @@ case object CreatePack
 
 case class Set(cards: List[Card])
 
-case class GeneratingNewGame(set: List[Card], player: Player, game: Game)
+case class MoveCards(set: List[Card], player: Player, game: Game)
+case class ResponseTyp(boolean: Boolean)
 
 /**
   * Created by Ina Kuhn on 17.01.2017.
@@ -20,29 +21,30 @@ class CardActor extends Actor with ActorLogging {
 
   def receive: Actor.Receive = {
     case CreatePack =>
-      log.info("Create cards for Game")
+      log.info(CardActor.logCreateNewCards)
       //create card for game
       val result = generateCards()
       sender ! result
       context.stop(self)
-      log.info("Stopped")
-    case e: Set =>
-      log.info("Check is ist a Set")
+      log.info(CardActor.stopActor)
+    case e : Set =>
+      log.info(CardActor.logCheckIfIsSet)
       val result = isSet(e.cards)
       log.info("is set = " + result)
-      sender ! result
-      log.info("Stopped")
+      sender ! ResponseTyp(result)
+      log.info(CardActor.stopActor)
       context.stop(self)
-    case e: GeneratingNewGame =>
-      log.info("GeneratingNewGame")
-      val cardsFromPack = e.game.pack.slice(0, 3)
+
+    case e: MoveCards =>
+      log.info(CardActor.logMovingCardsAfterSet)
+      val cardsFromPack = e.game.pack.slice(CardActor.zero, CardActor.setMax)
       val cardsForField = getCardsForField(cardsFromPack, e.set, e.game.cardsInField)
-      val pack = getCardsForPack(e.game.pack, e.set, cardsFromPack)
+      val pack = getCardsForPack(e.game.pack, cardsFromPack)
       val players = getPlayers(e.game.player, e.player)
       val result = Game(cardsForField, pack, players)
-      log.info("is set = " + result)
+      log.info("game after moving cards :  " + result)
       sender ! result
-      log.info("Stopped")
+      log.info(CardActor.stopActor)
       context.stop(self)
     case default@_ =>
       log.warning("that was unexpected: " + default.toString)
@@ -76,9 +78,8 @@ class CardActor extends Actor with ActorLogging {
     cardsInFieldTmp.++(cardsFromPack)
   }
 
-  def getCardsForPack(pack: List[Card], set: List[Card], cardsFromPack: List[Card]): List[Card] = {
-    val newPack = pack diff cardsFromPack
-    newPack diff set
+  def getCardsForPack(pack: List[Card], cardsFromPack: List[Card]): List[Card] = {
+   pack diff cardsFromPack
   }
 
   def getPlayers(players: List[Player], player: Player): List[Player] = {
@@ -90,8 +91,15 @@ class CardActor extends Actor with ActorLogging {
 }
 
 object CardActor {
+  val zero = 0
   val setMin = 1
   val setMax = 3
+  val fieldSize = 12
+  //Logger information
+  val stopActor = "Stopped"
+  val logCreateNewCards = "Create cards for Game"
+  val logCheckIfIsSet= "Check is ist a Set"
+  val logMovingCardsAfterSet= "Moving cards after set"
 
   def apply: CardActor = new CardActor()
 }
