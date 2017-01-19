@@ -1,8 +1,8 @@
 package de.htwg.se.setGame
 
 import java.awt.{Color, Toolkit}
+import javax.swing.ImageIcon
 
-import de.htwg.se.setGame.aview.gui.components.GameField
 import de.htwg.se.setGame.model.Game
 
 import scala.swing._
@@ -40,7 +40,12 @@ class Gui(private val controller: Controller) extends MainFrame {
   }
 
   def pressMe() {
-    Dialog.showMessage(contents.head, "Thank you!", title = "You pressed me")
+    val res = Dialog.showConfirmation(contents.head,
+      "Start new Game?",
+      optionType=Dialog.Options.YesNo,
+      title=title)
+    if (res == Dialog.Result.Ok)
+      controller.startGame()
   }
 
   def closeMe() {
@@ -59,15 +64,27 @@ class Gui(private val controller: Controller) extends MainFrame {
       case None =>
     }
   }
+//Hier kommt er nicht rein
+  def startNewGame(game: Game): Unit = {
+    contents = new GridPanel(3,4){
+      for (card <- game.cardsInField)
+        contents += new Button() {
+          val myCard = card
+          icon = new ImageIcon(ClassLoader.getSystemResource("pack/" + card.name + ".gif").getFile)
+          reactions += {
+            case _: ButtonClicked => {
 
-  def startNewGame(): Unit = {
-    pressMe()
+            }
+          }
+        }
+
+    }
   }
 
   reactions += {
     case e: NewGame => showNameDialog()
-    case e: StartGame => pressMe()
-    case e: PlayerAdded => startNewGame()
+    case e: StartGame => startNewGame(e.game)
+    case e: PlayerAdded => pressMe()
     case e: ExitApplication => closeMe()
   }
 
