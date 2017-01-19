@@ -44,15 +44,8 @@ class Gui(private val controller: Controller) extends MainFrame {
   }
 
   def closeMe() {
-    val res = Dialog.showConfirmation(contents.head,
-      "Do you really want to quit?",
-      optionType = Dialog.Options.YesNo,
-      title = title)
-    if (res == Dialog.Result.Ok) {
       close()
       dispose()
-    }
-
   }
 
   override def closeOperation(): Unit = {
