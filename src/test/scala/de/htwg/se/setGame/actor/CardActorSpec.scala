@@ -20,15 +20,12 @@ class CardActorSpec extends TestKit(ActorSystem("CardActorSpec", ConfigFactory.p
   with Matchers
   with BeforeAndAfterAll {
   "CardActorSpec" should {
-    val target = system.actorOf(Props[CardActor])
     "generateCards" in {
       val target = system.actorOf(Props[CardActor])
       within(500 millis) {
         target ! CreatePack
-
         receiveWhile(500 millis) {
           case result: List[Card] => result.size should be(CardActor.packSizeAtBegin)
-
         }
 
       }

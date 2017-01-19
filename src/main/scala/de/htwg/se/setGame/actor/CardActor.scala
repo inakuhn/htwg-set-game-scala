@@ -23,6 +23,7 @@ class CardActor extends Actor with ActorLogging {
     case CreatePack =>
       log.info(CardActor.logCreateNewCards)
       //create card for game
+      val result = generateCards()
       sender ! generateCards()
       context.stop(self)
       log.info(CardActor.stopActor)
@@ -53,10 +54,10 @@ class CardActor extends Actor with ActorLogging {
 
 
   def generateCards(): List[Card] = {
-    var cards = List[Card]()
+    var pack = List[Card]()
     for (form <- CardAttribute.Form.values; color <- CardAttribute.Color.values; fill <- CardAttribute.Fill.values; count <- CardAttribute.Count.values)
-      cards = cards:+Card(form, color, fill, count)
-    Random.shuffle(cards)
+      pack = pack:+ Card(form, color, fill, count)
+    Random.shuffle(pack)
   }
 
   def isSet(list: List[Card]): Boolean = {

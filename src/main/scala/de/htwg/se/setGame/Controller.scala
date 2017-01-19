@@ -57,6 +57,10 @@ protected class ControllerActorSystem(private val system: ActorSystem) extends C
     val future = myActor ? CreatePack
     val result = Await.result(future, timeout.duration).asInstanceOf[List[Card]]
     logger.info("Actor result: " + result)
+    val cardInField = result.slice(0,CardActor.fieldSize)
+    val pack = result diff cardInField
+    game = Game(cardInField, pack,game.player)
+    publish(StartGame(game))
   }
 
 
@@ -65,6 +69,7 @@ protected class ControllerActorSystem(private val system: ActorSystem) extends C
     val future = myActor ? MoveCards(set,player,game)
     game = Await.result(future, timeout.duration).asInstanceOf[Game]
     logger.info("Actor result: " + game)
+    publish(UpdateGame(game))
   }
 
   def checkSet(set: List[Card], player: Player): Unit = {
@@ -74,11 +79,7 @@ protected class ControllerActorSystem(private val system: ActorSystem) extends C
     val result = Await.result(future, timeout.duration).asInstanceOf[ResponseTyp]
     logger.info("Actor result: " + result.boolean)
     if (result.boolean && game.pack.size >= Controller.sizeOfSet) generateNewGame(player, set)
-
     publish(if (result.boolean) new IsSet else new IsInvalidSet)
-    if (result.boolean) {
-      publish(UpdateGame(game))
-    }
   }
 
   private def createEmptyGame: Game = Game(List[Card](), List[Card](), List[Player]())
@@ -102,7 +103,7 @@ protected class ControllerActorSystem(private val system: ActorSystem) extends C
   }
 
   override def startGame(): Unit = {
-    publish(StartGame(game))
+    createCards()
   }
 }
 

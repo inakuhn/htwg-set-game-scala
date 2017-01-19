@@ -14,18 +14,19 @@ import scala.swing.{Button, GridPanel}
   */
 class GameField() extends GridPanel(3,4){
   var selectCards = List[Card]()
-  def setCardsIntoField(game : Game): Unit ={
+  def setCardsIntoField(game : Game): Unit = {
     selectCards = List[Card]()
-    for(card <-game.cardsInField)
-    contents += new Button(){
-      val myCard = card
-      icon = new ImageIcon(ClassLoader.getSystemResource("pack/" +card.name + ".gif").getFile)
-      reactions += {
-        case _: ButtonClicked => {
-          selectCards = selectCards:+myCard
+    for (card <- game.cardsInField)
+      contents += new Button() {
+        val myCard = card
+        icon = new ImageIcon(ClassLoader.getSystemResource("pack/" + card.name + ".gif").getFile)
+        reactions += {
+          case _: ButtonClicked => {
+            selectCards = selectCards :+ myCard
 
+          }
         }
-    }
+      }
   }
 
 
