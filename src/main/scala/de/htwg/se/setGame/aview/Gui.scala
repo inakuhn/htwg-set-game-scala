@@ -2,6 +2,7 @@ package de.htwg.se.setGame
 
 import java.awt.Toolkit
 
+import de.htwg.se.setGame.aview.gui.components.GameField
 import de.htwg.se.setGame.model.Game
 
 import scala.swing._
@@ -17,13 +18,11 @@ class Gui(private val controller: Controller) extends MainFrame {
 
   preferredSize = Toolkit.getDefaultToolkit.getScreenSize
 
-  private val label = new Label {
+  private val field = new GameField()
 
-
-  }
 
   contents = new FlowPanel {
-    contents += label
+    contents+= field
   }
 
   override def closeOperation(): Unit = {
@@ -31,8 +30,7 @@ class Gui(private val controller: Controller) extends MainFrame {
   }
 
   def startGame(game: Game): Unit = {
-
-
+      field.setCardsIntoField(game)
   }
 
   reactions += {
