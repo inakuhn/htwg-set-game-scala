@@ -94,6 +94,7 @@ object CardActor {
   val setMin = 1
   val setMax = 3
   val fieldSize = 12
+  val packSizeAtBegin = 81
   //Logger information
   val stopActor = "Stopped"
   val logCreateNewCards = "Create cards for Game"
