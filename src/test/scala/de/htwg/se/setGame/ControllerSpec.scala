@@ -73,6 +73,8 @@ class ControllerSpec extends WordSpec {
       var isSetAns = false
       val cardOne = Card(CardAttribute.Form.balk, CardAttribute.Color.red, CardAttribute.Fill.halfFilled, CardAttribute.Count.one)
       val cards = List[Card](cardOne,cardOne,cardOne)
+
+      target.checkSet(cards, Player(0,0, "ina"))
       new ReactorSpy(target) {
         reactions += {
           case _: IsSet =>
@@ -81,7 +83,6 @@ class ControllerSpec extends WordSpec {
             triggerUpdate = true
         }
       }
-      target.checkSet(cards, Player(0,0, "ina"))
 
       isSetAns should be (true)
       triggerUpdate should be (true)

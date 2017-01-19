@@ -23,8 +23,7 @@ class CardActor extends Actor with ActorLogging {
     case CreatePack =>
       log.info(CardActor.logCreateNewCards)
       //create card for game
-      val result = generateCards()
-      sender ! result
+      sender ! generateCards()
       context.stop(self)
       log.info(CardActor.stopActor)
     case e : Set =>

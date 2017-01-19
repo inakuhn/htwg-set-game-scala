@@ -1,6 +1,5 @@
 package de.htwg.se.setGame
 
-import akka.actor.ActorSystem
 import org.scalatest.Matchers._
 import org.scalatest.{Outcome, WordSpec}
 

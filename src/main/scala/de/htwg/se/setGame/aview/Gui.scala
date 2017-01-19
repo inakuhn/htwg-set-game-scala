@@ -2,11 +2,7 @@ package de.htwg.se.setGame
 
 import java.awt.Toolkit
 
-import de.htwg.se.setGame.aview.gui.ImageIconGenerator
-import de.htwg.se.setGame.model.Card
-
 import scala.swing._
-import scala.swing.event.ButtonClicked
 
 /**
   * @author Philipp Daniels

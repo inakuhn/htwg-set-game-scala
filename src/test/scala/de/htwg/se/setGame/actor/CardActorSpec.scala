@@ -1,18 +1,14 @@
 package de.htwg.se.setGame.actor
 
-import akka.actor.Actor.Receive
-import akka.actor.{Actor, ActorSystem, Props}
+import akka.actor.{ActorSystem, Props}
 import akka.testkit.{DefaultTimeout, ImplicitSender, TestActorRef, TestKit}
 import com.typesafe.config.ConfigFactory
-import de.htwg.se.setGame.Controller
 import de.htwg.se.setGame.model.{Card, CardAttribute, Game, Player}
-import org.scalatest.Matchers._
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 import scala.collection.mutable
 import scala.concurrent.duration._
 import scala.language.postfixOps
-import scala.util.Random
 
 /**
   * Created by Ina Kuhn on 18.01.2017.
@@ -26,6 +22,7 @@ class CardActorSpec extends TestKit(ActorSystem("CardActorSpec", ConfigFactory.p
   "CardActorSpec" should {
     val target = system.actorOf(Props[CardActor])
     "generateCards" in {
+      val target = system.actorOf(Props[CardActor])
       within(500 millis) {
         target ! CreatePack
 
