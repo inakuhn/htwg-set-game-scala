@@ -34,25 +34,25 @@ class MenuPlayerSpec extends WordSpec with TuiSpecExtension {
     }
 
     "have called MenuPlayerName" in withLogger { (logger) =>
+      var playerName = ""
       val controller = new ControllerDummy {
         override def addPlayer(name: String): Unit = {
-          val event = PlayerAdded(Game(List[Card](), List[Card](), List[Player]()))
-          publish(event)
+          playerName = name
+          publish(PlayerAdded(Game(List[Card](), List[Card](), List[Player]())))
+          publish(new ExitApplication)
         }
-        override def exitApplication(): Unit = publish(new ExitApplication)
       }
-      val target = new MenuPlayer(controller, new MenuDummy {
-        override def process(): Unit = controller.addPlayer("player")
-      })
+      overrideConsoleIn(MenuPlayer.PlayerCommand) {
+        new MenuPlayer(controller, new MenuDummy {
+          override def process(): Unit = controller.addPlayer("player")
+        }).process()
+      }
 
-      val input = MenuPlayer.PlayerCommand + lineBreak + MenuPlayer.ExitCommand
-      overrideConsoleIn(input) {
-        target.process()
-      }
       val logs = logger.logAsString()
       logs should include (MenuPlayer.MenuHeading)
       logs should include (MenuPlayer.PlayerAdded)
       logs should include (MenuPlayer.PlayerList.format(""))
+      playerName should be ("player")
     }
 
     "have unknown menu-entry fallback" in withLogger { (logger) =>
