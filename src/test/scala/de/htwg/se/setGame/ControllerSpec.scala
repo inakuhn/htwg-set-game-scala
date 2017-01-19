@@ -13,6 +13,7 @@ import scala.swing.event.Event
   */
 class ControllerSpec extends WordSpec {
   private class ReactorSpy(controller: Controller) extends Reactor {
+
     listenTo(controller)
   }
 
@@ -73,6 +74,7 @@ class ControllerSpec extends WordSpec {
       var isSetAns = false
       val cardOne = Card(CardAttribute.Form.balk, CardAttribute.Color.red, CardAttribute.Fill.halfFilled, CardAttribute.Count.one)
       val cards = List[Card](cardOne,cardOne,cardOne)
+
       target.checkSet(cards, Player(0,0, "ina"))
       new ReactorSpy(target) {
         reactions += {

@@ -1,7 +1,5 @@
 package de.htwg.se.setGame.aview.tui
 
-import java.io.ByteArrayInputStream
-
 import de.htwg.se.setGame._
 import de.htwg.se.setGame.model.{Card, Game, Player}
 import org.scalatest.Matchers._
