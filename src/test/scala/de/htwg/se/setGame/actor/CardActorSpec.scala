@@ -27,7 +27,7 @@ class CardActorSpec extends TestKit(ActorSystem("CardActorSpec", ConfigFactory.p
         target ! CreatePack
 
         receiveWhile(500 millis) {
-          case result: List[Card] => result.size should be(81)
+          case result: List[Card] => result.size should be(CardActor.packSizeAtBegin)
 
         }
 

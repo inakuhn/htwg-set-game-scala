@@ -53,19 +53,18 @@ class CardActor extends Actor with ActorLogging {
 
 
   def generateCards(): List[Card] = {
-    var cards = mutable.MutableList[Card]()
+    var cards = List[Card]()
     for (form <- CardAttribute.Form.values; color <- CardAttribute.Color.values; fill <- CardAttribute.Fill.values; count <- CardAttribute.Count.values)
-      cards += Card(form, color, fill, count)
+      cards = cards:+Card(form, color, fill, count)
     Random.shuffle(cards)
-    List[Card](cards: _*)
   }
 
   def isSet(list: List[Card]): Boolean = {
     log.info("Entry Set : " + list)
-    (isACombination((list map (t => t.color) toSet).size)
-      && isACombination((list map (t => t.form) toSet).size)
-      && isACombination((list map (t => t.fill) toSet).size)
-      && isACombination((list map (t => t.count) toSet).size))
+    (isACombination((list map (t => t.color)).size)
+      && isACombination((list map (t => t.form)).size)
+      && isACombination((list map (t => t.fill)).size)
+      && isACombination((list map (t => t.count)).size))
   }
 
   def isACombination(int: Int): Boolean = {
