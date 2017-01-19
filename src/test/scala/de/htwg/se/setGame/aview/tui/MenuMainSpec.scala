@@ -55,8 +55,9 @@ class MenuMainSpec extends WordSpec with TuiSpecExtension {
       val controller = new ControllerDummy
       val target = new MenuMain(controller, new MenuDummy)
       controller.publish(new ExitApplication)
-      logger.logAsString() should be ("")
+
       target.isContinue should be (false)
+      logger.logAsString() should include (MenuMain.EventExitApplication)
     }
 
     "have listen to AddPlayer event" in withLogger { (logger) =>
@@ -68,14 +69,17 @@ class MenuMainSpec extends WordSpec with TuiSpecExtension {
       controller.publish(AddPlayer(createEmptyGame))
 
       called should be(true)
-      logger.logAsString() should be ("")
+      logger.logAsString() should include (MenuMain.EventAddPlayer)
     }
 
     "have listen to CancelAddPlayer event" in withLogger { (logger) =>
       val controller = new ControllerDummy
       new MenuMain(controller, new MenuDummy)
       controller.publish(new CancelAddPlayer)
-      logger.logAsString() should include (MenuMain.MenuHeading)
+
+      val log = logger.logAsString()
+      log should include (MenuMain.MenuHeading)
+      log should include (MenuMain.EventCancelAddPlayer)
     }
 
     "have factory method" in {

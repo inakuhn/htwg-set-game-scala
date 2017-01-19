@@ -15,9 +15,15 @@ class MenuMain(private val controller: Controller, private val player: Menu) ext
   getActions(MenuMain.ExitCommand) = (new Exit, MenuMain.ExitDescription)
 
   reactions += {
-    case _: ExitApplication => exit()
-    case _: AddPlayer => player.process()
-    case _: CancelAddPlayer => outputMenuList()
+    case _: ExitApplication =>
+      logger.info(MenuMain.EventExitApplication)
+      exit()
+    case _: AddPlayer =>
+      logger.info(MenuMain.EventAddPlayer)
+      player.process()
+    case _: CancelAddPlayer =>
+      logger.info(MenuMain.EventCancelAddPlayer)
+      outputMenuList()
   }
 
   protected override def preMenuList(): Unit = {
@@ -35,6 +41,9 @@ class MenuMain(private val controller: Controller, private val player: Menu) ext
 }
 
 object MenuMain {
+  val EventAddPlayer = "Received 'AddPlayer' event"
+  val EventCancelAddPlayer = "Received 'CancelAddPlayer' event"
+  val EventExitApplication = "Received 'ExitApplication' event"
   val ExitCommand = "x"
   val ExitDescription = "Exit application"
   val CreateCommand = "c"
