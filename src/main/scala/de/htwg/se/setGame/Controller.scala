@@ -75,7 +75,10 @@ protected class ControllerActorSystem(private val system: ActorSystem) extends C
     logger.info("Actor result: " + result.boolean)
     if (result.boolean && game.pack.size >= Controller.sizeOfSet) generateNewGame(player, set)
 
-    publish(IsSet(result.boolean))
+    publish(if (result.boolean) new IsSet else new IsInvalidSet)
+    if (result.boolean) {
+      publish(UpdateGame(game))
+    }
   }
 
   private def createEmptyGame: Game = Game(List[Card](), List[Card](), List[Player]())
@@ -131,4 +134,6 @@ case class NewGame(game: Game) extends Event
 
 case class StartGame(game: Game) extends Event
 
-case class IsSet(boolean: Boolean) extends Event
+case class IsSet() extends Event
+case class IsInvalidSet() extends Event
+case class UpdateGame(game: Game) extends Event
