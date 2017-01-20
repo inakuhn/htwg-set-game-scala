@@ -11,21 +11,12 @@ class MenuPlayerName(private val controller: Controller) extends Menu {
   private val logger = Logger(getClass)
   listenTo(controller)
 
-  reactions += {
-    case e: PlayerAdded => exit()
-    case e: CancelAddPlayer => exit()
-    case e: ExitApplication => exit()
-  }
-
-  override def process(): Unit = {
-    logger.info(MenuPlayerName.RequestPlayerName)
-    readInput()
-  }
-
-  override protected def processInput(input: String): Unit = {
+  override def process(input: String): Unit = {
     logger.info(Menu.ReadInput.format(input))
     controller.addPlayer(input)
   }
+
+  override def postMenuList(): Unit = logger.info(MenuPlayerName.RequestPlayerName)
 }
 
 object MenuPlayerName {

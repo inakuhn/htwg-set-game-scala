@@ -14,24 +14,19 @@ class MenuNewGameTest extends WordSpec with TuiSpecExtension {
   private def createEmptyGame: Game = Game(List[Card](), List[Card](), List[Player]())
 
   "MenuPlayer" should {
-    "have called MenuPlayerName" ignore withLogger { (logger) =>
-      var playerName = ""
-      val controller = new ControllerDummy {
-        override def addPlayer(name: String): Unit = {
-          playerName = name
-          publish(PlayerAdded(createEmptyGame))
-          publish(new ExitApplication)
-        }
+    "have set MenuPlayerName as menu on command" in withLogger { (logger) =>
+      var called = false
+      val playerName = new MenuDummy {
+        override def postMenuList(): Unit = called = true
       }
-      overrideConsoleIn(MenuNewGame.PlayerCommand) {
-        new MenuNewGame(controller, new Tui(new ControllerDummy), new MenuDummy).process()
-      }
+      val tui = new Tui(new ControllerDummy)
+      val target = new MenuNewGame(new ControllerDummy, tui, playerName)
+      target.process(MenuNewGame.PlayerCommand)
 
+      called should be (true)
+      tui.menu should be (playerName)
       val logs = logger.logAsString()
-      logs should include (MenuNewGame.MenuHeading)
-      logs should include (MenuNewGame.EventPlayerAdded)
-      logs should include (MenuNewGame.PlayerList.format(""))
-      playerName should be ("player")
+      logs should include (Menu.ReadInput.format(MenuNewGame.PlayerCommand))
     }
 
     "have called controller cancelAddPlayer on command" in withLogger { (logger) =>
@@ -69,9 +64,12 @@ class MenuNewGameTest extends WordSpec with TuiSpecExtension {
 
     "have listener on PlayerAdded event" in withLogger { (logger) =>
       val controller = new ControllerDummy
-      new MenuNewGame(controller, new Tui(new ControllerDummy), new MenuDummy)
+      val tui = new Tui(new ControllerDummy)
+      val target = new MenuNewGame(controller, tui, new MenuDummy)
+      tui.menu = new MenuDummy
       controller.publish(PlayerAdded(createEmptyGame))
 
+      tui.menu should be (target)
       logger.logAsString() should include (MenuNewGame.EventPlayerAdded)
     }
 
