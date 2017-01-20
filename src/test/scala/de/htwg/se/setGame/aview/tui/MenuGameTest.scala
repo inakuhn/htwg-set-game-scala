@@ -20,8 +20,8 @@ class MenuGameTest extends WordSpec with TuiSpecExtension {
       }, new Tui(new ControllerDummy))
       target.process(MenuGame.ExitCommand)
 
-      called should be (true)
-      logger.logAsString() should include (Menu.ReadInput.format(MenuGame.ExitCommand))
+      called should be(true)
+      logger.logAsString() should include(Menu.ReadInput.format(MenuGame.ExitCommand))
     }
 
     "have listener on StartGame event" in withLogger { (logger) =>
@@ -33,11 +33,11 @@ class MenuGameTest extends WordSpec with TuiSpecExtension {
       tui.menu = new MenuDummy
       controller.publish(StartGame(game))
 
-      tui.menu should be (target)
+      tui.menu should be(target)
       val logs = logger.logAsString()
-      logs should include (MenuGame.EventStartGame)
-      logs should include (MenuGame.FieldHeading)
-      logs should include (MenuGame.CardFormat.format(1, Form.wave, Color.green, Fill.halfFilled, Count.one))
+      logs should include(MenuGame.EventStartGame)
+      logs should include(MenuGame.FieldHeading)
+      logs should include(MenuGame.CardFormat.format(1, Form.wave, Color.green, Fill.halfFilled, Count.one))
     }
 
     "have factory method" in {

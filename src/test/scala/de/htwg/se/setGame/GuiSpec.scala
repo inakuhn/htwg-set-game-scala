@@ -14,8 +14,8 @@ import scala.swing.Reactions.Reaction
   */
 class GuiSpec extends WordSpec {
   val listenerList = new ListBuffer[Reaction]()
-  var controller:ControllerSpy = _
-  var target:Gui = _
+  var controller: ControllerSpy = _
+  var target: Gui = _
   var exitCalled = false
 
 
@@ -52,11 +52,11 @@ class GuiSpec extends WordSpec {
     }
 
     "has title" in {
-      target.title should be (Gui.Title)
+      target.title should be(Gui.Title)
     }
 
     "be visible" in {
-      target.visible should be (true)
+      target.visible should be(true)
     }
     "refreshField" in {
       var pack = mutable.MutableList[Card]()
@@ -74,19 +74,19 @@ class GuiSpec extends WordSpec {
       //Game game
       val game = Game(cardsInField, cards, players)
       target.refreshField(game)
-      target.contents != null shouldBe(true)
+      target.contents != null shouldBe (true)
 
     }
     "not have called exit on startup" in {
-      exitCalled should be (false)
+      exitCalled should be(false)
     }
     "close on ExitApplikation event" in {
       controller.publish(new ExitApplication)
-      target.visible should be (false)
+      target.visible should be(false)
     }
     "call controller on closeOperation" in {
       target.closeOperation()
-      exitCalled should be (true)
+      exitCalled should be(true)
     }
   }
 }

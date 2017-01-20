@@ -26,6 +26,7 @@ class Tui(private val controller: Controller) extends NonBlockingInputReader wit
     menu.outputMenuList()
     super.readInput()
   }
+
   override protected def processInput(input: String): Unit = {
     menu.process(input)
   }
@@ -34,6 +35,7 @@ class Tui(private val controller: Controller) extends NonBlockingInputReader wit
 object Tui {
   val InitiateMessage = "Initiate UI"
   val Shutdown = "Shutdown UI"
+
   def apply(controller: Controller): Tui = {
     val ui = new Tui(controller)
     MenuNewGame(controller, ui)

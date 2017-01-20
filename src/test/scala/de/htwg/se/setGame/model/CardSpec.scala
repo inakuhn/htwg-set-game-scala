@@ -23,7 +23,7 @@ class CardSpec extends WordSpec {
     }
     "be equal" in {
       val example = Card(Form.wave, Color.green, Fill.halfFilled, Count.one)
-      target.equals(example) should be (true)
+      target.equals(example) should be(true)
       Card.unapply(example)
     }
   }

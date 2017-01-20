@@ -13,14 +13,14 @@ class TuiSpec extends WordSpec with TuiSpecExtension {
 
     "have factory method" in withLogger { (logger) =>
       overrideConsoleIn(MenuMain.ExitCommand) {
-        Tui(new ControllerDummy{
+        Tui(new ControllerDummy {
           override def exitApplication(): Unit = publish(new ExitApplication)
         })
       }
       val logs = logger.logAsString()
-      logs should include (Tui.InitiateMessage)
-      logs should include (Tui.Shutdown)
-      logs should include (MenuMain.MenuHeading)
+      logs should include(Tui.InitiateMessage)
+      logs should include(Tui.Shutdown)
+      logs should include(MenuMain.MenuHeading)
     }
 
     "have listener on ExitApplication event" in withLogger { (logger) =>
@@ -41,8 +41,8 @@ class TuiSpec extends WordSpec with TuiSpecExtension {
       }
 
       val logs = logger.logAsString()
-      logs should include (Tui.InitiateMessage)
-      logs should include (Tui.Shutdown)
+      logs should include(Tui.InitiateMessage)
+      logs should include(Tui.Shutdown)
       inputString should be(MenuMain.ExitCommand)
     }
   }

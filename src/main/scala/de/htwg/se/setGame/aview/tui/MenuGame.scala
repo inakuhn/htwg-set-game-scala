@@ -51,5 +51,6 @@ object MenuGame {
   val ExitCommand = "x"
   val ExitDescription = "Exit"
   val MenuHeading = "# GAME-MENU #"
+
   def apply(controller: Controller, tui: Tui): MenuGame = new MenuGame(controller, tui)
 }

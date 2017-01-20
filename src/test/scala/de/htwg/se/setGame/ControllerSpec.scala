@@ -12,6 +12,7 @@ import scala.swing.event.Event
   * @author Philipp Daniels
   */
 class ControllerSpec extends WordSpec {
+
   private class ReactorSpy(controller: Controller) extends Reactor {
     listenTo(controller)
   }
@@ -29,11 +30,13 @@ class ControllerSpec extends WordSpec {
   }
 
   private def createEmptyGame: Game = Game(List[Card](), List[Card](), List[Player]())
+
   private var game: Game = createEmptyGame
+
   private def assertGame(cards: Boolean, pack: Boolean, player: Boolean) = {
-    game.cardsInField.isEmpty should be (cards)
-    game.pack.isEmpty should be (pack)
-    game.player.isEmpty should be (player)
+    game.cardsInField.isEmpty should be(cards)
+    game.pack.isEmpty should be(pack)
+    game.player.isEmpty should be(player)
   }
 
   "Controller" should {
@@ -50,7 +53,7 @@ class ControllerSpec extends WordSpec {
       }
 
       target.exitApplication()
-      called should be (true)
+      called should be(true)
       logger.logAsString should include(Controller.TriggerExitApp)
     }
 
@@ -65,16 +68,16 @@ class ControllerSpec extends WordSpec {
       }
 
       target.createNewGame()
-      called should be (true)
+      called should be(true)
       logger.logAsString should include(Controller.CreateNewGame)
     }
     "have send isSet event on createNewGame" ignore withController { (target, logger) =>
       var triggerUpdate = false
       var isSetAns = false
       val cardOne = Card(CardAttribute.Form.balk, CardAttribute.Color.red, CardAttribute.Fill.halfFilled, CardAttribute.Count.one)
-      val cards = List[Card](cardOne,cardOne,cardOne)
+      val cards = List[Card](cardOne, cardOne, cardOne)
 
-      target.checkSet(cards, Player(0,0, "ina"))
+      target.checkSet(cards, Player(0, 0, "ina"))
       new ReactorSpy(target) {
         reactions += {
           case _: IsSet =>
@@ -84,8 +87,8 @@ class ControllerSpec extends WordSpec {
         }
       }
 
-      isSetAns should be (true)
-      triggerUpdate should be (true)
+      isSetAns should be(true)
+      triggerUpdate should be(true)
       logger.logAsString should include(Controller.TriggerIsSet)
     }
 
@@ -98,7 +101,7 @@ class ControllerSpec extends WordSpec {
 
       target.addPlayer("player")
       assertGame(cards = true, pack = true, player = false)
-      game.player should contain (Player(0, 0, "player"))
+      game.player should contain(Player(0, 0, "player"))
       logger.logAsString should include(Controller.PlayerAdded.format("player"))
     }
 
@@ -111,7 +114,7 @@ class ControllerSpec extends WordSpec {
       }
 
       target.cancelAddPlayer()
-      called should be (true)
+      called should be(true)
       logger.logAsString should include(Controller.TriggerCancelPlayer)
     }
 
@@ -124,8 +127,8 @@ class ControllerSpec extends WordSpec {
       }
 
       target.startGame()
-      called should be (true)
-      logger.logAsString should be ("")
+      called should be(true)
+      logger.logAsString should be("")
     }
 
     "have reset Game on createNewGame" in withController { (target, logger) =>

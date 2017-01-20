@@ -20,7 +20,9 @@ class MenuNewGame(private val controller: Controller, private val tui: Tui, priv
   reactions += {
     case e: PlayerAdded =>
       logger.info(MenuNewGame.EventPlayerAdded)
-      val formatter = (p: model.Player) => {MenuNewGame.PlayerFormat.format(p.name, p.points)}
+      val formatter = (p: model.Player) => {
+        MenuNewGame.PlayerFormat.format(p.name, p.points)
+      }
       val player = e.game.player.map(formatter)
       logger.info(MenuNewGame.PlayerList.format(player.mkString(", ")))
       tui.menu = this
@@ -54,6 +56,7 @@ class MenuNewGame(private val controller: Controller, private val tui: Tui, priv
   private class Start extends Action {
     override def execute(): Unit = controller.startGame()
   }
+
 }
 
 object MenuNewGame {
@@ -70,6 +73,7 @@ object MenuNewGame {
   val PlayerList = "Player: %s"
   val StartCommand = "s"
   val StartDescription = "Start game"
+
   def apply(controller: Controller, tui: Tui): MenuNewGame = {
     new MenuNewGame(controller, tui, MenuPlayerName(controller))
   }

@@ -25,7 +25,7 @@ class SessionSpec extends WordSpec {
     }
     "be equal" in {
       val example = Session(players, cards, cards)
-      target.equals(example) should be (true)
+      target.equals(example) should be(true)
       Session.unapply(example)
     }
   }

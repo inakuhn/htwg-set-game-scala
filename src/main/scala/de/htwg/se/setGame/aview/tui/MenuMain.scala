@@ -34,6 +34,7 @@ class MenuMain(private val controller: Controller, private val tui: Tui) extends
   private class Create extends Action {
     override def execute(): Unit = controller.createNewGame()
   }
+
 }
 
 object MenuMain {
@@ -43,5 +44,6 @@ object MenuMain {
   val CreateCommand = "c"
   val CreateDescription = "Create new game"
   val MenuHeading = "# MAIN-MENU #"
+
   def apply(controller: Controller, tui: Tui): MenuMain = new MenuMain(controller, tui)
 }

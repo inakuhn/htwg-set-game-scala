@@ -23,10 +23,10 @@ class MenuNewGameTest extends WordSpec with TuiSpecExtension {
       val target = new MenuNewGame(new ControllerDummy, tui, playerName)
       target.process(MenuNewGame.PlayerCommand)
 
-      called should be (true)
-      tui.menu should be (playerName)
+      called should be(true)
+      tui.menu should be(playerName)
       val logs = logger.logAsString()
-      logs should include (Menu.ReadInput.format(MenuNewGame.PlayerCommand))
+      logs should include(Menu.ReadInput.format(MenuNewGame.PlayerCommand))
     }
 
     "have called controller cancelAddPlayer on command" in withLogger { (logger) =>
@@ -36,8 +36,8 @@ class MenuNewGameTest extends WordSpec with TuiSpecExtension {
       }, new Tui(new ControllerDummy), new MenuDummy)
       target.process(MenuNewGame.CancelCommand)
 
-      called should be (true)
-      logger.logAsString() should include (Menu.ReadInput.format(MenuNewGame.CancelCommand))
+      called should be(true)
+      logger.logAsString() should include(Menu.ReadInput.format(MenuNewGame.CancelCommand))
     }
 
     "have called controller exitApplication on command" in withLogger { (logger) =>
@@ -47,8 +47,8 @@ class MenuNewGameTest extends WordSpec with TuiSpecExtension {
       }, new Tui(new ControllerDummy), new MenuDummy)
       target.process(MenuNewGame.ExitCommand)
 
-      called should be (true)
-      logger.logAsString() should include (Menu.ReadInput.format(MenuNewGame.ExitCommand))
+      called should be(true)
+      logger.logAsString() should include(Menu.ReadInput.format(MenuNewGame.ExitCommand))
     }
 
     "have called controller startGame on command" in withLogger { (logger) =>
@@ -58,8 +58,8 @@ class MenuNewGameTest extends WordSpec with TuiSpecExtension {
       }, new Tui(new ControllerDummy), new MenuDummy)
       target.process(MenuNewGame.StartCommand)
 
-      called should be (true)
-      logger.logAsString() should include (Menu.ReadInput.format(MenuNewGame.StartCommand))
+      called should be(true)
+      logger.logAsString() should include(Menu.ReadInput.format(MenuNewGame.StartCommand))
     }
 
     "have listener on PlayerAdded event" in withLogger { (logger) =>
@@ -69,8 +69,8 @@ class MenuNewGameTest extends WordSpec with TuiSpecExtension {
       tui.menu = new MenuDummy
       controller.publish(PlayerAdded(createEmptyGame))
 
-      tui.menu should be (target)
-      logger.logAsString() should include (MenuNewGame.EventPlayerAdded)
+      tui.menu should be(target)
+      logger.logAsString() should include(MenuNewGame.EventPlayerAdded)
     }
 
     "have listener on NewGame event" in withLogger { (logger) =>
@@ -80,17 +80,17 @@ class MenuNewGameTest extends WordSpec with TuiSpecExtension {
       tui.menu = new MenuDummy
       controller.publish(NewGame(createEmptyGame))
 
-      tui.menu should be (target)
+      tui.menu should be(target)
       val logs = logger.logAsString()
-      logs should include (MenuNewGame.EventNewGame)
-      logs should include (MenuNewGame.MenuHeading)
+      logs should include(MenuNewGame.EventNewGame)
+      logs should include(MenuNewGame.MenuHeading)
     }
 
     "have unknown menu-entry fallback" in withLogger { (logger) =>
       val target = new MenuNewGame(new ControllerDummy, new Tui(new ControllerDummy), new MenuDummy)
       target.process("test")
 
-      logger.logAsString should include (Menu.UnknownMenuEntry.format("test"))
+      logger.logAsString should include(Menu.UnknownMenuEntry.format("test"))
     }
 
     "have factory method" in {

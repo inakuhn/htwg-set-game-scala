@@ -21,5 +21,6 @@ class MenuPlayerName(private val controller: Controller) extends Menu {
 
 object MenuPlayerName {
   val RequestPlayerName = "Choose player name:"
+
   def apply(controller: Controller): MenuPlayerName = new MenuPlayerName(controller)
 }

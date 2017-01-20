@@ -21,14 +21,14 @@ class PlayerSpec extends WordSpec {
       target.name equals name
     }
     "have toString" in {
-      target.toString.isEmpty should be (false)
+      target.toString.isEmpty should be(false)
     }
     "have HashCode" in {
-      target.hashCode.toString.isEmpty should be (false)
+      target.hashCode.toString.isEmpty should be(false)
     }
     "be equal" in {
       val example = Player(identity, points, name)
-      target.equals(example) should be (true)
+      target.equals(example) should be(true)
       Player.unapply(example)
     }
   }

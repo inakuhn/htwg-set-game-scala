@@ -20,14 +20,14 @@ class MenuPlayerNameSpec extends WordSpec with TuiSpecExtension {
       target.process("Player")
 
       playerName should equal("Player")
-      logger.logAsString() should include (Menu.ReadInput.format("Player"))
+      logger.logAsString() should include(Menu.ReadInput.format("Player"))
     }
 
     "have override default request message" in withLogger { (logger) =>
       val target = MenuPlayerName(new ControllerDummy)
       target.outputMenuList()
 
-      logger.logAsString() should include (MenuPlayerName.RequestPlayerName)
+      logger.logAsString() should include(MenuPlayerName.RequestPlayerName)
     }
   }
 }

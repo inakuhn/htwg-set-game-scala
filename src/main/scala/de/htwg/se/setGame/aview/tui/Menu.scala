@@ -43,6 +43,7 @@ trait Menu extends Reactor {
   protected trait Action {
     def execute()
   }
+
 }
 
 object Menu {
@@ -67,7 +68,7 @@ trait NonBlockingInputReader {
         processInput(Console.in.readLine())
       }
       Thread.sleep(Menu.ReadInputTiming)
-    } while(continue)
+    } while (continue)
   }
 
   protected def processInput(input: String)

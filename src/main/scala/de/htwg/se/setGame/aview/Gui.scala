@@ -58,7 +58,7 @@ class Gui(private val controller: Controller) extends MainFrame {
   def refreshField(game: Game): Unit = {
     var setSet = false
     var setList = List[Card]()
-    var playerSet = Player(0,0,"")
+    var playerSet = Player(0, 0, "")
     contents = new FlowPanel() {
       contents += new GridPanel(Gui.xFieldSize, Gui.yFieldSize) {
         for (card <- game.cardsInField) {
@@ -105,16 +105,16 @@ class Gui(private val controller: Controller) extends MainFrame {
           }
         }
         contents += new BoxPanel(Orientation.Vertical) {
-          for(player <- game.player){
-          contents += new Button("Set : "+player.name) {
-            val playerB = player
-            reactions += {
-              case _: ButtonClicked => {
-                setSet = true
-                playerSet = playerB
+          for (player <- game.player) {
+            contents += new Button("Set : " + player.name) {
+              val playerB = player
+              reactions += {
+                case _: ButtonClicked => {
+                  setSet = true
+                  playerSet = playerB
+                }
               }
             }
-          }
 
           }
           contents += new Button("Finish Game") {
@@ -201,13 +201,13 @@ class Gui(private val controller: Controller) extends MainFrame {
     case e: PlayerAdded => {
       startGame()
     }
-    case e : IsSet => {
-      Dialog.showMessage(contents.head, "Set correct!", title="You are Great!!")
+    case e: IsSet => {
+      Dialog.showMessage(contents.head, "Set correct!", title = "You are Great!!")
     }
-    case e : IsInvalidSet =>{
-      Dialog.showMessage(contents.head, "Set wrong!", title="Try Again!!")
+    case e: IsInvalidSet => {
+      Dialog.showMessage(contents.head, "Set wrong!", title = "Try Again!!")
     }
-    case e : UpdateGame => refreshField(e.game)
+    case e: UpdateGame => refreshField(e.game)
 
     case e: ExitApplication => closeMe()
 

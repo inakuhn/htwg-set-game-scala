@@ -10,6 +10,7 @@ case object CreatePack
 case class Set(cards: List[Card])
 
 case class MoveCards(set: List[Card], player: Player, game: Game)
+
 case class ResponseTyp(boolean: Boolean)
 
 /**
@@ -26,7 +27,7 @@ class CardActor extends Actor with ActorLogging {
       sender ! generateCards()
       context.stop(self)
       log.info(CardActor.stopActor)
-    case e : Set =>
+    case e: Set =>
       log.info(CardActor.logCheckIfIsSet)
       val result = isSet(e.cards)
       log.info("is set = " + result)
@@ -55,7 +56,7 @@ class CardActor extends Actor with ActorLogging {
   def generateCards(): List[Card] = {
     var pack = List[Card]()
     for (form <- CardAttribute.Form.values; color <- CardAttribute.Color.values; fill <- CardAttribute.Fill.values; count <- CardAttribute.Count.values)
-      pack = pack:+ Card(form, color, fill, count)
+      pack = pack :+ Card(form, color, fill, count)
     Random.shuffle(pack)
   }
 
@@ -63,8 +64,8 @@ class CardActor extends Actor with ActorLogging {
     log.info("Entry Set : " + list)
     (isACombination((list map (t => t.color) toSet).size)
       && isACombination((list map (t => t.form) toSet).size)
-      && isACombination((list map (t => t.fill)toSet).size)
-      && isACombination((list map (t => t.count)toSet).size))
+      && isACombination((list map (t => t.fill) toSet).size)
+      && isACombination((list map (t => t.count) toSet).size))
   }
 
   def isACombination(int: Int): Boolean = {
@@ -77,13 +78,13 @@ class CardActor extends Actor with ActorLogging {
   }
 
   def getCardsForPack(pack: List[Card], cardsFromPack: List[Card]): List[Card] = {
-   pack diff cardsFromPack
+    pack diff cardsFromPack
   }
 
   def getPlayers(players: List[Player], player: Player): List[Player] = {
-    var newPlayers  = players.filterNot(p => p == player)
+    var newPlayers = players.filterNot(p => p == player)
     val newPlayer = Player(player.identify, player.points + 1, player.name)
-    newPlayers = newPlayers:+newPlayer
+    newPlayers = newPlayers :+ newPlayer
     newPlayers
   }
 
@@ -98,8 +99,8 @@ object CardActor {
   //Logger information
   val stopActor = "Stopped"
   val logCreateNewCards = "Create cards for Game"
-  val logCheckIfIsSet= "Check is ist a Set"
-  val logMovingCardsAfterSet= "Moving cards after set"
+  val logCheckIfIsSet = "Check is ist a Set"
+  val logMovingCardsAfterSet = "Moving cards after set"
 
   def apply: CardActor = new CardActor()
 }

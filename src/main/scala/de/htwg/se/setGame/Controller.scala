@@ -59,7 +59,7 @@ protected class ControllerActorSystem(private val system: ActorSystem) extends C
 
   def generateNewGame(player: Player, set: List[Card]): Unit = {
     val myActor = system.actorOf(Props[CardActor])
-    val future = myActor ? MoveCards(set,player,game)
+    val future = myActor ? MoveCards(set, player, game)
     game = Await.result(future, timeout.duration).asInstanceOf[Game]
     logger.info("Actor result: " + game)
     publish(UpdateGame(game))
@@ -73,7 +73,7 @@ protected class ControllerActorSystem(private val system: ActorSystem) extends C
     logger.info("Actor result: " + result.boolean)
     if (result.boolean && game.pack.size >= Controller.sizeOfSet) generateNewGame(player, set)
     publish(if (result.boolean) new IsSet else new IsInvalidSet)
-    if(!result.boolean)
+    if (!result.boolean)
       publish(new UpdateGame(game))
   }
 
@@ -101,9 +101,9 @@ protected class ControllerActorSystem(private val system: ActorSystem) extends C
     val future = myActor ? CreatePack
     val result = Await.result(future, timeout.duration).asInstanceOf[List[Card]]
     logger.info("Actor result: " + result)
-    val cardInField = result.slice(0,CardActor.fieldSize)
+    val cardInField = result.slice(0, CardActor.fieldSize)
     val pack = result diff cardInField
-    game = Game(cardInField, pack,game.player)
+    game = Game(cardInField, pack, game.player)
     publish(StartGame(game))
   }
 }
@@ -137,5 +137,7 @@ case class NewGame(game: Game) extends Event
 case class StartGame(game: Game) extends Event
 
 case class IsSet() extends Event
+
 case class IsInvalidSet() extends Event
+
 case class UpdateGame(game: Game) extends Event

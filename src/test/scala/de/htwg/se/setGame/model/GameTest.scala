@@ -13,22 +13,22 @@ class GameTest extends WordSpec {
 
     "have a cardsInField" in {
       target.cardsInField shouldBe a[List[_]]
-      target.cardsInField.isEmpty should be (true)
+      target.cardsInField.isEmpty should be(true)
     }
 
     "have a pack" in {
       target.pack shouldBe a[List[_]]
-      target.pack.isEmpty should be (true)
+      target.pack.isEmpty should be(true)
     }
 
     "have player" in {
       target.player shouldBe a[List[_]]
-      target.player.isEmpty should be (true)
+      target.player.isEmpty should be(true)
     }
 
     "be equal" in {
       val example = Game(List[Card](), List[Card](), List[Player]())
-      target.equals(example) should be (true)
+      target.equals(example) should be(true)
       Game.unapply(example)
     }
   }

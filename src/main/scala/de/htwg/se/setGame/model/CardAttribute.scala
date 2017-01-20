@@ -1,36 +1,37 @@
 package de.htwg.se.setGame.model
 
 /**
- * Card attribute contains the information for cards.
- *
- */
+  * Card attribute contains the information for cards.
+  *
+  */
 object CardAttribute {
 
   /**
-   * Color enumeration
-   */
+    * Color enumeration
+    */
   object Color extends Enumeration {
     val red, green, purple = Value
   }
 
   /**
-   * Fill Enumeration
-   */
+    * Fill Enumeration
+    */
   object Fill extends Enumeration {
     val filled, halfFilled, empty = Value
   }
 
   /**
-   * Form Enumeration
-   */
+    * Form Enumeration
+    */
   object Form extends Enumeration {
     val ellipse, wave, balk = Value
   }
 
   /**
-   * Count Enumeration
-   */
+    * Count Enumeration
+    */
   object Count extends Enumeration {
     val one, two, three = Value
   }
+
 }

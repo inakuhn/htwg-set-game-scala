@@ -8,7 +8,7 @@ import scala.collection.mutable.ListBuffer
 /**
   * @author Philipp Daniels
   */
-class TestAppender extends AppenderSkeleton{
+class TestAppender extends AppenderSkeleton {
   private val log = new ListBuffer[LoggingEvent]()
   private val lineBreak = sys.props("line.separator")
 
