@@ -44,7 +44,22 @@ class GuiSpec extends WordSpec {
   }
 
   "Gui" should {
+    def getGameForTest() : Game = {
+      var pack = mutable.MutableList[Card]()
+      for (form <- CardAttribute.Form.values; color <- CardAttribute.Color.values; fill <- CardAttribute.Fill.values; count <- CardAttribute.Count.values)
+        pack += Card(form, color, fill, count)
 
+      var cards = List[Card](pack: _*)
+      val cardsInField = cards.slice(0, CardActor.fieldSize)
+      cards = cards diff cardsInField
+      val set = cardsInField.slice(0, CardActor.setMax)
+      //players
+      val playerOne = Player(0, 0, "Joe Doe")
+      val playerTwo = Player(1, 0, "Smith Doe")
+      val players = List[Player](playerOne, playerTwo)
+      //Game game
+      Game(cardsInField, cards, players)
+    }
     "called listenTo" in {
       listenerList should have length 2
       listenerList contains target
@@ -59,26 +74,15 @@ class GuiSpec extends WordSpec {
       target.visible should be(true)
     }
     "refreshField" in {
-      var pack = mutable.MutableList[Card]()
-      for (form <- CardAttribute.Form.values; color <- CardAttribute.Color.values; fill <- CardAttribute.Fill.values; count <- CardAttribute.Count.values)
-        pack += Card(form, color, fill, count)
-
-      var cards = List[Card](pack: _*)
-      val cardsInField = cards.slice(0, CardActor.fieldSize)
-      cards = cards diff cardsInField
-      val set = cardsInField.slice(0, CardActor.setMax)
-      //players
-      val playerOne = Player(0, 0, "Joe Doe")
-      val playerTwo = Player(1, 0, "Smith Doe")
-      val players = List[Player](playerOne, playerTwo)
-      //Game game
-      val game = Game(cardsInField, cards, players)
-      target.refreshField(game)
+      target.refreshField(getGameForTest())
       target.contents != null shouldBe (true)
 
     }
     "start Game " in {
       target.startGame()
+    }
+    "show winner" in {
+      target.showWinnerDialog(getGameForTest())
     }
     "not have called exit on startup" in {
       exitCalled should be(false)
