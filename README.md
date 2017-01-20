@@ -1,10 +1,11 @@
-htwg-scala-seed
+Set Game
 =========================
+#Types
+![](help_types.png)
 
-This is a seed project to create a basic scala project as used in the
-class Software Engineering at the University of Applied Science HTWG Konstanz
+#Rules
+A SET consists of 3 cards in which each of the cards features, looked at one-by-one, are the same on each card, or, are different on each card. 
+All of the features must separately satisfy this rule.
+In other words: shape must be either the same in all 3 cards, or different on each if the 3 cards; color must be either the same on all 3 cards, or different on each of the 3, etc. 
 
-* Has a folder structure prepared for a MVC-style application
-* Has *ScalaTest* and *ScalaMock* at their latest versions as dependencies.
-* Has *sbt-scalariform*, *sbt-scapegoat*, *scalastyle-sbt-plugin* and *sbt-scoverage* sbt plugins
-* Has .gitignore defaults
+
