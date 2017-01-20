@@ -69,7 +69,7 @@ class CardActor extends Actor with ActorLogging {
   }
 
   def isACombination(int: Int): Boolean = {
-    (int == CardActor.setMin || int == CardActor.setMax)
+    int == CardActor.setMin || int == CardActor.setMax
   }
 
   def getCardsForField(cardsFromPack: List[Card], set: List[Card], cardsInField: List[Card]): List[Card] = {
@@ -101,6 +101,4 @@ object CardActor {
   val logCreateNewCards = "Create cards for Game"
   val logCheckIfIsSet = "Check is ist a Set"
   val logMovingCardsAfterSet = "Moving cards after set"
-
-  def apply: CardActor = new CardActor()
 }

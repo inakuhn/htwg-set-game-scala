@@ -19,7 +19,7 @@ case class ButtonGenerator(controller: Controller) {
 
   def createSetButton(player: Player): Button = {
     new Button("Set : " + player.name) {
-      val playerB = player
+      private val playerB = player
       reactions += {
         case _: ButtonClicked =>
           Gui.setSet = true
@@ -84,7 +84,6 @@ case class ButtonGenerator(controller: Controller) {
         case _: ButtonClicked =>
           if (Gui.setSet) {
             border = new LineBorder(Color.ORANGE, Gui.sizeOfSelectBorder)
-            println(myCard)
             Gui.setList = Gui.setList :+ myCard
             if (Gui.setList.size == CardActor.setMax) {
               controller.checkSet(Gui.setList, Gui.playerSet)
