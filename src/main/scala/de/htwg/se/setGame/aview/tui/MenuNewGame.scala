@@ -1,12 +1,13 @@
 package de.htwg.se.setGame.aview.tui
 
 import com.typesafe.scalalogging.Logger
+import de.htwg.se.setGame.aview.Tui
 import de.htwg.se.setGame.{model, _}
 
 /**
   * @author Philipp Daniels
   */
-class MenuNewGame(private val controller: Controller, private val playerName: Menu, private val game: Menu) extends Menu {
+class MenuNewGame(private val controller: Controller, private val tui: Tui, private val playerName: Menu) extends Menu {
 
   private val logger = Logger(getClass)
   listenTo(controller)
@@ -22,6 +23,10 @@ class MenuNewGame(private val controller: Controller, private val playerName: Me
       val formatter = (p: model.Player) => {MenuNewGame.PlayerFormat.format(p.name, p.points)}
       val player = e.game.player.map(formatter)
       logger.info(MenuNewGame.PlayerList.format(player.mkString(", ")))
+    case _: NewGame =>
+      logger.info(MenuNewGame.EventNewGame)
+      tui.menu = this
+      outputMenuList()
   }
 
   protected override def preMenuList(): Unit = {
@@ -52,10 +57,8 @@ class MenuNewGame(private val controller: Controller, private val playerName: Me
 object MenuNewGame {
   val CancelCommand = "c"
   val CancelDescription = "Cancel"
-  val EventCancelAddPlayer = "Received 'CancelAddPlayer' event"
-  val EventExitApplication = "Received 'ExitApplication' event"
   val EventPlayerAdded = "Received 'PlayerAdded' event"
-  val EventStartGame = "Received 'StartGame' event"
+  val EventNewGame = "Received 'NewGame' event"
   val ExitCommand = "x"
   val ExitDescription = "Exit"
   val MenuHeading = "# PLAYER-MENU #"
@@ -65,7 +68,7 @@ object MenuNewGame {
   val PlayerList = "Player: %s"
   val StartCommand = "s"
   val StartDescription = "Start game"
-  def apply(controller: Controller): MenuNewGame = {
-    new MenuNewGame(controller, MenuPlayerName(controller), MenuGame(controller))
+  def apply(controller: Controller, tui: Tui): MenuNewGame = {
+    new MenuNewGame(controller, tui, MenuPlayerName(controller))
   }
 }

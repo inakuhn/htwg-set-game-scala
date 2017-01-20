@@ -1,7 +1,7 @@
 package de.htwg.se.setGame.aview
 
 import com.typesafe.scalalogging.Logger
-import de.htwg.se.setGame.aview.tui.{Menu, MenuMain, NonBlockingInputReader}
+import de.htwg.se.setGame.aview.tui.{Menu, MenuMain, MenuNewGame, NonBlockingInputReader}
 import de.htwg.se.setGame.{Controller, ExitApplication}
 
 import scala.swing.Reactor
@@ -36,6 +36,7 @@ object Tui {
   val Shutdown = "Shutdown UI"
   def apply(controller: Controller): Tui = {
     val ui = new Tui(controller)
+    MenuNewGame(controller, ui)
     ui.readInput()
     ui
   }
