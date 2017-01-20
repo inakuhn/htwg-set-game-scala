@@ -1,6 +1,6 @@
-package de.htwg.se.setGame
+package de.htwg.se.setGame.controller
 
-import de.htwg.se.setGame.controller._
+import de.htwg.se.setGame.TestAppender
 import de.htwg.se.setGame.model.{Card, CardAttribute, Game, Player}
 import org.apache.log4j.Logger
 import org.scalatest.Matchers._

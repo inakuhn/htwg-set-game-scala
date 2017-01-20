@@ -1,8 +1,7 @@
 package de.htwg.se.setGame.aview
 
 import de.htwg.se.setGame.aview.tui.{MenuDummy, MenuMain, TuiSpecExtension}
-import de.htwg.se.setGame.ControllerDummy
-import de.htwg.se.setGame.controller.ExitApplication
+import de.htwg.se.setGame.controller.{ControllerDummy, ExitApplication}
 import org.scalatest.Matchers._
 import org.scalatest.WordSpec
 

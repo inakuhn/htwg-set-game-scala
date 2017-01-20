@@ -1,11 +1,10 @@
-package de.htwg.se.setGame
+package de.htwg.se.setGame.controller
 
 import akka.actor.{ActorSystem, Props}
 import akka.pattern.ask
 import akka.util.Timeout
 import com.typesafe.scalalogging.Logger
 import de.htwg.se.setGame.actor._
-import de.htwg.se.setGame.controller._
 import de.htwg.se.setGame.model.{Card, Game, Player}
 
 import scala.concurrent.Await

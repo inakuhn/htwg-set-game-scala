@@ -2,8 +2,7 @@ package de.htwg.se.setGame.aview.tui
 
 import de.htwg.se.setGame.aview.Tui
 import de.htwg.se.setGame.model.{Card, Game, Player}
-import de.htwg.se.setGame.ControllerDummy
-import de.htwg.se.setGame.controller.CancelAddPlayer
+import de.htwg.se.setGame.controller.{CancelAddPlayer, ControllerDummy}
 import org.scalatest.Matchers._
 import org.scalatest.WordSpec
 

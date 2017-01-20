@@ -3,6 +3,7 @@ package de.htwg.se.setGame
 import akka.actor.ActorSystem
 import com.typesafe.scalalogging.Logger
 import de.htwg.se.setGame.aview.{Gui, Tui}
+import de.htwg.se.setGame.controller.Controller
 
 object SetGameApplication {
   private val logger = Logger(getClass)

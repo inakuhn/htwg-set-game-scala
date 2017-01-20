@@ -2,8 +2,7 @@ package de.htwg.se.setGame.aview
 
 import com.typesafe.scalalogging.Logger
 import de.htwg.se.setGame.aview.tui._
-import de.htwg.se.setGame.Controller
-import de.htwg.se.setGame.controller.ExitApplication
+import de.htwg.se.setGame.controller.{Controller, ExitApplication}
 
 import scala.swing.Reactor
 

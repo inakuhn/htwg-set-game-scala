@@ -1,7 +1,7 @@
 package de.htwg.se.setGame.aview.tui
 
 import de.htwg.se.setGame._
-import de.htwg.se.setGame.controller.{IsInvalidSet, IsSet, StartGame, UpdateGame}
+import de.htwg.se.setGame.controller._
 import de.htwg.se.setGame.model.CardAttribute.{Color, Count, Fill, Form}
 import de.htwg.se.setGame.model.{Card, Game, Player}
 import org.scalatest.Matchers._

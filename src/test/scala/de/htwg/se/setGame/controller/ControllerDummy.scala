@@ -1,4 +1,4 @@
-package de.htwg.se.setGame
+package de.htwg.se.setGame.controller
 
 import de.htwg.se.setGame.model.{Card, Player}
 
@@ -8,7 +8,6 @@ import de.htwg.se.setGame.model.{Card, Player}
 class ControllerDummy extends Controller {
 
   override def exitApplication(): Unit = {}
-
 
   override def createNewGame(): Unit = {}
 
