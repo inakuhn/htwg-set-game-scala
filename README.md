@@ -1,7 +1,7 @@
 Set Game
 =========================
 Set game is a dynamic Game!
-This has programmed with Scala in order to show the difference between the languages. (![see java repository](https://github.com/rabertol/de.htwg.se.setGame))
+This has programmed with Scala in order to show the difference between the languages. ([see java repository](https://github.com/rabertol/de.htwg.se.setGame))
 
 ##Types
 
