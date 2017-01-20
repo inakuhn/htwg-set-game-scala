@@ -1,4 +1,4 @@
-package de.htwg.se.setGame
+package de.htwg.se.setGame.controller
 
 import akka.actor.{ActorSystem, Props}
 import akka.pattern.ask
@@ -11,7 +11,6 @@ import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.language.postfixOps
 import scala.swing.Publisher
-import scala.swing.event.Event
 import scala.util.Random
 
 trait Controller extends Publisher {
@@ -20,8 +19,8 @@ trait Controller extends Publisher {
 
   def createNewGame()
 
-  /** Add new player to game session and set name of player
-    *
+  /**
+    * Add new player to game session and set name of player
     * @param name Name of new added player
     */
   def addPlayer(name: String)
@@ -31,12 +30,10 @@ trait Controller extends Publisher {
   def finishGame()
   def checkSet(cards: List[Card], player: Player)
 
-
   /**
     * Trigger game start for all UIs
     */
   def startGame()
-
 }
 
 /**
@@ -69,8 +66,9 @@ protected class ControllerActorSystem(private val system: ActorSystem) extends C
     logger.info("Actor result: " + result.boolean)
     if (result.boolean && game.pack.size >= Controller.sizeOfSet) generateNewGame(player, set)
     publish(if (result.boolean) new IsSet else new IsInvalidSet)
-    if (!result.boolean)
-      publish(new UpdateGame(game))
+    if (!result.boolean) {
+      publish(UpdateGame(game))
+    }
   }
 
   private def createEmptyGame: Game = Game(List[Card](), List[Card](), List[Player]())
@@ -109,11 +107,11 @@ protected class ControllerActorSystem(private val system: ActorSystem) extends C
     val cardsInField = listOfCards.slice(0,CardActor.fieldSize)
     val pack = listOfCards diff cardsInField
     game = Game(cardsInField, pack, game.player)
-    publish(new UpdateGame(game))
+    publish(UpdateGame(game))
   }
 
   override def finishGame(): Unit = {
-    publish(new FinishGame(game))
+    publish(FinishGame(game))
   }
 }
 
@@ -128,28 +126,5 @@ object Controller {
   val PlayerAdded = "Player added: %s"
   val TriggerIsSet = "Called is a SET"
   val sizeOfSet = 3
-
   def apply(system: ActorSystem): Controller = new ControllerActorSystem(system)
-
 }
-
-case class ExitApplication() extends Event
-
-case class AddPlayer(game: Game) extends Event
-
-case class CancelAddPlayer() extends Event
-
-case class PlayerAdded(game: Game) extends Event
-
-case class NewGame(game: Game) extends Event
-
-case class StartGame(game: Game) extends Event
-
-case class IsSet() extends Event
-
-case class IsInvalidSet() extends Event
-
-case class UpdateGame(game: Game) extends Event
-
-case class FinishGame(game: Game) extends Event
-

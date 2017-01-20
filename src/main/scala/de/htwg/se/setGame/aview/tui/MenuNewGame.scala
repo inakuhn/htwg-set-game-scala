@@ -2,6 +2,7 @@ package de.htwg.se.setGame.aview.tui
 
 import com.typesafe.scalalogging.Logger
 import de.htwg.se.setGame.aview.Tui
+import de.htwg.se.setGame.controller.{Controller, NewGame, PlayerAdded}
 import de.htwg.se.setGame.{model, _}
 
 /**

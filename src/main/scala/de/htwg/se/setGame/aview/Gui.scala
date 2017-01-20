@@ -1,8 +1,9 @@
-package de.htwg.se.setGame
+package de.htwg.se.setGame.aview
 
 import javax.swing.border.EmptyBorder
 
 import de.htwg.se.setGame.aview.gui.ButtonGenerator
+import de.htwg.se.setGame.controller._
 import de.htwg.se.setGame.model.{Card, Game, Player}
 
 import scala.swing.event.ButtonClicked
@@ -17,7 +18,7 @@ class Gui(private val controller: Controller) extends MainFrame {
   visible = true
   visible = true
   visible = true
-  val buttonGenerator = new ButtonGenerator(controller)
+  val buttonGenerator = ButtonGenerator(controller)
   preferredSize = new Dimension(Gui.xLayoutSize, Gui.yLayoutSize)
   private val label = new Label {
 
@@ -84,7 +85,7 @@ class Gui(private val controller: Controller) extends MainFrame {
       contents += new BoxPanel(Orientation.Horizontal) {
         contents += new Button("Start Game") {
           reactions += {
-            case ButtonClicked(button) => controller.startGame()
+            case ButtonClicked(_) => controller.startGame()
           }
         }
         contents += new BoxPanel(Orientation.Horizontal) {
@@ -136,12 +137,12 @@ class Gui(private val controller: Controller) extends MainFrame {
   reactions += {
     case e: NewGame => showAddUser(e.game)
     case e: StartGame => refreshField(e.game)
-    case e: PlayerAdded => startGame()
-    case e: IsSet => Dialog.showMessage(contents.head, "Set correct!", title = "You are Great!!")
-    case e: IsInvalidSet => Dialog.showMessage(contents.head, "Set wrong!", title = "Try Again!!")
+    case _: PlayerAdded => startGame()
+    case _: IsSet => Dialog.showMessage(contents.head, "Set correct!", title = "You are Great!!")
+    case _: IsInvalidSet => Dialog.showMessage(contents.head, "Set wrong!", title = "Try Again!!")
     case e: UpdateGame => refreshField(e.game)
     case e: FinishGame => showWinnerDialog(e.game)
-    case e: ExitApplication => closeMe()
+    case _: ExitApplication => closeMe()
 
   }
 

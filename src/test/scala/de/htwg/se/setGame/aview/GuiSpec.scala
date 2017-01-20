@@ -1,6 +1,7 @@
-package de.htwg.se.setGame
+package de.htwg.se.setGame.aview
 
 import de.htwg.se.setGame.actor.CardActor
+import de.htwg.se.setGame.controller.{ControllerDummy, ExitApplication}
 import de.htwg.se.setGame.model.{Card, CardAttribute, Game, Player}
 import org.scalatest.Matchers._
 import org.scalatest.{Outcome, WordSpec}
@@ -81,7 +82,6 @@ class GuiSpec extends WordSpec {
     "start Game " in {
       target.startGame()
     }
-
     "not have called exit on startup" in {
       exitCalled should be(false)
     }

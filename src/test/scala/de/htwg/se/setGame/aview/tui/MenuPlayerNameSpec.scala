@@ -1,6 +1,7 @@
 package de.htwg.se.setGame.aview.tui
 
 import de.htwg.se.setGame._
+import de.htwg.se.setGame.controller.ControllerDummy
 import org.scalatest.Matchers._
 import org.scalatest.WordSpec
 

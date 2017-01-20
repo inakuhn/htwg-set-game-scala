@@ -1,9 +1,9 @@
 package de.htwg.se.setGame.aview.tui
 
 import de.htwg.se.setGame.aview.Tui
+import de.htwg.se.setGame.controller.{ControllerDummy, IsInvalidSet, IsSet, StartGame}
 import de.htwg.se.setGame.model.CardAttribute.{Color, Count, Fill, Form}
 import de.htwg.se.setGame.model.{Card, Game, Player}
-import de.htwg.se.setGame.{ControllerDummy, IsInvalidSet, IsSet, StartGame}
 import org.scalatest.Matchers._
 import org.scalatest.WordSpec
 

@@ -2,8 +2,8 @@ package de.htwg.se.setGame.aview.tui
 
 import com.typesafe.scalalogging.Logger
 import de.htwg.se.setGame.aview.Tui
+import de.htwg.se.setGame.controller.{Controller, IsInvalidSet, IsSet, StartGame}
 import de.htwg.se.setGame.model.{Card, Game}
-import de.htwg.se.setGame.{Controller, IsInvalidSet, IsSet, StartGame}
 
 /**
   * @author Philipp Daniels

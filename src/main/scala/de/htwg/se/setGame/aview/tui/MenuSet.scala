@@ -3,6 +3,7 @@ package de.htwg.se.setGame.aview.tui
 import com.typesafe.scalalogging.Logger
 import de.htwg.se.setGame._
 import de.htwg.se.setGame.model.{Card, Game, Player}
+import de.htwg.se.setGame.controller._
 
 import scala.collection.mutable
 
