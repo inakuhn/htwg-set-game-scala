@@ -1,9 +1,10 @@
-package de.htwg.se.setGame
+package de.htwg.se.setGame.aview
 
 import java.awt.Color
 import javax.swing.ImageIcon
 import javax.swing.border.{EmptyBorder, LineBorder}
 
+import de.htwg.se.setGame.Controller
 import de.htwg.se.setGame.actor.CardActor
 import de.htwg.se.setGame.controller._
 import de.htwg.se.setGame.model.{Card, Game, Player}
@@ -50,7 +51,7 @@ class Gui(private val controller: Controller) extends MainFrame {
   val s = new Dimension(Gui.xSizeOfCard, Gui.ySizeOfCard)
 
   var setSet = false
-  var setList = List[Card]()
+  private var setList = List[Card]()
   var playerSet = Player(0, 0, "")
   def refreshField(game: Game): Unit = {
     contents = new FlowPanel() {
@@ -74,7 +75,7 @@ class Gui(private val controller: Controller) extends MainFrame {
   }
   def createSetCardPanel(card: Card) : Button = {
     new Button() {
-      val myCard = card
+      private val myCard = card
       minimumSize = s
       maximumSize = s
       preferredSize = s
@@ -82,7 +83,7 @@ class Gui(private val controller: Controller) extends MainFrame {
       icon = new ImageIcon(ClassLoader.getSystemResource("pack/" + card.name + ".gif").getFile)
 
       reactions += {
-        case _: ButtonClicked => {
+        case _: ButtonClicked =>
           if (setSet) {
             border = new LineBorder(Color.ORANGE, Gui.sizeOfSelectBorder)
             println(myCard)
@@ -95,7 +96,6 @@ class Gui(private val controller: Controller) extends MainFrame {
           } else {
             selectSetFirst()
           }
-        }
       }
     }
   }
@@ -125,40 +125,36 @@ class Gui(private val controller: Controller) extends MainFrame {
   }
   def createSetButton(player: Player): Button = {
     new Button("Set : " + player.name) {
-      val playerB = player
+      private val playerB = player
       reactions += {
-        case _: ButtonClicked => {
+        case _: ButtonClicked =>
           setSet = true
           playerSet = playerB
           chooseCards(playerSet)
-        }
       }
     }
   }
   def createNewGameButton(): Button = {
     new Button("New Game") {
       reactions += {
-        case _: ButtonClicked => {
+        case _: ButtonClicked =>
           controller.createNewGame()
-        }
       }
     }
   }
   def createRandomButton(): Button = {
     new Button("Random field cards") {
       reactions += {
-        case _: ButtonClicked => {
+        case _: ButtonClicked =>
           controller.randomCardsInField()
-        }
       }
     }
   }
   def createFinishButon() : Button = {
     new Button("Finish Game") {
       reactions += {
-        case _: ButtonClicked => {
+        case _: ButtonClicked =>
           controller.finishGame()
-        }
       }
     }
   }
@@ -213,7 +209,7 @@ class Gui(private val controller: Controller) extends MainFrame {
   def changeText() {
     val r = Dialog.showInput(contents.head, "User Name", initial = "user name")
     r match {
-      case Some(s) => controller.addPlayer(s)
+      case Some(value) => controller.addPlayer(value)
       case None =>
     }
   }
@@ -233,18 +229,15 @@ class Gui(private val controller: Controller) extends MainFrame {
   reactions += {
     case e: NewGame => showAddUser(e.game)
     case e: StartGame => refreshField(e.game)
-    case e: PlayerAdded => {
+    case _: PlayerAdded =>
       startGame()
-    }
-    case e: IsSet => {
+    case _: IsSet =>
       Dialog.showMessage(contents.head, "Set correct!", title = "You are Great!!")
-    }
-    case e: IsInvalidSet => {
+    case _: IsInvalidSet =>
       Dialog.showMessage(contents.head, "Set wrong!", title = "Try Again!!")
-    }
     case e: UpdateGame => refreshField(e.game)
     case e: FinishGame => showWinnerDialog(e.game)
-    case e: ExitApplication => closeMe()
+    case _: ExitApplication => closeMe()
 
   }
 

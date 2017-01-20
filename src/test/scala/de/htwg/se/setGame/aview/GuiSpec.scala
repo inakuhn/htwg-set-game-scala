@@ -1,5 +1,6 @@
-package de.htwg.se.setGame
+package de.htwg.se.setGame.aview
 
+import de.htwg.se.setGame.ControllerDummy
 import de.htwg.se.setGame.actor.CardActor
 import de.htwg.se.setGame.controller.ExitApplication
 import de.htwg.se.setGame.model.{Card, CardAttribute, Game, Player}
@@ -75,7 +76,7 @@ class GuiSpec extends WordSpec {
       //Game game
       val game = Game(cardsInField, cards, players)
       target.refreshField(game)
-      target.contents != null shouldBe (true)
+      target.contents != null shouldBe true
 
     }
     "start Game " in {
