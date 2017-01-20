@@ -20,6 +20,10 @@ trait Menu extends NonBlockingInputReader with Reactor {
     readInput()
   }
 
+  def process(input: String): Unit = {
+    processInput(input)
+  }
+
   override protected def processInput(input: String): Unit = {
     logger.info(Menu.ReadInput.format(input))
     if (actions.contains(input)) {
@@ -37,7 +41,7 @@ trait Menu extends NonBlockingInputReader with Reactor {
     logger.info(Menu.RequestMenuInput)
   }
 
-  protected final def outputMenuList(): Unit = {
+  final def outputMenuList(): Unit = {
     preMenuList()
     for ((key, (_, message)) <- actions.iterator) {
       logger.info(Menu.MenuEntryFormat.format(key, message))
@@ -66,7 +70,7 @@ trait NonBlockingInputReader {
 
   def isContinue: Boolean = continue
 
-  protected def readInput(): Unit = {
+  def readInput(): Unit = {
     continue = true
     do {
       if (Console.in.ready()) {

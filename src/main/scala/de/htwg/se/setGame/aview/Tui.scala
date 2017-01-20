@@ -9,7 +9,7 @@ import scala.swing.Reactor
 /**
   * @author Philipp Daniels
   */
-class Tui(private val controller: Controller, private val main: Menu) extends Reactor {
+class Tui(private val controller: Controller, menu: Menu) extends Reactor {
   private val logger = Logger(getClass)
 
   logger.info(Tui.InitiateMessage)
@@ -19,7 +19,7 @@ class Tui(private val controller: Controller, private val main: Menu) extends Re
     case _: ExitApplication => logger.info(Tui.Shutdown)
   }
 
-  main.process()
+  menu.process()
 }
 
 object Tui {
