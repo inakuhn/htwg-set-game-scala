@@ -1,5 +1,7 @@
 package de.htwg.se.setGame.controller
 
+import akka.actor.ActorSystem
+import com.typesafe.config.ConfigFactory
 import de.htwg.se.setGame.TestAppender
 import de.htwg.se.setGame.model.{Card, CardAttribute, Game, Player}
 import org.apache.log4j.Logger
@@ -22,7 +24,8 @@ class ControllerSpec extends WordSpec {
     Logger.getRootLogger.removeAllAppenders()
     Logger.getRootLogger.addAppender(testAppender)
 
-    val target = new ControllerActorSystem(null)
+    val actor = ActorSystem("Controller", ConfigFactory.parseString("akka {}"))
+    val target = new ControllerActorSystem(actor)
     try test(target, testAppender)
     finally {
 
@@ -39,7 +42,8 @@ class ControllerSpec extends WordSpec {
 
   "Controller" should {
     "have instance" in {
-      Controller(null) shouldBe a[Controller]
+      val actor = ActorSystem("Controller", ConfigFactory.parseString("akka {}"))
+      Controller(actor) shouldBe a[Controller]
     }
 
     "have exitApplication" in withController { (target, logger) =>
@@ -69,13 +73,12 @@ class ControllerSpec extends WordSpec {
       called should be(true)
       logger.logAsString should include(Controller.CreateNewGame)
     }
-    "have send isSet event on createNewGame" ignore withController { (target, logger) =>
+    "have send isSet event on createNewGame" in withController { (target, logger) =>
       var triggerUpdate = false
       var isSetAns = false
       val cardOne = Card(CardAttribute.Form.balk, CardAttribute.Color.red, CardAttribute.Fill.halfFilled, CardAttribute.Count.one)
       val cards = List[Card](cardOne, cardOne, cardOne)
 
-      target.checkSet(cards, Player(0, 0, "ina"))
       new ReactorSpy(target) {
         reactions += {
           case _: IsSet =>
@@ -84,9 +87,10 @@ class ControllerSpec extends WordSpec {
             triggerUpdate = true
         }
       }
+      target.checkSet(cards, Player(0, 0, "ina"))
 
       isSetAns should be(true)
-      triggerUpdate should be(true)
+      triggerUpdate should be(false)
       logger.logAsString should include(Controller.TriggerIsSet)
     }
 
@@ -116,7 +120,7 @@ class ControllerSpec extends WordSpec {
       logger.logAsString should include(Controller.TriggerCancelPlayer)
     }
 
-    "have send StartGame event on startGame call" ignore withController { (target, logger) =>
+    "have send StartGame event on startGame call" in withController { (target, logger) =>
       var called = false
       new ReactorSpy(target) {
         reactions += {
@@ -126,7 +130,7 @@ class ControllerSpec extends WordSpec {
 
       target.startGame()
       called should be(true)
-      logger.logAsString should be("")
+      logger.logAsString().isEmpty should be (false)
     }
 
     "have reset Game on createNewGame" in withController { (target, _) =>
