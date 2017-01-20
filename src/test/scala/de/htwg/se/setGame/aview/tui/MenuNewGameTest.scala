@@ -67,7 +67,9 @@ class MenuNewGameTest extends WordSpec with TuiSpecExtension {
       val tui = new Tui(new ControllerDummy)
       val target = new MenuNewGame(controller, tui, new MenuDummy)
       tui.menu = new MenuDummy
-      controller.publish(PlayerAdded(createEmptyGame))
+      val player = Player(0, 0, "test")
+      val game = Game(List[Card](), List[Card](), List[Player]() :+ player)
+      controller.publish(PlayerAdded(game))
 
       tui.menu should be(target)
       logger.logAsString() should include(MenuNewGame.EventPlayerAdded)
