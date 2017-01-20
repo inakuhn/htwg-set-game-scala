@@ -1,10 +1,7 @@
 package de.htwg.se.setGame
 
-import java.awt.Color
-import javax.swing.ImageIcon
-import javax.swing.border.{EmptyBorder, LineBorder}
+import javax.swing.border.EmptyBorder
 
-import de.htwg.se.setGame.actor.CardActor
 import de.htwg.se.setGame.aview.gui.ButtonGenerator
 import de.htwg.se.setGame.model.{Card, Game, Player}
 

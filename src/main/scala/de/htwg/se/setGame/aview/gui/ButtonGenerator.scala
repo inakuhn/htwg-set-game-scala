@@ -5,11 +5,11 @@ import javax.swing.ImageIcon
 import javax.swing.border.LineBorder
 
 import de.htwg.se.setGame.actor.CardActor
-import de.htwg.se.setGame.{Controller, Gui}
 import de.htwg.se.setGame.model.{Card, Player}
+import de.htwg.se.setGame.{Controller, Gui}
 
-import scala.swing.{Button, Dialog}
 import scala.swing.event.ButtonClicked
+import scala.swing.{Button, Dialog}
 
 /**
   * Created by Ina Kuhn on 20.01.2017.

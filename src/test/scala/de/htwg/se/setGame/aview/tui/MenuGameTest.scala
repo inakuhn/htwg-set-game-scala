@@ -6,6 +6,7 @@ import de.htwg.se.setGame.model.{Card, Game, Player}
 import de.htwg.se.setGame.{ControllerDummy, IsInvalidSet, IsSet, StartGame}
 import org.scalatest.Matchers._
 import org.scalatest.WordSpec
+
 import scala.swing.event.Event
 
 /**
