@@ -1,12 +1,13 @@
 package de.htwg.se.setGame.aview.tui
 
 import com.typesafe.scalalogging.Logger
-import de.htwg.se.setGame.{AddPlayer, CancelAddPlayer, Controller, ExitApplication}
+import de.htwg.se.setGame.aview.Tui
+import de.htwg.se.setGame._
 
 /**
   * @author Philipp Daniels
   */
-class MenuMain(private val controller: Controller, private val player: Menu) extends Menu {
+class MenuMain(private val controller: Controller, private val tui: Tui) extends Menu {
 
   private val logger = Logger(getClass)
   listenTo(controller)
@@ -15,14 +16,9 @@ class MenuMain(private val controller: Controller, private val player: Menu) ext
   getActions(MenuMain.ExitCommand) = (new Exit, MenuMain.ExitDescription)
 
   reactions += {
-    case _: ExitApplication =>
-      logger.info(MenuMain.EventExitApplication)
-      exit()
-    case _: AddPlayer =>
-      logger.info(MenuMain.EventAddPlayer)
-      player.process()
     case _: CancelAddPlayer =>
       logger.info(MenuMain.EventCancelAddPlayer)
+      tui.menu = this
       outputMenuList()
   }
 
@@ -41,13 +37,11 @@ class MenuMain(private val controller: Controller, private val player: Menu) ext
 }
 
 object MenuMain {
-  val EventAddPlayer = "Received 'AddPlayer' event"
   val EventCancelAddPlayer = "Received 'CancelAddPlayer' event"
-  val EventExitApplication = "Received 'ExitApplication' event"
   val ExitCommand = "x"
   val ExitDescription = "Exit application"
   val CreateCommand = "c"
   val CreateDescription = "Create new game"
   val MenuHeading = "# MAIN-MENU #"
-  def apply(controller: Controller): MenuMain = new MenuMain(controller, MenuPlayer(controller))
+  def apply(controller: Controller, tui: Tui): MenuMain = new MenuMain(controller, tui)
 }

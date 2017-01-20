@@ -8,19 +8,14 @@ import scala.swing.Reactor
 /**
   * @author Philipp Daniels
   */
-trait Menu extends NonBlockingInputReader with Reactor {
+trait Menu extends Reactor {
 
   private val logger = Logger(getClass)
   private val actions = mutable.LinkedHashMap[String, (Action, String)]()
 
   protected def getActions: mutable.Map[String, (Action, String)] = actions
 
-  def process(): Unit = {
-    outputMenuList()
-    readInput()
-  }
-
-  override protected def processInput(input: String): Unit = {
+  def process(input: String): Unit = {
     logger.info(Menu.ReadInput.format(input))
     if (actions.contains(input)) {
       actions(input)._1.execute()
@@ -37,7 +32,7 @@ trait Menu extends NonBlockingInputReader with Reactor {
     logger.info(Menu.RequestMenuInput)
   }
 
-  protected final def outputMenuList(): Unit = {
+  final def outputMenuList(): Unit = {
     preMenuList()
     for ((key, (_, message)) <- actions.iterator) {
       logger.info(Menu.MenuEntryFormat.format(key, message))
@@ -46,7 +41,6 @@ trait Menu extends NonBlockingInputReader with Reactor {
   }
 
   protected trait Action {
-
     def execute()
   }
 }
@@ -66,7 +60,7 @@ trait NonBlockingInputReader {
 
   def isContinue: Boolean = continue
 
-  protected def readInput(): Unit = {
+  def readInput(): Unit = {
     continue = true
     do {
       if (Console.in.ready()) {
