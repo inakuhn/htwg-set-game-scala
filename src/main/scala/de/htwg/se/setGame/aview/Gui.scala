@@ -46,8 +46,6 @@ class Gui(private val controller: Controller) extends MainFrame {
   }
 
 
-  //Hier kommt er nicht rein
-  val s = new Dimension(Gui.xSizeOfCard, Gui.ySizeOfCard)
 
   def refreshField(game: Game): Unit = {
     contents = new FlowPanel() {
@@ -58,10 +56,11 @@ class Gui(private val controller: Controller) extends MainFrame {
       }
     }
   }
-  def createSetFieldPanel(game: Game) : GridPanel = {
+
+  def createSetFieldPanel(game: Game): GridPanel = {
     new GridPanel(Gui.xFieldSize, Gui.yFieldSize) {
       for (card <- game.cardsInField) {
-        val button = createSetCardPanel(card)
+        val button = buttonGenerator.createSetCardPanel(card)
         contents += new BorderPanel() {
           border = new EmptyBorder(Gui.sizeOfBorderBtwCardsTop, Gui.sizeOfBorderBtwCardsLeftAndRight, 0, Gui.sizeOfBorderBtwCardsLeftAndRight)
           add(button, BorderPanel.Position.Center)
@@ -69,39 +68,6 @@ class Gui(private val controller: Controller) extends MainFrame {
       }
     }
   }
-  def createSetCardPanel(card: Card) : Button = {
-    new Button() {
-      val myCard = card
-      minimumSize = s
-      maximumSize = s
-      preferredSize = s
-      background = Color.white
-      icon = new ImageIcon(ClassLoader.getSystemResource("pack/" + card.name + ".gif").getFile)
-
-      reactions += {
-        case _: ButtonClicked => {
-          if (Gui.setSet) {
-            border = new LineBorder(Color.ORANGE, Gui.sizeOfSelectBorder)
-            println(myCard)
-            Gui.setList = Gui.setList :+ myCard
-            if (Gui.setList.size == CardActor.setMax) {
-              controller.checkSet(Gui.setList, Gui.playerSet)
-              Gui.setList = List[Card]()
-              Gui.setSet = false
-            }
-          } else {
-            selectSetFirst()
-          }
-        }
-      }
-    }
-  }
-
-
-  def selectSetFirst() {
-    Dialog.showMessage(contents.head, "Before Choose card please press Set button", title = "Press Set!")
-  }
-
 
   def showAddUser(game: Game): Unit = {
 
@@ -133,7 +99,7 @@ class Gui(private val controller: Controller) extends MainFrame {
       }
     }
   }
-  
+
   def startNewGame(): Unit = {
     controller.createNewGame()
   }
@@ -145,7 +111,8 @@ class Gui(private val controller: Controller) extends MainFrame {
   }
 
   def max(s1: Player, s2: Player): Player = if (s1.points > s2.points) s1 else s2
-  def createInformationPanel(game: Game) : BoxPanel = {
+
+  def createInformationPanel(game: Game): BoxPanel = {
     new BoxPanel(Orientation.Vertical) {
       for (player <- game.player) {
         contents += new Label() {
@@ -157,7 +124,8 @@ class Gui(private val controller: Controller) extends MainFrame {
       }
     }
   }
-  def createOptionsMenu(game: Game) : BoxPanel = {
+
+  def createOptionsMenu(game: Game): BoxPanel = {
     new BoxPanel(Orientation.Vertical) {
       for (player <- game.player) {
         contents += buttonGenerator.createSetButton(player)
@@ -167,18 +135,13 @@ class Gui(private val controller: Controller) extends MainFrame {
       contents += buttonGenerator.createNewGameButton()
     }
   }
+
   reactions += {
     case e: NewGame => showAddUser(e.game)
     case e: StartGame => refreshField(e.game)
-    case e: PlayerAdded => {
-      startGame()
-    }
-    case e: IsSet => {
-      Dialog.showMessage(contents.head, "Set correct!", title = "You are Great!!")
-    }
-    case e: IsInvalidSet => {
-      Dialog.showMessage(contents.head, "Set wrong!", title = "Try Again!!")
-    }
+    case e: PlayerAdded => startGame()
+    case e: IsSet => Dialog.showMessage(contents.head, "Set correct!", title = "You are Great!!")
+    case e: IsInvalidSet => Dialog.showMessage(contents.head, "Set wrong!", title = "Try Again!!")
     case e: UpdateGame => refreshField(e.game)
     case e: FinishGame => showWinnerDialog(e.game)
     case e: ExitApplication => closeMe()
