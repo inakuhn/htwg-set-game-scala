@@ -40,6 +40,7 @@ class TuiSpec extends WordSpec with TuiSpecExtension {
         target.readInput()
       }
 
+      target.isContinue should be (false)
       val logs = logger.logAsString()
       logs should include (Tui.InitiateMessage)
       logs should include (Tui.Shutdown)

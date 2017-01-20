@@ -3,16 +3,17 @@ package de.htwg.se.setGame.aview.tui
 import com.typesafe.scalalogging.Logger
 import de.htwg.se.setGame.aview.Tui
 import de.htwg.se.setGame.model.{Card, Game}
-import de.htwg.se.setGame.{Controller, StartGame}
+import de.htwg.se.setGame.{Controller, IsInvalidSet, IsSet, StartGame}
 
 /**
   * @author Philipp Daniels
   */
-class MenuGame(private val controller: Controller, private val tui: Tui) extends Menu {
+class MenuGame(private val controller: Controller, private val tui: Tui, private val set: Menu) extends Menu {
 
   private val logger = Logger(getClass)
   listenTo(controller)
 
+  getActions(MenuGame.SetCommand) = (new Set, MenuGame.SetDescription)
   getActions(MenuGame.ExitCommand) = (new Exit, MenuGame.ExitDescription)
 
   reactions += {
@@ -21,10 +22,24 @@ class MenuGame(private val controller: Controller, private val tui: Tui) extends
       tui.menu = this
       showGameField(e.game)
       outputMenuList()
+    case _: IsSet =>
+      tui.menu = this
+      outputMenuList()
+    case _: IsInvalidSet =>
+      tui.menu = this
+      outputMenuList()
   }
 
   private class Exit extends Action {
     override def execute(): Unit = controller.exitApplication()
+  }
+
+  private class Set extends Action {
+    override def execute(): Unit = {
+      logger.info(MenuGame.MenuSetSwitch)
+      tui.menu = set
+      set.outputMenuList()
+    }
   }
 
   protected override def preMenuList(): Unit = {
@@ -45,11 +60,14 @@ class MenuGame(private val controller: Controller, private val tui: Tui) extends
 }
 
 object MenuGame {
-  val FieldHeading = "# GAME-FIELD #"
   val CardFormat = "Card %2s: %s, %s, %s, %s"
   val EventStartGame = "Received 'StartGame' event"
   val ExitCommand = "x"
   val ExitDescription = "Exit"
+  val FieldHeading = "# GAME-FIELD #"
   val MenuHeading = "# GAME-MENU #"
-  def apply(controller: Controller, tui: Tui): MenuGame = new MenuGame(controller, tui)
+  val SetCommand = "s"
+  val SetDescription = "Mark set"
+  val MenuSetSwitch = "Switch to MenuSet"
+  def apply(controller: Controller, tui: Tui): MenuGame = new MenuGame(controller, tui, MenuSet(controller))
 }
