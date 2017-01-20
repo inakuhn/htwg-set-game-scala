@@ -5,6 +5,7 @@ import javax.swing.ImageIcon
 import javax.swing.border.{EmptyBorder, LineBorder}
 
 import de.htwg.se.setGame.actor.CardActor
+import de.htwg.se.setGame.aview.gui.ButtonGenerator
 import de.htwg.se.setGame.model.{Card, Game, Player}
 
 import scala.swing.event.ButtonClicked
@@ -19,14 +20,14 @@ class Gui(private val controller: Controller) extends MainFrame {
   visible = true
   visible = true
   visible = true
-
+  val buttonGenerator = new ButtonGenerator(controller)
   preferredSize = new Dimension(Gui.xLayoutSize, Gui.yLayoutSize)
   private val label = new Label {
 
   }
   contents = new FlowPanel {
     contents += label
-    contents += createNewGameButton()
+    contents += buttonGenerator.createNewGameButton()
   }
 
 
@@ -48,9 +49,6 @@ class Gui(private val controller: Controller) extends MainFrame {
   //Hier kommt er nicht rein
   val s = new Dimension(Gui.xSizeOfCard, Gui.ySizeOfCard)
 
-  var setSet = false
-  var setList = List[Card]()
-  var playerSet = Player(0, 0, "")
   def refreshField(game: Game): Unit = {
     contents = new FlowPanel() {
       contents += createSetFieldPanel(game)
@@ -82,14 +80,14 @@ class Gui(private val controller: Controller) extends MainFrame {
 
       reactions += {
         case _: ButtonClicked => {
-          if (setSet) {
+          if (Gui.setSet) {
             border = new LineBorder(Color.ORANGE, Gui.sizeOfSelectBorder)
             println(myCard)
-            setList = setList :+ myCard
-            if (setList.size == CardActor.setMax) {
-              controller.checkSet(setList, playerSet)
-              setList = List[Card]()
-              setSet = false
+            Gui.setList = Gui.setList :+ myCard
+            if (Gui.setList.size == CardActor.setMax) {
+              controller.checkSet(Gui.setList, Gui.playerSet)
+              Gui.setList = List[Card]()
+              Gui.setSet = false
             }
           } else {
             selectSetFirst()
@@ -99,83 +97,18 @@ class Gui(private val controller: Controller) extends MainFrame {
     }
   }
 
-  def createInformationPanel(game: Game) : BoxPanel = {
-    new BoxPanel(Orientation.Vertical) {
-      for (player <- game.player) {
-        contents += new Label() {
-          text = player.name + " : " + player.points
-        }
-      }
-      contents += new Label() {
-        text = "Cards in deck : " + game.pack.size
-      }
-    }
-  }
-  def createOptionsMenu(game: Game) : BoxPanel = {
-    new BoxPanel(Orientation.Vertical) {
-      for (player <- game.player) {
-        contents += createSetButton(player)
-      }
-      contents += createFinishButon()
-      contents += createRandomButton()
-
-      contents += createNewGameButton()
-    }
-  }
-  def createSetButton(player: Player): Button = {
-    new Button("Set : " + player.name) {
-      val playerB = player
-      reactions += {
-        case _: ButtonClicked => {
-          setSet = true
-          playerSet = playerB
-          chooseCards(playerSet)
-        }
-      }
-    }
-  }
-  def createNewGameButton(): Button = {
-    new Button("New Game") {
-      reactions += {
-        case _: ButtonClicked => {
-          controller.createNewGame()
-        }
-      }
-    }
-  }
-  def createRandomButton(): Button = {
-    new Button("Random field cards") {
-      reactions += {
-        case _: ButtonClicked => {
-          controller.randomCardsInField()
-        }
-      }
-    }
-  }
-  def createFinishButon() : Button = {
-    new Button("Finish Game") {
-      reactions += {
-        case _: ButtonClicked => {
-          controller.finishGame()
-        }
-      }
-    }
-  }
 
   def selectSetFirst() {
     Dialog.showMessage(contents.head, "Before Choose card please press Set button", title = "Press Set!")
   }
 
-  def chooseCards(player: Player) {
-    Dialog.showMessage(contents.head, player.name + " you can choose 3 cards", title = "Your Turn!")
-  }
 
   def showAddUser(game: Game): Unit = {
 
     contents = new BoxPanel(Orientation.Vertical) {
       contents += label
       contents += new BoxPanel(Orientation.Horizontal) {
-        contents += createUserNameButton()
+        contents += buttonGenerator.createUserNameButton()
       }
     }
   }
@@ -192,7 +125,7 @@ class Gui(private val controller: Controller) extends MainFrame {
           }
         }
         contents += new BoxPanel(Orientation.Horizontal) {
-          contents += createUserNameButton()
+          contents += buttonGenerator.createUserNameButton()
 
 
         }
@@ -200,23 +133,7 @@ class Gui(private val controller: Controller) extends MainFrame {
       }
     }
   }
-
-  def createUserNameButton() : Button = {
-    new Button("User Name") {
-      reactions += {
-        case ButtonClicked(button) => changeText()
-      }
-    }
-  }
-
-  def changeText() {
-    val r = Dialog.showInput(contents.head, "User Name", initial = "user name")
-    r match {
-      case Some(s) => controller.addPlayer(s)
-      case None =>
-    }
-  }
-
+  
   def startNewGame(): Unit = {
     controller.createNewGame()
   }
@@ -228,7 +145,28 @@ class Gui(private val controller: Controller) extends MainFrame {
   }
 
   def max(s1: Player, s2: Player): Player = if (s1.points > s2.points) s1 else s2
-
+  def createInformationPanel(game: Game) : BoxPanel = {
+    new BoxPanel(Orientation.Vertical) {
+      for (player <- game.player) {
+        contents += new Label() {
+          text = player.name + " : " + player.points
+        }
+      }
+      contents += new Label() {
+        text = "Cards in deck : " + game.pack.size
+      }
+    }
+  }
+  def createOptionsMenu(game: Game) : BoxPanel = {
+    new BoxPanel(Orientation.Vertical) {
+      for (player <- game.player) {
+        contents += buttonGenerator.createSetButton(player)
+      }
+      contents += buttonGenerator.createFinishButon()
+      contents += buttonGenerator.createRandomButton()
+      contents += buttonGenerator.createNewGameButton()
+    }
+  }
   reactions += {
     case e: NewGame => showAddUser(e.game)
     case e: StartGame => refreshField(e.game)
@@ -263,6 +201,9 @@ object Gui {
   val yLayoutSize = 800
   val xFieldSize = 3
   val yFieldSize = 4
+  var setSet = false
+  var setList = List[Card]()
+  var playerSet = Player(0, 0, "")
 
   def apply(controller: Controller): Gui = new Gui(controller)
 }
