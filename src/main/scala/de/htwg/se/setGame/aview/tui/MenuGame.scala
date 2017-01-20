@@ -2,7 +2,7 @@ package de.htwg.se.setGame.aview.tui
 
 import com.typesafe.scalalogging.Logger
 import de.htwg.se.setGame.model.{Card, Game}
-import de.htwg.se.setGame.{Controller, ExitApplication, StartGame}
+import de.htwg.se.setGame.{Controller, StartGame}
 
 /**
   * @author Philipp Daniels
@@ -15,9 +15,6 @@ class MenuGame(private val controller: Controller) extends Menu {
   getActions(MenuGame.ExitCommand) = (new Exit, MenuGame.ExitDescription)
 
   reactions += {
-    case _: ExitApplication =>
-      logger.info(MenuGame.EventExitApplication)
-      exit()
     case e: StartGame =>
       logger.info(MenuGame.EventStartGame)
       showGameField(e.game)
@@ -42,7 +39,6 @@ class MenuGame(private val controller: Controller) extends Menu {
 object MenuGame {
   val FieldHeading = "# GAME-FIELD #"
   val CardFormat = "Card %d:  %s, %s, %s, %s"
-  val EventExitApplication = "Received 'ExitApplication' event"
   val EventStartGame = "Received 'StartGame' event"
   val ExitCommand = "x"
   val ExitDescription = "Exit"
