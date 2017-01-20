@@ -81,9 +81,7 @@ class GuiSpec extends WordSpec {
     "start Game " in {
       target.startGame()
     }
-    "show winner" in {
-      target.showWinnerDialog(getGameForTest())
-    }
+
     "not have called exit on startup" in {
       exitCalled should be(false)
     }
