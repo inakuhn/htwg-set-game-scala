@@ -37,9 +37,7 @@ class MenuMain(private val controller: Controller, private val tui: Tui) extends
 }
 
 object MenuMain {
-  val EventAddPlayer = "Received 'AddPlayer' event"
   val EventCancelAddPlayer = "Received 'CancelAddPlayer' event"
-  val EventExitApplication = "Received 'ExitApplication' event"
   val ExitCommand = "x"
   val ExitDescription = "Exit application"
   val CreateCommand = "c"
