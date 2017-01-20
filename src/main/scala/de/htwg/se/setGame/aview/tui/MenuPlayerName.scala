@@ -1,7 +1,7 @@
 package de.htwg.se.setGame.aview.tui
 
 import com.typesafe.scalalogging.Logger
-import de.htwg.se.setGame.{CancelAddPlayer, Controller, ExitApplication, PlayerAdded}
+import de.htwg.se.setGame.Controller
 
 /**
   * @author Philipp Daniels

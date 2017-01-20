@@ -3,7 +3,6 @@ package de.htwg.se.setGame.actor
 import akka.actor.{Actor, ActorLogging}
 import de.htwg.se.setGame.model.{Card, CardAttribute, Game, Player}
 
-import scala.collection.mutable
 import scala.util.Random
 
 case object CreatePack

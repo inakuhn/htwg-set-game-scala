@@ -1,15 +1,14 @@
 package de.htwg.se.setGame
 
-import java.awt.{Color, Dimension, Toolkit}
-import javax.swing.{BoxLayout, ImageIcon, JOptionPane}
-import javax.swing.border.{Border, EmptyBorder, LineBorder}
+import java.awt.Color
+import javax.swing.ImageIcon
+import javax.swing.border.{EmptyBorder, LineBorder}
 
 import de.htwg.se.setGame.actor.CardActor
 import de.htwg.se.setGame.model.{Card, Game, Player}
-import sun.invoke.empty.Empty
 
-import scala.swing.{Dimension, _}
 import scala.swing.event.ButtonClicked
+import scala.swing.{Dimension, _}
 
 /**
   * @author Philipp Daniels

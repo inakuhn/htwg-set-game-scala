@@ -7,7 +7,6 @@ import org.scalatest.{Outcome, WordSpec}
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
-import scala.swing.FlowPanel
 import scala.swing.Reactions.Reaction
 
 /**
