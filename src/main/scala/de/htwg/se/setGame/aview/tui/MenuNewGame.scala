@@ -6,36 +6,36 @@ import de.htwg.se.setGame.{model, _}
 /**
   * @author Philipp Daniels
   */
-class MenuStart(private val controller: Controller, private val playerName: Menu, private val game: Menu) extends Menu {
+class MenuNewGame(private val controller: Controller, private val playerName: Menu, private val game: Menu) extends Menu {
 
   private val logger = Logger(getClass)
   listenTo(controller)
 
-  getActions(MenuStart.PlayerCommand) = (new Player, MenuStart.PlayerDescription)
-  getActions(MenuStart.StartCommand) = (new Start, MenuStart.StartDescription)
-  getActions(MenuStart.CancelCommand) = (new Cancel, MenuStart.CancelDescription)
-  getActions(MenuStart.ExitCommand) = (new Exit, MenuStart.ExitDescription)
+  getActions(MenuNewGame.PlayerCommand) = (new Player, MenuNewGame.PlayerDescription)
+  getActions(MenuNewGame.StartCommand) = (new Start, MenuNewGame.StartDescription)
+  getActions(MenuNewGame.CancelCommand) = (new Cancel, MenuNewGame.CancelDescription)
+  getActions(MenuNewGame.ExitCommand) = (new Exit, MenuNewGame.ExitDescription)
 
   reactions += {
     case _: ExitApplication =>
-      logger.info(MenuStart.EventExitApplication)
+      logger.info(MenuNewGame.EventExitApplication)
       exit()
     case _: CancelAddPlayer =>
-      logger.info(MenuStart.EventCancelAddPlayer)
+      logger.info(MenuNewGame.EventCancelAddPlayer)
       exit()
     case e: PlayerAdded =>
-      logger.info(MenuStart.EventPlayerAdded)
-      val formatter = (p: model.Player) => {MenuStart.PlayerFormat.format(p.name, p.points)}
+      logger.info(MenuNewGame.EventPlayerAdded)
+      val formatter = (p: model.Player) => {MenuNewGame.PlayerFormat.format(p.name, p.points)}
       val player = e.game.player.map(formatter)
-      logger.info(MenuStart.PlayerList.format(player.mkString(", ")))
+      logger.info(MenuNewGame.PlayerList.format(player.mkString(", ")))
     case _: StartGame =>
-      logger.info(MenuStart.EventStartGame)
+      logger.info(MenuNewGame.EventStartGame)
       game.process()
   }
 
   protected override def preMenuList(): Unit = {
     super.preMenuList()
-    logger.info(MenuStart.MenuHeading)
+    logger.info(MenuNewGame.MenuHeading)
   }
 
   private class Player extends Action {
@@ -58,7 +58,7 @@ class MenuStart(private val controller: Controller, private val playerName: Menu
   }
 }
 
-object MenuStart {
+object MenuNewGame {
   val CancelCommand = "c"
   val CancelDescription = "Cancel"
   val EventCancelAddPlayer = "Received 'CancelAddPlayer' event"
@@ -74,7 +74,7 @@ object MenuStart {
   val PlayerList = "Player: %s"
   val StartCommand = "s"
   val StartDescription = "Start game"
-  def apply(controller: Controller): MenuStart = {
-    new MenuStart(controller, MenuPlayerName(controller), MenuGame(controller))
+  def apply(controller: Controller): MenuNewGame = {
+    new MenuNewGame(controller, MenuPlayerName(controller), MenuGame(controller))
   }
 }

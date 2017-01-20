@@ -10,14 +10,14 @@ import scala.swing.event.Event
 /**
   * @author Philipp Daniels
   */
-class MenuStartTest extends WordSpec with TuiSpecExtension {
+class MenuNewGameTest extends WordSpec with TuiSpecExtension {
 
   private val lineBreak = sys.props("line.separator")
   private def createEmptyGame: Game = Game(List[Card](), List[Card](), List[Player]())
 
   private def assertExitByEvent(event: Event): Unit = {
     val controller = new ControllerDummy
-    val target = new MenuStart(controller, new MenuDummy, new MenuDummy)
+    val target = new MenuNewGame(controller, new MenuDummy, new MenuDummy)
     controller.publish(event)
 
     target.isContinue should be (false)
@@ -25,7 +25,7 @@ class MenuStartTest extends WordSpec with TuiSpecExtension {
 
   "MenuPlayer" should {
     val assertEvent = (logger: TestAppender, command: String, c: Controller) => {
-      val target = new MenuStart(c, new MenuDummy, new MenuDummy)
+      val target = new MenuNewGame(c, new MenuDummy, new MenuDummy)
       overrideConsoleIn(command) {
         target.process()
       }
@@ -33,13 +33,13 @@ class MenuStartTest extends WordSpec with TuiSpecExtension {
     }
 
     "have stopped on ExitApplication event" in withLogger { (logger) =>
-      assertEvent(logger, MenuStart.ExitCommand, new ControllerDummy {
+      assertEvent(logger, MenuNewGame.ExitCommand, new ControllerDummy {
         override def exitApplication(): Unit = publish(new ExitApplication)
       })
     }
 
     "have stopped on CancelAddPlayer event" in withLogger { (logger) =>
-      assertEvent(logger, MenuStart.CancelCommand, new ControllerDummy {
+      assertEvent(logger, MenuNewGame.CancelCommand, new ControllerDummy {
         override def cancelAddPlayer(): Unit = publish(new CancelAddPlayer)
       })
     }
@@ -53,23 +53,23 @@ class MenuStartTest extends WordSpec with TuiSpecExtension {
           publish(new ExitApplication)
         }
       }
-      overrideConsoleIn(MenuStart.PlayerCommand) {
-        new MenuStart(controller, new MenuDummy {
+      overrideConsoleIn(MenuNewGame.PlayerCommand) {
+        new MenuNewGame(controller, new MenuDummy {
           override def process(): Unit = controller.addPlayer("player")
         }, new MenuDummy).process()
       }
 
       val logs = logger.logAsString()
-      logs should include (MenuStart.MenuHeading)
-      logs should include (MenuStart.EventPlayerAdded)
-      logs should include (MenuStart.PlayerList.format(""))
+      logs should include (MenuNewGame.MenuHeading)
+      logs should include (MenuNewGame.EventPlayerAdded)
+      logs should include (MenuNewGame.PlayerList.format(""))
       playerName should be ("player")
     }
 
     "have called controller startGame" in withLogger { (logger) =>
       var called = false
-      overrideConsoleIn(MenuStart.StartCommand) {
-        new MenuStart(new ControllerDummy {
+      overrideConsoleIn(MenuNewGame.StartCommand) {
+        new MenuNewGame(new ControllerDummy {
           override def startGame(): Unit = {
             called = true
             publish(new ExitApplication)
@@ -78,39 +78,39 @@ class MenuStartTest extends WordSpec with TuiSpecExtension {
       }
 
       val logs = logger.logAsString()
-      logs should include (MenuStart.StartDescription)
-      logs should include (Menu.ReadInput.format(MenuStart.StartCommand))
+      logs should include (MenuNewGame.StartDescription)
+      logs should include (Menu.ReadInput.format(MenuNewGame.StartCommand))
       called should be (true)
     }
 
     "have listener on StartGame event" in withLogger { (logger) =>
       var called = false
       val controller = new ControllerDummy
-      new MenuStart(controller, new MenuDummy, new MenuDummy {
+      new MenuNewGame(controller, new MenuDummy, new MenuDummy {
         override def process(): Unit = called = true
       })
       controller.publish(StartGame(createEmptyGame))
 
       called should be (true)
-      logger.logAsString() should include (MenuStart.EventStartGame)
+      logger.logAsString() should include (MenuNewGame.EventStartGame)
     }
 
     "have listener on ExitApplication event" in withLogger { (logger) =>
       assertExitByEvent(new ExitApplication)
-      logger.logAsString() should include (MenuStart.EventExitApplication)
+      logger.logAsString() should include (MenuNewGame.EventExitApplication)
     }
 
     "have listener on CancelAddPlayer event" in withLogger { (logger) =>
       assertExitByEvent(new CancelAddPlayer)
-      logger.logAsString() should include (MenuStart.EventCancelAddPlayer)
+      logger.logAsString() should include (MenuNewGame.EventCancelAddPlayer)
     }
 
     "have unknown menu-entry fallback" in withLogger { (logger) =>
-      val target = new MenuStart(new ControllerDummy {
+      val target = new MenuNewGame(new ControllerDummy {
         override def exitApplication(): Unit = publish(new ExitApplication)
       }, new MenuDummy, new MenuDummy)
 
-      val input = "test" + lineBreak + MenuStart.ExitCommand
+      val input = "test" + lineBreak + MenuNewGame.ExitCommand
       overrideConsoleIn(input) {
         target.process()
       }
@@ -118,7 +118,7 @@ class MenuStartTest extends WordSpec with TuiSpecExtension {
     }
 
     "have factory method" in {
-      MenuStart(new ControllerDummy)
+      MenuNewGame(new ControllerDummy)
     }
   }
 }
