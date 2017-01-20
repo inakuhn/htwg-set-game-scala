@@ -9,7 +9,6 @@ class ControllerDummy extends Controller {
 
   override def exitApplication(): Unit = {}
 
-  override def createCards(): Unit = {}
 
   override def createNewGame(): Unit = {}
 
@@ -20,4 +19,8 @@ class ControllerDummy extends Controller {
   override def checkSet(cards: List[Card], player: Player): Unit = {}
 
   override def startGame(): Unit = {}
+
+  override def randomCardsInField(): Unit = {}
+
+  override def finishGame(): Unit = {}
 }

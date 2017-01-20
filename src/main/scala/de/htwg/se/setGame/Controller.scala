@@ -12,12 +12,11 @@ import scala.concurrent.duration._
 import scala.language.postfixOps
 import scala.swing.Publisher
 import scala.swing.event.Event
+import scala.util.Random
 
 trait Controller extends Publisher {
 
   def exitApplication()
-
-  def createCards()
 
   def createNewGame()
 
@@ -28,7 +27,8 @@ trait Controller extends Publisher {
   def addPlayer(name: String)
 
   def cancelAddPlayer()
-
+  def randomCardsInField()
+  def finishGame()
   def checkSet(cards: List[Card], player: Player)
 
 
@@ -50,10 +50,6 @@ protected class ControllerActorSystem(private val system: ActorSystem) extends C
   override def exitApplication(): Unit = {
     logger.info(Controller.TriggerExitApp)
     publish(new ExitApplication)
-  }
-
-  override def createCards(): Unit = {
-
   }
 
 
@@ -106,6 +102,19 @@ protected class ControllerActorSystem(private val system: ActorSystem) extends C
     game = Game(cardInField, pack, game.player)
     publish(StartGame(game))
   }
+
+  override def randomCardsInField(): Unit = {
+    var listOfCards = game.pack:::game.cardsInField
+    listOfCards = Random.shuffle(listOfCards)
+    val cardsInField = listOfCards.slice(0,CardActor.fieldSize)
+    val pack = listOfCards diff cardsInField
+    game = Game(cardsInField, pack, game.player)
+    publish(new UpdateGame(game))
+  }
+
+  override def finishGame(): Unit = {
+    publish(new FinishGame(game))
+  }
 }
 
 /**
@@ -141,3 +150,6 @@ case class IsSet() extends Event
 case class IsInvalidSet() extends Event
 
 case class UpdateGame(game: Game) extends Event
+
+case class FinishGame(game: Game) extends Event
+

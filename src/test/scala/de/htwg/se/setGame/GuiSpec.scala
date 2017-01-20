@@ -77,6 +77,9 @@ class GuiSpec extends WordSpec {
       target.contents != null shouldBe (true)
 
     }
+    "start Game " in {
+      target.startGame()
+    }
     "not have called exit on startup" in {
       exitCalled should be(false)
     }
