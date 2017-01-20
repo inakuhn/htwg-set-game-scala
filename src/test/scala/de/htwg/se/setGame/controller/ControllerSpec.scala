@@ -129,7 +129,7 @@ class ControllerSpec extends WordSpec {
       logger.logAsString should be("")
     }
 
-    "have reset Game on createNewGame" in withController { (target, logger) =>
+    "have reset Game on createNewGame" in withController { (target, _) =>
       new ReactorSpy(target) {
         reactions += {
           case e: StartGame => game = e.game
@@ -139,6 +139,28 @@ class ControllerSpec extends WordSpec {
       target.addPlayer("player")
       target.createNewGame()
       assertGame(cards = true, pack = true, player = false)
+    }
+
+    "have triggered UpdateGame event" in withController { (target, _) =>
+      var called = false
+      new ReactorSpy(target) {
+        reactions += {
+          case _: UpdateGame => called = true
+        }
+      }
+      target.randomCardsInField()
+      called should be (true)
+    }
+
+    "have triggered FinishGame event" in withController { (target, _) =>
+      var called = false
+      new ReactorSpy(target) {
+        reactions += {
+          case _: FinishGame => called = true
+        }
+      }
+      target.finishGame()
+      called should be (true)
     }
   }
 }

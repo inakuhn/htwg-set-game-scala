@@ -49,7 +49,6 @@ protected class ControllerActorSystem(private val system: ActorSystem) extends C
     publish(new ExitApplication)
   }
 
-
   def generateNewGame(player: Player, set: List[Card]): Unit = {
     val myActor = system.actorOf(Props[CardActor])
     val future = myActor ? MoveCards(set, player, game)
