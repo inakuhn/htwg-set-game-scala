@@ -17,20 +17,11 @@ class MenuNewGame(private val controller: Controller, private val playerName: Me
   getActions(MenuNewGame.ExitCommand) = (new Exit, MenuNewGame.ExitDescription)
 
   reactions += {
-    case _: ExitApplication =>
-      logger.info(MenuNewGame.EventExitApplication)
-      exit()
-    case _: CancelAddPlayer =>
-      logger.info(MenuNewGame.EventCancelAddPlayer)
-      exit()
     case e: PlayerAdded =>
       logger.info(MenuNewGame.EventPlayerAdded)
       val formatter = (p: model.Player) => {MenuNewGame.PlayerFormat.format(p.name, p.points)}
       val player = e.game.player.map(formatter)
       logger.info(MenuNewGame.PlayerList.format(player.mkString(", ")))
-    case _: StartGame =>
-      logger.info(MenuNewGame.EventStartGame)
-      game.process()
   }
 
   protected override def preMenuList(): Unit = {
