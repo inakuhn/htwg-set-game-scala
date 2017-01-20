@@ -1,5 +1,6 @@
 package de.htwg.se.setGame.aview.tui
 
+import de.htwg.se.setGame.aview.Tui
 import de.htwg.se.setGame.model.CardAttribute.{Color, Count, Fill, Form}
 import de.htwg.se.setGame.model.{Card, Game, Player}
 import de.htwg.se.setGame.{ControllerDummy, StartGame}
@@ -15,24 +16,24 @@ class MenuGameTest extends WordSpec with TuiSpecExtension {
     "have called controller exitApplication on command" in withLogger { (logger) =>
       var called = false
       val target = new MenuGame(new ControllerDummy {
-        override def exitApplication(): Unit = {
-          called = true
-        }
-      })
+        override def exitApplication(): Unit = called = true
+      }, new Tui(new ControllerDummy))
       target.process(MenuGame.ExitCommand)
 
       called should be (true)
       logger.logAsString() should include (Menu.ReadInput.format(MenuGame.ExitCommand))
     }
 
-    "have shown game field on StartGame" in withLogger { (logger) =>
+    "have listener on StartGame event" in withLogger { (logger) =>
       val controller = new ControllerDummy
-      val target = new MenuGame(controller)
+      val tui = new Tui(new ControllerDummy)
+      val target = new MenuGame(controller, tui)
       val card = Card(Form.wave, Color.green, Fill.halfFilled, Count.one)
       val game = Game(List[Card]() :+ card, List[Card](), List[Player]())
+      tui.menu = new MenuDummy
       controller.publish(StartGame(game))
 
-      target.isContinue should be (true)
+      tui.menu should be (target)
       val logs = logger.logAsString()
       logs should include (MenuGame.EventStartGame)
       logs should include (MenuGame.FieldHeading)
@@ -40,7 +41,7 @@ class MenuGameTest extends WordSpec with TuiSpecExtension {
     }
 
     "have factory method" in {
-      MenuGame(new ControllerDummy)
+      MenuGame(new ControllerDummy, new Tui(new ControllerDummy))
     }
   }
 }

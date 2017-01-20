@@ -38,6 +38,7 @@ object Tui {
     val ui = new Tui(controller)
     MenuNewGame(controller, ui)
     MenuPlayerName(controller)
+    MenuGame(controller, ui)
     ui.readInput()
     ui
   }
