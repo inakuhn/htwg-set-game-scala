@@ -6,36 +6,36 @@ import de.htwg.se.setGame.{model, _}
 /**
   * @author Philipp Daniels
   */
-class MenuPlayer(private val controller: Controller, private val playerName: Menu, private val game: Menu) extends Menu {
+class MenuStart(private val controller: Controller, private val playerName: Menu, private val game: Menu) extends Menu {
 
   private val logger = Logger(getClass)
   listenTo(controller)
 
-  getActions(MenuPlayer.PlayerCommand) = (new Player, MenuPlayer.PlayerDescription)
-  getActions(MenuPlayer.StartCommand) = (new Start, MenuPlayer.StartDescription)
-  getActions(MenuPlayer.CancelCommand) = (new Cancel, MenuPlayer.CancelDescription)
-  getActions(MenuPlayer.ExitCommand) = (new Exit, MenuPlayer.ExitDescription)
+  getActions(MenuStart.PlayerCommand) = (new Player, MenuStart.PlayerDescription)
+  getActions(MenuStart.StartCommand) = (new Start, MenuStart.StartDescription)
+  getActions(MenuStart.CancelCommand) = (new Cancel, MenuStart.CancelDescription)
+  getActions(MenuStart.ExitCommand) = (new Exit, MenuStart.ExitDescription)
 
   reactions += {
     case _: ExitApplication =>
-      logger.info(MenuPlayer.EventExitApplication)
+      logger.info(MenuStart.EventExitApplication)
       exit()
     case _: CancelAddPlayer =>
-      logger.info(MenuPlayer.EventCancelAddPlayer)
+      logger.info(MenuStart.EventCancelAddPlayer)
       exit()
     case e: PlayerAdded =>
-      logger.info(MenuPlayer.EventPlayerAdded)
-      val formatter = (p: model.Player) => {MenuPlayer.PlayerFormat.format(p.name, p.points)}
+      logger.info(MenuStart.EventPlayerAdded)
+      val formatter = (p: model.Player) => {MenuStart.PlayerFormat.format(p.name, p.points)}
       val player = e.game.player.map(formatter)
-      logger.info(MenuPlayer.PlayerList.format(player.mkString(", ")))
+      logger.info(MenuStart.PlayerList.format(player.mkString(", ")))
     case _: StartGame =>
-      logger.info(MenuPlayer.EventStartGame)
+      logger.info(MenuStart.EventStartGame)
       game.process()
   }
 
   protected override def preMenuList(): Unit = {
     super.preMenuList()
-    logger.info(MenuPlayer.MenuHeading)
+    logger.info(MenuStart.MenuHeading)
   }
 
   private class Player extends Action {
@@ -58,7 +58,7 @@ class MenuPlayer(private val controller: Controller, private val playerName: Men
   }
 }
 
-object MenuPlayer {
+object MenuStart {
   val CancelCommand = "c"
   val CancelDescription = "Cancel"
   val EventCancelAddPlayer = "Received 'CancelAddPlayer' event"
@@ -74,7 +74,7 @@ object MenuPlayer {
   val PlayerList = "Player: %s"
   val StartCommand = "s"
   val StartDescription = "Start game"
-  def apply(controller: Controller): MenuPlayer = {
-    new MenuPlayer(controller, MenuPlayerName(controller), MenuGame(controller))
+  def apply(controller: Controller): MenuStart = {
+    new MenuStart(controller, MenuPlayerName(controller), MenuGame(controller))
   }
 }
