@@ -53,14 +53,7 @@ protected class ControllerActorSystem(private val system: ActorSystem) extends C
   }
 
   override def createCards(): Unit = {
-    val myActor = system.actorOf(Props[CardActor])
-    val future = myActor ? CreatePack
-    val result = Await.result(future, timeout.duration).asInstanceOf[List[Card]]
-    logger.info("Actor result: " + result)
-    val cardInField = result.slice(0,CardActor.fieldSize)
-    val pack = result diff cardInField
-    game = Game(cardInField, pack,game.player)
-    publish(StartGame(game))
+
   }
 
 
@@ -102,7 +95,14 @@ protected class ControllerActorSystem(private val system: ActorSystem) extends C
   }
 
   override def startGame(): Unit = {
-    createCards()
+    val myActor = system.actorOf(Props[CardActor])
+    val future = myActor ? CreatePack
+    val result = Await.result(future, timeout.duration).asInstanceOf[List[Card]]
+    logger.info("Actor result: " + result)
+    val cardInField = result.slice(0,CardActor.fieldSize)
+    val pack = result diff cardInField
+    game = Game(cardInField, pack,game.player)
+    publish(StartGame(game))
   }
 }
 
