@@ -1,5 +1,6 @@
 package de.htwg.se.setGame.aview.tui
 
+import de.htwg.se.setGame.aview.Tui
 import de.htwg.se.setGame.model.{Card, Game, Player}
 import de.htwg.se.setGame.{AddPlayer, CancelAddPlayer, ControllerDummy, ExitApplication}
 import org.scalatest.Matchers._
@@ -13,23 +14,17 @@ class MenuMainSpec extends WordSpec with TuiSpecExtension {
 
   "MenuMain" should {
 
-    "have stopped on ExitApplication event" in withLogger { (logger) =>
+    "have called exitApplication on command" in withLogger { (logger) =>
       var called = false
       val target = new MenuMain(new ControllerDummy {
         override def exitApplication(): Unit = {
           called = true
-          publish(new ExitApplication)
         }
-      }, new MenuDummy)
-      overrideConsoleIn(MenuMain.ExitCommand) {
-        target.process()
-      }
+      }, new Tui(new ControllerDummy))
+      target.process(MenuMain.ExitCommand)
 
       called should be (true)
-      target.isContinue should be (false)
-      val logs = logger.logAsString()
-      logs should include (MenuMain.MenuHeading)
-      logs should include (Menu.ReadInput.format(MenuMain.ExitCommand))
+      logger.logAsString() should include (Menu.ReadInput.format(MenuMain.ExitCommand))
     }
 
     "have called createNewGame on command" in withLogger { (logger) =>
@@ -37,53 +32,29 @@ class MenuMainSpec extends WordSpec with TuiSpecExtension {
       val target = new MenuMain(new ControllerDummy {
         override def createNewGame(): Unit = {
           called = true
-          publish(new ExitApplication)
         }
-      }, new MenuDummy)
-      overrideConsoleIn(MenuMain.CreateCommand) {
-        target.process()
-      }
+      }, new Tui(new ControllerDummy))
+      target.process(MenuMain.CreateCommand)
 
       called should be(true)
-      target.isContinue should be (false)
-      val logs = logger.logAsString()
-      logs should include (MenuMain.MenuHeading)
-      logs should include (Menu.ReadInput.format(MenuMain.CreateCommand))
-    }
-
-    "have listen to ExitApplication event" in withLogger { (logger) =>
-      val controller = new ControllerDummy
-      val target = new MenuMain(controller, new MenuDummy)
-      controller.publish(new ExitApplication)
-
-      target.isContinue should be (false)
-      logger.logAsString() should include (MenuMain.EventExitApplication)
-    }
-
-    "have listen to AddPlayer event" in withLogger { (logger) =>
-      var called = false
-      val controller = new ControllerDummy
-      new MenuMain(controller, new MenuDummy {
-        override def process(): Unit = called = true
-      })
-      controller.publish(AddPlayer(createEmptyGame))
-
-      called should be(true)
-      logger.logAsString() should include (MenuMain.EventAddPlayer)
+      logger.logAsString() should include (Menu.ReadInput.format(MenuMain.CreateCommand))
     }
 
     "have listen to CancelAddPlayer event" in withLogger { (logger) =>
       val controller = new ControllerDummy
-      new MenuMain(controller, new MenuDummy)
+      val tui = new Tui(new ControllerDummy)
+      val target = new MenuMain(controller, tui)
+      tui.menu = new MenuDummy
       controller.publish(new CancelAddPlayer)
 
+      tui.menu should be (target)
       val log = logger.logAsString()
       log should include (MenuMain.MenuHeading)
       log should include (MenuMain.EventCancelAddPlayer)
     }
 
     "have factory method" in {
-      MenuMain(new ControllerDummy)
+      MenuMain(new ControllerDummy, new Tui(new ControllerDummy))
     }
   }
 }

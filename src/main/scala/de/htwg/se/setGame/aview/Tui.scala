@@ -11,7 +11,7 @@ import scala.swing.Reactor
   */
 class Tui(private val controller: Controller) extends NonBlockingInputReader with Reactor {
   private val logger = Logger(getClass)
-  var menu: Menu = MenuMain(controller)
+  var menu: Menu = MenuMain(controller, this)
 
   logger.info(Tui.InitiateMessage)
   listenTo(controller)
