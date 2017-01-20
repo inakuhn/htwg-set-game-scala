@@ -62,10 +62,10 @@ class CardActor extends Actor with ActorLogging {
 
   def isSet(list: List[Card]): Boolean = {
     log.info("Entry Set : " + list)
-    (isACombination((list map (t => t.color)).size)
-      && isACombination((list map (t => t.form)).size)
-      && isACombination((list map (t => t.fill)).size)
-      && isACombination((list map (t => t.count)).size))
+    (isACombination((list map (t => t.color) toSet).size)
+      && isACombination((list map (t => t.form) toSet).size)
+      && isACombination((list map (t => t.fill)toSet).size)
+      && isACombination((list map (t => t.count)toSet).size))
   }
 
   def isACombination(int: Int): Boolean = {
@@ -82,9 +82,10 @@ class CardActor extends Actor with ActorLogging {
   }
 
   def getPlayers(players: List[Player], player: Player): List[Player] = {
-    val otherPlayer = players.filterNot(p => p == player).head
+    var newPlayers  = players.filterNot(p => p == player)
     val newPlayer = Player(player.identify, player.points + 1, player.name)
-    List[Player](otherPlayer, newPlayer)
+    newPlayers = newPlayers:+newPlayer
+    newPlayers
   }
 
 }

@@ -79,6 +79,8 @@ class Gui(private val controller: Controller) extends MainFrame {
                   setList = setList :+ myCard
                   if (setList.size == CardActor.setMax) {
                     controller.checkSet(setList, playerSet)
+                    setList = List[Card]()
+                    setSet = false
                   }
                 } else {
                   selectSetFirst()
