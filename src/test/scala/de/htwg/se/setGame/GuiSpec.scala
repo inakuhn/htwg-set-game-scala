@@ -1,9 +1,13 @@
 package de.htwg.se.setGame
 
+import de.htwg.se.setGame.actor.CardActor
+import de.htwg.se.setGame.model.{Card, CardAttribute, Game, Player}
 import org.scalatest.Matchers._
 import org.scalatest.{Outcome, WordSpec}
 
+import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
+import scala.swing.FlowPanel
 import scala.swing.Reactions.Reaction
 
 /**
@@ -14,6 +18,7 @@ class GuiSpec extends WordSpec {
   var controller:ControllerSpy = _
   var target:Gui = _
   var exitCalled = false
+
 
   class ControllerSpy extends ControllerDummy {
 
@@ -53,6 +58,25 @@ class GuiSpec extends WordSpec {
 
     "be visible" in {
       target.visible should be (true)
+    }
+    "refreshField" in {
+      var pack = mutable.MutableList[Card]()
+      for (form <- CardAttribute.Form.values; color <- CardAttribute.Color.values; fill <- CardAttribute.Fill.values; count <- CardAttribute.Count.values)
+        pack += Card(form, color, fill, count)
+
+      var cards = List[Card](pack: _*)
+      val cardsInField = cards.slice(0, CardActor.fieldSize)
+      cards = cards diff cardsInField
+      val set = cardsInField.slice(0, CardActor.setMax)
+      //players
+      val playerOne = Player(0, 0, "Joe Doe")
+      val playerTwo = Player(1, 0, "Smith Doe")
+      val players = List[Player](playerOne, playerTwo)
+      //Game game
+      val game = Game(cardsInField, cards, players)
+      target.refreshField(game)
+      target.contents != null shouldBe(true)
+
     }
     "not have called exit on startup" in {
       exitCalled should be (false)
