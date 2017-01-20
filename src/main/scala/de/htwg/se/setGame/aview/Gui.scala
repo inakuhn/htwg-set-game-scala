@@ -5,6 +5,7 @@ import javax.swing.ImageIcon
 import javax.swing.border.{EmptyBorder, LineBorder}
 
 import de.htwg.se.setGame.actor.CardActor
+import de.htwg.se.setGame.controller._
 import de.htwg.se.setGame.model.{Card, Game, Player}
 
 import scala.swing.event.ButtonClicked

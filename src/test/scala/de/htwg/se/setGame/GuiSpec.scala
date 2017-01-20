@@ -1,6 +1,7 @@
 package de.htwg.se.setGame
 
 import de.htwg.se.setGame.actor.CardActor
+import de.htwg.se.setGame.controller.ExitApplication
 import de.htwg.se.setGame.model.{Card, CardAttribute, Game, Player}
 import org.scalatest.Matchers._
 import org.scalatest.{Outcome, WordSpec}
