@@ -11,11 +11,12 @@ libraryDependencies ++= {
     "org.scalatest" %% "scalatest" % "3.0.0" % "test",
     "org.scalamock" %% "scalamock-scalatest-support" % "3.3.0" % "test",
     "com.typesafe.scala-logging" %% "scala-logging" % "3.5.0",
-    "org.slf4j" % "slf4j-log4j12" % "1.7.21",
+    "ch.qos.logback" % "logback-classic" % "1.1.7",
+    "uk.org.lidalia" % "slf4j-test" % "1.2.0" % "test",
     "org.scala-lang" % "scala-swing" % "2.11.0-M7",
-    "com.typesafe.akka" % "akka-remote_2.11" % "2.4.14",
-    "com.typesafe.akka" % "akka-slf4j_2.11" % "2.4.14",
-    "com.typesafe.akka" %% "akka-testkit" % "2.4.14" % "test"
+    "com.typesafe.akka" % "akka-remote_2.11" % "2.4.12",
+    "com.typesafe.akka" % "akka-slf4j_2.11" % "2.4.12",
+    "com.typesafe.akka" %% "akka-testkit" % "2.4.12" % "test"
 
   )
 }

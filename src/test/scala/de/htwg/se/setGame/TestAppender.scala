@@ -1,28 +1,20 @@
 package de.htwg.se.setGame
 
-import org.apache.log4j.AppenderSkeleton
-import org.apache.log4j.spi.LoggingEvent
-
-import scala.collection.mutable.ListBuffer
+import scala.collection.JavaConversions._
+import uk.org.lidalia.slf4jtest.TestLoggerFactory
 
 /**
   * @author Philipp Daniels
   */
-class TestAppender extends AppenderSkeleton {
-  private val log = new ListBuffer[LoggingEvent]()
+class TestAppender {
   private val lineBreak = sys.props("line.separator")
-
-  override def append(event: LoggingEvent): Unit = {
-    log += event
-  }
-
-  override def requiresLayout(): Boolean = false
-
-  override def close(): Unit = {}
+  TestLoggerFactory.clearAll()
 
   def logAsString(): String = {
     val sb = new StringBuilder
-    for (entry <- log.toList) sb.append(entry.getMessage + lineBreak)
+    for (e <- TestLoggerFactory.getLoggingEvents) {
+      sb.append(e.getMessage + lineBreak)
+    }
     sb.toString()
   }
 }

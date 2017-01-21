@@ -4,7 +4,6 @@ import akka.actor.ActorSystem
 import com.typesafe.config.ConfigFactory
 import de.htwg.se.setGame.TestAppender
 import de.htwg.se.setGame.model.{Card, CardAttribute, Game, Player}
-import org.apache.log4j.Logger
 import org.scalatest.Matchers._
 import org.scalatest.WordSpec
 
@@ -21,9 +20,6 @@ class ControllerSpec extends WordSpec {
 
   private def withController(test: (Controller, TestAppender) => Any) = {
     val testAppender = new TestAppender
-    Logger.getRootLogger.removeAllAppenders()
-    Logger.getRootLogger.addAppender(testAppender)
-
     val actor = ActorSystem("Controller", ConfigFactory.parseString("akka {}"))
     val target = new ControllerActorSystem(actor)
     try test(target, testAppender)

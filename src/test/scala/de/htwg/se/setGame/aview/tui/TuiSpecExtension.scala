@@ -3,7 +3,6 @@ package de.htwg.se.setGame.aview.tui
 import java.io.ByteArrayInputStream
 
 import de.htwg.se.setGame.TestAppender
-import org.apache.log4j.Logger
 
 /**
   * @author Philipp Daniels
@@ -11,11 +10,7 @@ import org.apache.log4j.Logger
 trait TuiSpecExtension {
 
   protected def withLogger(test: (TestAppender) => Any): Unit = {
-    val testAppender = new TestAppender
-    Logger.getRootLogger.removeAllAppenders()
-    Logger.getRootLogger.addAppender(testAppender)
-
-    try test(testAppender)
+    try test(new TestAppender)
     finally {}
   }
 
