@@ -39,7 +39,7 @@ trait Controller extends Publisher {
 /**
   * @author Philipp Daniels
   */
-protected class ControllerActorSystem(private val system: ActorSystem) extends Controller {
+class ControllerActorSystem(private val system: ActorSystem) extends Controller {
   private implicit val timeout = Timeout(5 seconds)
   private val logger = Logger(getClass)
   private var game: Game = createEmptyGame
