@@ -12,7 +12,7 @@ libraryDependencies ++= {
     "org.scalamock" %% "scalamock-scalatest-support" % "3.3.0" % "test",
     "com.typesafe.scala-logging" %% "scala-logging" % "3.5.0",
     "ch.qos.logback" % "logback-classic" % "1.1.7",
-    "uk.org.lidalia" % "slf4j-test" % "1.2.0" % "test",
+    "uk.org.lidalia" % "slf4j-test" % "1.2.0" % "test" exclude("ch.qos.logback", "logback-classic"),
     "com.typesafe.akka" % "akka-remote_2.11" % "2.4.12",
     "com.typesafe.akka" % "akka-slf4j_2.11" % "2.4.12",
     "com.typesafe.akka" %% "akka-testkit" % "2.4.12" % "test"
