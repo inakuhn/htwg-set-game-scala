@@ -13,10 +13,8 @@ libraryDependencies ++= {
     "com.typesafe.scala-logging" %% "scala-logging" % "3.5.0",
     "ch.qos.logback" % "logback-classic" % "1.1.7",
     "uk.org.lidalia" % "slf4j-test" % "1.2.0" % "test",
-    "org.scala-lang" % "scala-swing" % "2.11.0-M7",
     "com.typesafe.akka" % "akka-remote_2.11" % "2.4.12",
     "com.typesafe.akka" % "akka-slf4j_2.11" % "2.4.12",
     "com.typesafe.akka" %% "akka-testkit" % "2.4.12" % "test"
-
   )
 }
