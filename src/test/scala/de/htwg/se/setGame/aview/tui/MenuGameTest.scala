@@ -1,17 +1,17 @@
 package de.htwg.se.setGame.aview.tui
 
 import de.htwg.se.setGame.aview.Tui
-import de.htwg.se.setGame.controller.{ControllerDummy, IsInvalidSet, IsSet, StartGame}
-import de.htwg.se.setGame.model.CardAttribute.{Color, Count, Fill, Form}
-import de.htwg.se.setGame.model.{Card, Game, Player}
+import de.htwg.se.setGame.controller.{ ControllerDummy, IsInvalidSet, IsSet, StartGame }
+import de.htwg.se.setGame.model.CardAttribute.{ Color, Count, Fill, Form }
+import de.htwg.se.setGame.model.{ Card, Game, Player }
 import org.scalatest.Matchers._
 import org.scalatest.WordSpec
 
 import scala.swing.event.Event
 
 /**
-  * @author Philipp Daniels
-  */
+ * @author Philipp Daniels
+ */
 class MenuGameTest extends WordSpec with TuiSpecExtension {
   private def assertEvent(event: Event) = {
     val controller = new ControllerDummy
@@ -20,7 +20,7 @@ class MenuGameTest extends WordSpec with TuiSpecExtension {
     tui.menu = new MenuDummy
     controller.publish(event)
 
-    tui.menu should be (target)
+    tui.menu should be(target)
   }
 
   "MenuGame" should {
@@ -43,8 +43,8 @@ class MenuGameTest extends WordSpec with TuiSpecExtension {
       target.process(MenuGame.SetCommand)
 
       val logs = logger.logAsString()
-      logs should include (Menu.ReadInput.format(MenuGame.SetCommand))
-      logs should include (MenuGame.MenuSetSwitch)
+      logs should include(Menu.ReadInput.format(MenuGame.SetCommand))
+      logs should include(MenuGame.MenuSetSwitch)
     }
 
     "have listener on StartGame event" in withLogger { (logger) =>
@@ -66,12 +66,12 @@ class MenuGameTest extends WordSpec with TuiSpecExtension {
 
     "have listener on IsSet event" in withLogger { (logger) =>
       assertEvent(new IsSet)
-      logger.logAsString() should include (MenuGame.MenuHeading)
+      logger.logAsString() should include(MenuGame.MenuHeading)
     }
 
     "have listener on IsInvalidSet event" in withLogger { (logger) =>
       assertEvent(new IsInvalidSet)
-      logger.logAsString() should include (MenuGame.MenuHeading)
+      logger.logAsString() should include(MenuGame.MenuHeading)
     }
 
     "have factory method" in {

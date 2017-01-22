@@ -1,6 +1,6 @@
 package de.htwg.se.setGame.model
 
-import de.htwg.se.setGame.model.CardAttribute.{Color, Count, Fill, Form}
+import de.htwg.se.setGame.model.CardAttribute.{ Color, Count, Fill, Form }
 import org.scalatest.Matchers._
 import org.scalatest.WordSpec
 

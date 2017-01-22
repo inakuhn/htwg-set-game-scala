@@ -4,8 +4,8 @@ import scala.collection.JavaConversions._
 import uk.org.lidalia.slf4jtest.TestLoggerFactory
 
 /**
-  * @author Philipp Daniels
-  */
+ * @author Philipp Daniels
+ */
 class TestAppender {
   private val lineBreak = sys.props("line.separator")
   TestLoggerFactory.clearAll()

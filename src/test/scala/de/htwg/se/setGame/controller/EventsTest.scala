@@ -1,14 +1,14 @@
 package de.htwg.se.setGame.controller
 
-import de.htwg.se.setGame.model.{Card, Game, Player}
+import de.htwg.se.setGame.model.{ Card, Game, Player }
 import org.scalatest.Matchers._
 import org.scalatest.WordSpec
 
 import scala.swing.event.Event
 
 /**
-  * @author Philipp Daniels
-  */
+ * @author Philipp Daniels
+ */
 class EventsTest extends WordSpec {
   private def createEmptyGame: Game = Game(List[Card](), List[Card](), List[Player]())
 

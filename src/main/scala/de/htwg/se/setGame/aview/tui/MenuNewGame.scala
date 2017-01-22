@@ -2,12 +2,12 @@ package de.htwg.se.setGame.aview.tui
 
 import com.typesafe.scalalogging.Logger
 import de.htwg.se.setGame.aview.Tui
-import de.htwg.se.setGame.controller.{Controller, NewGame, PlayerAdded}
-import de.htwg.se.setGame.{model, _}
+import de.htwg.se.setGame.controller.{ Controller, NewGame, PlayerAdded }
+import de.htwg.se.setGame.{ model, _ }
 
 /**
-  * @author Philipp Daniels
-  */
+ * @author Philipp Daniels
+ */
 class MenuNewGame(private val controller: Controller, private val tui: Tui, private val playerName: Menu) extends Menu {
 
   private val logger = Logger(getClass)

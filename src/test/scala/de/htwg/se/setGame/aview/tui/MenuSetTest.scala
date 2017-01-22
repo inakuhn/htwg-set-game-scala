@@ -2,16 +2,16 @@ package de.htwg.se.setGame.aview.tui
 
 import de.htwg.se.setGame._
 import de.htwg.se.setGame.controller._
-import de.htwg.se.setGame.model.CardAttribute.{Color, Count, Fill, Form}
-import de.htwg.se.setGame.model.{Card, Game, Player}
+import de.htwg.se.setGame.model.CardAttribute.{ Color, Count, Fill, Form }
+import de.htwg.se.setGame.model.{ Card, Game, Player }
 import org.scalatest.Matchers._
 import org.scalatest.WordSpec
 
 import scala.swing.event.Event
 
 /**
-  * @author Philipp Daniels
-  */
+ * @author Philipp Daniels
+ */
 class MenuSetTest extends WordSpec with TuiSpecExtension {
 
   def publishEvent(event: Event): MenuSet = {
@@ -31,22 +31,22 @@ class MenuSetTest extends WordSpec with TuiSpecExtension {
 
     "have listener on StartGame event" in withLogger { (logger) =>
       publishEvent(StartGame(createEmptyGame))
-      logger.logAsString() should include (MenuSet.EventStartGame)
+      logger.logAsString() should include(MenuSet.EventStartGame)
     }
 
     "have listener on UpdateGame event" in withLogger { (logger) =>
       publishEvent(UpdateGame(createEmptyGame))
-      logger.logAsString() should include (MenuSet.EventUpdateGame)
+      logger.logAsString() should include(MenuSet.EventUpdateGame)
     }
 
     "have listener on IsSet event" in withLogger { (logger) =>
       publishEvent(new IsSet)
-      logger.logAsString() should include (MenuSet.EventIsSet)
+      logger.logAsString() should include(MenuSet.EventIsSet)
     }
 
     "have listener on IsInvalidSet event" in withLogger { (logger) =>
       publishEvent(new IsInvalidSet)
-      logger.logAsString() should include (MenuSet.EventIsInvalidSet)
+      logger.logAsString() should include(MenuSet.EventIsInvalidSet)
     }
 
     "have abort with no game" in withLogger { (logger) =>
@@ -54,8 +54,8 @@ class MenuSetTest extends WordSpec with TuiSpecExtension {
       target.process("player")
 
       val logs = logger.logAsString()
-      logs should include (MenuSet.Error)
-      logs should include (MenuSet.PlayerRequest)
+      logs should include(MenuSet.Error)
+      logs should include(MenuSet.PlayerRequest)
     }
 
     "have selected player" in withLogger { (logger) =>
@@ -65,8 +65,8 @@ class MenuSetTest extends WordSpec with TuiSpecExtension {
       target.process("player")
 
       val logs = logger.logAsString()
-      logs should include (MenuSet.PlayerSelected.format(player))
-      logs should include (MenuSet.CardRequest.format(1))
+      logs should include(MenuSet.PlayerSelected.format(player))
+      logs should include(MenuSet.CardRequest.format(1))
     }
 
     "have selected cards" in withLogger { (logger) =>
@@ -86,10 +86,10 @@ class MenuSetTest extends WordSpec with TuiSpecExtension {
 
       called should be(true)
       val logs = logger.logAsString()
-      logs should include (MenuSet.PlayerSelected.format(player))
-      logs should include (MenuSet.CardRequest.format(1))
-      logs should include (MenuSet.CardRequest.format(2))
-      logs should include (MenuSet.CardRequest.format(3))
+      logs should include(MenuSet.PlayerSelected.format(player))
+      logs should include(MenuSet.CardRequest.format(1))
+      logs should include(MenuSet.CardRequest.format(2))
+      logs should include(MenuSet.CardRequest.format(3))
     }
   }
 }

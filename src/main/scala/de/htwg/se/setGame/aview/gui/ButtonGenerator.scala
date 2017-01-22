@@ -1,20 +1,20 @@
 package de.htwg.se.setGame.aview.gui
 
-import java.awt.{Color, Dimension}
+import java.awt.{ Color, Dimension }
 import javax.swing.ImageIcon
 import javax.swing.border.LineBorder
 
 import de.htwg.se.setGame.actor.CardActor
 import de.htwg.se.setGame.aview.Gui
 import de.htwg.se.setGame.controller.Controller
-import de.htwg.se.setGame.model.{Card, Player}
+import de.htwg.se.setGame.model.{ Card, Player }
 
 import scala.swing.event.ButtonClicked
-import scala.swing.{Button, Dialog}
+import scala.swing.{ Button, Dialog }
 
 /**
-  * Created by Ina Kuhn on 20.01.2017.
-  */
+ * Created by Ina Kuhn on 20.01.2017.
+ */
 case class ButtonGenerator(controller: Controller) {
 
   def createSetButton(player: Player): Button = {
@@ -44,7 +44,7 @@ case class ButtonGenerator(controller: Controller) {
       }
     }
   }
-  def createFinishButon() : Button = {
+  def createFinishButon(): Button = {
     new Button("Finish Game") {
       reactions += {
         case _: ButtonClicked =>
@@ -52,7 +52,7 @@ case class ButtonGenerator(controller: Controller) {
       }
     }
   }
-  def createUserNameButton() : Button = {
+  def createUserNameButton(): Button = {
     new Button("User Name") {
       reactions += {
         case ButtonClicked(button) => changeText()
@@ -100,5 +100,4 @@ case class ButtonGenerator(controller: Controller) {
     Dialog.showMessage(null, "Before Choose card please press Set button", title = "Press Set!")
   }
 }
-
 

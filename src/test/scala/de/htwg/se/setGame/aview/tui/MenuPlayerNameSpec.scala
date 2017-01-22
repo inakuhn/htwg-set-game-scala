@@ -6,8 +6,8 @@ import org.scalatest.Matchers._
 import org.scalatest.WordSpec
 
 /**
-  * @author Philipp Daniels
-  */
+ * @author Philipp Daniels
+ */
 class MenuPlayerNameSpec extends WordSpec with TuiSpecExtension {
 
   "MenuPlayerName" should {

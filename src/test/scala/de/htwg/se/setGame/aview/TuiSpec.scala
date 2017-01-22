@@ -1,13 +1,13 @@
 package de.htwg.se.setGame.aview
 
-import de.htwg.se.setGame.aview.tui.{MenuDummy, MenuMain, TuiSpecExtension}
-import de.htwg.se.setGame.controller.{ControllerDummy, ExitApplication}
+import de.htwg.se.setGame.aview.tui.{ MenuDummy, MenuMain, TuiSpecExtension }
+import de.htwg.se.setGame.controller.{ ControllerDummy, ExitApplication }
 import org.scalatest.Matchers._
 import org.scalatest.WordSpec
 
 /**
-  * @author Philipp Daniels
-  */
+ * @author Philipp Daniels
+ */
 class TuiSpec extends WordSpec with TuiSpecExtension {
   "Tui" should {
 
@@ -40,7 +40,7 @@ class TuiSpec extends WordSpec with TuiSpecExtension {
         target.readInput()
       }
 
-      target.isContinue should be (false)
+      target.isContinue should be(false)
       val logs = logger.logAsString()
       logs should include(Tui.InitiateMessage)
       logs should include(Tui.Shutdown)

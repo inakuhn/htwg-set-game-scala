@@ -2,14 +2,14 @@ package de.htwg.se.setGame.aview.tui
 
 import de.htwg.se.setGame._
 import de.htwg.se.setGame.aview.Tui
-import de.htwg.se.setGame.controller.{ControllerDummy, NewGame, PlayerAdded}
-import de.htwg.se.setGame.model.{Card, Game, Player}
+import de.htwg.se.setGame.controller.{ ControllerDummy, NewGame, PlayerAdded }
+import de.htwg.se.setGame.model.{ Card, Game, Player }
 import org.scalatest.Matchers._
 import org.scalatest.WordSpec
 
 /**
-  * @author Philipp Daniels
-  */
+ * @author Philipp Daniels
+ */
 class MenuNewGameTest extends WordSpec with TuiSpecExtension {
 
   private def createEmptyGame: Game = Game(List[Card](), List[Card](), List[Player]())

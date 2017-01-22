@@ -1,11 +1,11 @@
 package de.htwg.se.setGame.controller
 
-import akka.actor.{ActorSystem, Props}
+import akka.actor.{ ActorSystem, Props }
 import akka.pattern.ask
 import akka.util.Timeout
 import com.typesafe.scalalogging.Logger
 import de.htwg.se.setGame.actor._
-import de.htwg.se.setGame.model.{Card, Game, Player}
+import de.htwg.se.setGame.model.{ Card, Game, Player }
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -20,9 +20,9 @@ trait Controller extends Publisher {
   def createNewGame()
 
   /**
-    * Add new player to game session and set name of player
-    * @param name Name of new added player
-    */
+   * Add new player to game session and set name of player
+   * @param name Name of new added player
+   */
   def addPlayer(name: String)
 
   def cancelAddPlayer()
@@ -31,14 +31,14 @@ trait Controller extends Publisher {
   def checkSet(cards: List[Card], player: Player)
 
   /**
-    * Trigger game start for all UIs
-    */
+   * Trigger game start for all UIs
+   */
   def startGame()
 }
 
 /**
-  * @author Philipp Daniels
-  */
+ * @author Philipp Daniels
+ */
 class ControllerActorSystem(private val system: ActorSystem) extends Controller {
   private implicit val timeout = Timeout(5 seconds)
   private val logger = Logger(getClass)
@@ -101,9 +101,9 @@ class ControllerActorSystem(private val system: ActorSystem) extends Controller 
   }
 
   override def randomCardsInField(): Unit = {
-    var listOfCards = game.pack:::game.cardsInField
+    var listOfCards = game.pack ::: game.cardsInField
     listOfCards = Random.shuffle(listOfCards)
-    val cardsInField = listOfCards.slice(0,CardActor.fieldSize)
+    val cardsInField = listOfCards.slice(0, CardActor.fieldSize)
     val pack = listOfCards diff cardsInField
     game = Game(cardsInField, pack, game.player)
     publish(UpdateGame(game))
@@ -115,8 +115,8 @@ class ControllerActorSystem(private val system: ActorSystem) extends Controller 
 }
 
 /**
-  * @author Philipp Daniels
-  */
+ * @author Philipp Daniels
+ */
 object Controller {
   val CreateNewGame = "Create new Game"
   val TriggerExitApp = "Send `ExitApplication` event"

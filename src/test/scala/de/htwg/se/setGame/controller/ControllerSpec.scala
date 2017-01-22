@@ -3,15 +3,15 @@ package de.htwg.se.setGame.controller
 import akka.actor.ActorSystem
 import com.typesafe.config.ConfigFactory
 import de.htwg.se.setGame.TestAppender
-import de.htwg.se.setGame.model.{Card, CardAttribute, Game, Player}
+import de.htwg.se.setGame.model.{ Card, CardAttribute, Game, Player }
 import org.scalatest.Matchers._
 import org.scalatest.WordSpec
 
 import scala.swing.Reactor
 
 /**
-  * @author Philipp Daniels
-  */
+ * @author Philipp Daniels
+ */
 class ControllerSpec extends WordSpec {
 
   private class ReactorSpy(controller: Controller) extends Reactor {
@@ -54,7 +54,6 @@ class ControllerSpec extends WordSpec {
       called should be(true)
       logger.logAsString should include(Controller.TriggerExitApp)
     }
-
 
     "have send AddPlayer event on createNewGame" in withController { (target, logger) =>
       var called = false
@@ -126,7 +125,7 @@ class ControllerSpec extends WordSpec {
 
       target.startGame()
       called should be(true)
-      logger.logAsString().isEmpty should be (false)
+      logger.logAsString().isEmpty should be(false)
     }
 
     "have reset Game on createNewGame" in withController { (target, _) =>
@@ -149,7 +148,7 @@ class ControllerSpec extends WordSpec {
         }
       }
       target.randomCardsInField()
-      called should be (true)
+      called should be(true)
     }
 
     "have triggered FinishGame event" in withController { (target, _) =>
@@ -160,7 +159,7 @@ class ControllerSpec extends WordSpec {
         }
       }
       target.finishGame()
-      called should be (true)
+      called should be(true)
     }
   }
 }

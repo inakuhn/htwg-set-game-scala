@@ -1,7 +1,7 @@
 package de.htwg.se.setGame.actor
 
-import akka.actor.{Actor, ActorLogging}
-import de.htwg.se.setGame.model.{Card, CardAttribute, Game, Player}
+import akka.actor.{ Actor, ActorLogging }
+import de.htwg.se.setGame.model.{ Card, CardAttribute, Game, Player }
 
 import scala.language.postfixOps
 import scala.util.Random
@@ -15,9 +15,8 @@ case class MoveCards(set: List[Card], player: Player, game: Game)
 case class ResponseTyp(boolean: Boolean)
 
 /**
-  * Created by Ina Kuhn on 17.01.2017.
-  */
-
+ * Created by Ina Kuhn on 17.01.2017.
+ */
 class CardActor extends Actor with ActorLogging {
 
   def receive: Actor.Receive = {
@@ -47,12 +46,11 @@ class CardActor extends Actor with ActorLogging {
       sender ! result
       log.info(CardActor.stopActor)
       context.stop(self)
-    case default@_ =>
+    case default @ _ =>
       log.warning("that was unexpected: " + default.toString)
       sender ! None
       context.stop(self)
   }
-
 
   def generateCards(): List[Card] = {
     var pack = List[Card]()

@@ -1,24 +1,24 @@
 package de.htwg.se.setGame.actor
 
-import akka.actor.{ActorSystem, Props}
-import akka.testkit.{DefaultTimeout, ImplicitSender, TestActorRef, TestKit}
+import akka.actor.{ ActorSystem, Props }
+import akka.testkit.{ DefaultTimeout, ImplicitSender, TestActorRef, TestKit }
 import com.typesafe.config.ConfigFactory
-import de.htwg.se.setGame.model.{Card, CardAttribute, Game, Player}
-import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
+import de.htwg.se.setGame.model.{ Card, CardAttribute, Game, Player }
+import org.scalatest.{ BeforeAndAfterAll, Matchers, WordSpecLike }
 
 import scala.collection.mutable
 import scala.concurrent.duration._
 import scala.language.postfixOps
 
 /**
-  * Created by Ina Kuhn on 18.01.2017.
-  */
+ * Created by Ina Kuhn on 18.01.2017.
+ */
 class CardActorSpec extends TestKit(ActorSystem("CardActorSpec", ConfigFactory.parseString("akka {}")))
-  with DefaultTimeout
-  with ImplicitSender
-  with WordSpecLike
-  with Matchers
-  with BeforeAndAfterAll {
+    with DefaultTimeout
+    with ImplicitSender
+    with WordSpecLike
+    with Matchers
+    with BeforeAndAfterAll {
   "CardActorSpec" should {
     "generateCards" in {
       val target = system.actorOf(Props[CardActor])
@@ -82,7 +82,6 @@ class CardActorSpec extends TestKit(ActorSystem("CardActorSpec", ConfigFactory.p
         }
       }
 
-
     }
     "default " in {
       within(500 millis) {
@@ -98,10 +97,9 @@ class CardActorSpec extends TestKit(ActorSystem("CardActorSpec", ConfigFactory.p
 
     }
 
-
     /**
-      * Actor sub functions test
-      */
+     * Actor sub functions test
+     */
     "isACombination" in {
       //preparing
       val actorRef = TestActorRef(new CardActor)
@@ -134,16 +132,13 @@ class CardActorSpec extends TestKit(ActorSystem("CardActorSpec", ConfigFactory.p
       val cardsFromPack = cards.slice(0, CardActor.setMax)
       cards = cards diff cardsFromPack
 
-
       //execute
       val newCardsInField = actor.getCardsForField(cardsFromPack, set, cardsInField)
-
 
       //verify
       newCardsInField diff set should be(newCardsInField)
       cards.size should be(pack.size - newCardsInField.size - cardsFromPack.size)
       newCardsInField.size should be(CardActor.fieldSize)
-
 
     }
 
@@ -161,7 +156,6 @@ class CardActorSpec extends TestKit(ActorSystem("CardActorSpec", ConfigFactory.p
       //verify
       result.filter(p => p.identify == 0).head.points should be(1)
       result.filter(p => p.identify == 0).head.name should be("Joe Doe")
-
 
     }
 
@@ -184,7 +178,6 @@ class CardActorSpec extends TestKit(ActorSystem("CardActorSpec", ConfigFactory.p
 
       result diff cardsFromPack should be(result)
       result diff cardsInField should be(result)
-
 
     }
     "Set be equal" in {

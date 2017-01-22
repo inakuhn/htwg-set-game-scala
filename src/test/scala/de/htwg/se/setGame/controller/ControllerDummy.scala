@@ -1,10 +1,10 @@
 package de.htwg.se.setGame.controller
 
-import de.htwg.se.setGame.model.{Card, Player}
+import de.htwg.se.setGame.model.{ Card, Player }
 
 /**
-  * @author Philipp Daniels
-  */
+ * @author Philipp Daniels
+ */
 class ControllerDummy extends Controller {
 
   override def exitApplication(): Unit = {}

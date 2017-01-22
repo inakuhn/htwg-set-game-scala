@@ -4,14 +4,14 @@ import javax.swing.border.EmptyBorder
 
 import de.htwg.se.setGame.aview.gui.ButtonGenerator
 import de.htwg.se.setGame.controller._
-import de.htwg.se.setGame.model.{Card, Game, Player}
+import de.htwg.se.setGame.model.{ Card, Game, Player }
 
 import scala.swing.event.ButtonClicked
-import scala.swing.{Dimension, _}
+import scala.swing.{ Dimension, _ }
 
 /**
-  * @author Philipp Daniels
-  */
+ * @author Philipp Daniels
+ */
 class Gui(private val controller: Controller) extends MainFrame {
   listenTo(controller)
   title = Gui.Title
@@ -28,11 +28,9 @@ class Gui(private val controller: Controller) extends MainFrame {
     contents += buttonGenerator.createNewGameButton()
   }
 
-
   def addPlayer(s: String): Unit = {
     controller.addPlayer(s)
   }
-
 
   def closeMe() {
     close()
@@ -42,8 +40,6 @@ class Gui(private val controller: Controller) extends MainFrame {
   override def closeOperation(): Unit = {
     controller.exitApplication()
   }
-
-
 
   def refreshField(game: Game): Unit = {
     contents = new FlowPanel() {
@@ -77,7 +73,6 @@ class Gui(private val controller: Controller) extends MainFrame {
     }
   }
 
-
   def startGame(): Unit = {
 
     contents = new BoxPanel(Orientation.Vertical) {
@@ -90,7 +85,6 @@ class Gui(private val controller: Controller) extends MainFrame {
         }
         contents += new BoxPanel(Orientation.Horizontal) {
           contents += buttonGenerator.createUserNameButton()
-
 
         }
 

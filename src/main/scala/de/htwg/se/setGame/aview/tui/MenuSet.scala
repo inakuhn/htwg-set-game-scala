@@ -2,19 +2,19 @@ package de.htwg.se.setGame.aview.tui
 
 import com.typesafe.scalalogging.Logger
 import de.htwg.se.setGame._
-import de.htwg.se.setGame.model.{Card, Game, Player}
+import de.htwg.se.setGame.model.{ Card, Game, Player }
 import de.htwg.se.setGame.controller._
 
 import scala.collection.mutable
 
 /**
-  * @author Philipp Daniels
-  */
+ * @author Philipp Daniels
+ */
 class MenuSet(private val controller: Controller) extends Menu {
 
   private val logger = Logger(getClass)
   private var game = None: Option[Game]
-  private var player = None : Option[Player]
+  private var player = None: Option[Player]
   private val cards = mutable.MutableList.empty[Card]
   listenTo(controller)
 

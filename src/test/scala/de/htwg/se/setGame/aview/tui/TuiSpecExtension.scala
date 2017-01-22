@@ -5,8 +5,8 @@ import java.io.ByteArrayInputStream
 import de.htwg.se.setGame.TestAppender
 
 /**
-  * @author Philipp Daniels
-  */
+ * @author Philipp Daniels
+ */
 trait TuiSpecExtension {
 
   protected def withLogger(test: (TestAppender) => Any): Unit = {

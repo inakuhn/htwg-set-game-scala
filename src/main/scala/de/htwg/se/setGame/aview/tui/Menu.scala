@@ -6,8 +6,8 @@ import scala.collection.mutable
 import scala.swing.Reactor
 
 /**
-  * @author Philipp Daniels
-  */
+ * @author Philipp Daniels
+ */
 trait Menu extends Reactor {
 
   private val logger = Logger(getClass)

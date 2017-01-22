@@ -7,8 +7,8 @@ import org.scalatest.Matchers._
 import org.scalatest.WordSpec
 
 /**
-  * @author Philipp Daniels
-  */
+ * @author Philipp Daniels
+ */
 class SetGameApplicationSpec extends WordSpec {
   private val input = new ByteArrayInputStream(MenuMain.ExitCommand.getBytes)
 

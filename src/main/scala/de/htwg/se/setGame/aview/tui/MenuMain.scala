@@ -3,11 +3,11 @@ package de.htwg.se.setGame.aview.tui
 import com.typesafe.scalalogging.Logger
 import de.htwg.se.setGame._
 import de.htwg.se.setGame.aview.Tui
-import de.htwg.se.setGame.controller.{CancelAddPlayer, Controller}
+import de.htwg.se.setGame.controller.{ CancelAddPlayer, Controller }
 
 /**
-  * @author Philipp Daniels
-  */
+ * @author Philipp Daniels
+ */
 class MenuMain(private val controller: Controller, private val tui: Tui) extends Menu {
 
   private val logger = Logger(getClass)

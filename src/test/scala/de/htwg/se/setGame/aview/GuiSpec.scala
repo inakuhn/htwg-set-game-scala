@@ -1,24 +1,23 @@
 package de.htwg.se.setGame.aview
 
 import de.htwg.se.setGame.actor.CardActor
-import de.htwg.se.setGame.controller.{ControllerDummy, ExitApplication}
-import de.htwg.se.setGame.model.{Card, CardAttribute, Game, Player}
+import de.htwg.se.setGame.controller.{ ControllerDummy, ExitApplication }
+import de.htwg.se.setGame.model.{ Card, CardAttribute, Game, Player }
 import org.scalatest.Matchers._
-import org.scalatest.{Outcome, WordSpec}
+import org.scalatest.{ Outcome, WordSpec }
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 import scala.swing.Reactions.Reaction
 
 /**
-  * @author Philipp Daniels
-  */
+ * @author Philipp Daniels
+ */
 class GuiSpec extends WordSpec {
   val listenerList = new ListBuffer[Reaction]()
   var controller: ControllerSpy = _
   var target: Gui = _
   var exitCalled = false
-
 
   class ControllerSpy extends ControllerDummy {
 
@@ -45,7 +44,7 @@ class GuiSpec extends WordSpec {
   }
 
   "Gui" should {
-    def getGameForTest() : Game = {
+    def getGameForTest: Game = {
       var pack = mutable.MutableList[Card]()
       for (form <- CardAttribute.Form.values; color <- CardAttribute.Color.values; fill <- CardAttribute.Fill.values; count <- CardAttribute.Count.values)
         pack += Card(form, color, fill, count)
@@ -75,7 +74,7 @@ class GuiSpec extends WordSpec {
       target.visible should be(true)
     }
     "refreshField" in {
-      target.refreshField(getGameForTest())
+      target.refreshField(getGameForTest)
       target.contents != null shouldBe (true)
 
     }
