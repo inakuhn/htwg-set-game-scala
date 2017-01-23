@@ -1,16 +1,17 @@
 package de.htwg.se.setGame.aview.gui
 
-import java.awt.{ Color, Dimension }
+import java.awt.{Color, Dimension}
+import java.net.URLDecoder
 import javax.swing.ImageIcon
 import javax.swing.border.LineBorder
 
 import de.htwg.se.setGame.actor.CardActor
 import de.htwg.se.setGame.aview.Gui
 import de.htwg.se.setGame.controller.Controller
-import de.htwg.se.setGame.model.{ Card, Player }
+import de.htwg.se.setGame.model.{Card, Player}
 
 import scala.swing.event.ButtonClicked
-import scala.swing.{ Button, Dialog }
+import scala.swing.{Button, Dialog}
 
 /**
  * Created by Ina Kuhn on 20.01.2017.
@@ -78,8 +79,9 @@ case class ButtonGenerator(controller: Controller) {
       maximumSize = s
       preferredSize = s
       background = Color.white
-      val cardName = "pack/" + card.name + ".gif"
-      icon = new ImageIcon(ClassLoader.getSystemResource(cardName).getFile)
+      private val cardName = "pack/" + card.name + ".gif"
+      private val imagePath = URLDecoder.decode(ClassLoader.getSystemResource(cardName).getFile, "UTF-8")
+      icon = new ImageIcon(imagePath)
 
       reactions += {
         case _: ButtonClicked =>
