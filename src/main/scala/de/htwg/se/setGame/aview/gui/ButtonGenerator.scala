@@ -78,7 +78,8 @@ case class ButtonGenerator(controller: Controller) {
       maximumSize = s
       preferredSize = s
       background = Color.white
-      icon = new ImageIcon(ClassLoader.getSystemResource("pack/" + card.name + ".gif").getFile)
+      val cardName = "pack/" + card.name + ".gif"
+      icon = new ImageIcon(ClassLoader.getSystemResource(cardName).getFile)
 
       reactions += {
         case _: ButtonClicked =>
